@@ -1,0 +1,120 @@
+
+--  快房新老数据更新 为了楼盘地图 老数据重新梳理了
+
+-- 导入房产数据
+INSERT INTO `show_kfw001`.`kfw_project_list`( 
+cover,title,`type`,next_open,avg_price,sell_phone,address,latitude,longitude,
+tags, -- 标签   建筑类别1多层2高层3小高层4低密度
+see_open,create_time,update_time,sale_status,house_type,
+zone_id,city_id,metro_id,metrostation_id,
+oldid)
+--   
+SELECT 
+housing_birdeyeimage,REPLACE(housing_name,"·",'') AS housing_name,REPLACE(housing_class,"#",'') AS t1,housing_selldate,housing_avgprice,housing_sellphone,housing_address,housing_latitude,housing_longitude,
+REPLACE(housing_floor,"#",'') AS housing_floor, -- 建筑类别1多层2高层3小高层4低密度
+housing_sellstatus,housing_createtime,housing_updatetime,
+housing_sellstatus,-- 1新盘2在售3售完
+REPLACE(housing_class,"#",'') AS housing_class,
+housing_newarea,housing_newplate,
+housing_metro,housing_metrostation,
+housing_id FROM kuaifang_data.inch_housing WHERE 1 AND housing_status>0
+
+-- 更新区域id 
+update `show_kfw001`.`kfw_project_list` p ,
+`kuaifang_data`.`inch_housing` h 
+set p.zone_id=h.housing_newarea,p.plate_id=h.housing_newplate,p.mainhouseing=h.housing_mainhousing
+where p.oldid=h.housing_id
+
+
+-- 导入规格数据
+
+--  项目规格  
+INSERT  INTO `show_kfw001`.`kfw_project_specs` (
+project_id ,
+`floor_space`,`building_space`,`space_ratio`,green_space,plan_room_num,
+park_num,fitment,lift_brand,outer_wall,
+property_company,
+traffic_info,education_info,hospital_info,bussiness_info,building_company,
+property_type-- '地块物业类型'
+)
+SELECT p.`id` ,
+housing_floorspace,housing_buildingspace,
+housing_spaceratio,housing_virescenceratio,housing_plandoornum,
+housing_carportratio,REPLACE(housing_fitment,"#",'') AS housing_fitment,
+building_liftbrand,building_outerwall,housing_propertycompany,
+housing_publicmemo,housing_schoolmemo,housing_hospitalmemo,housing_businessmemo,housing_developer,
+REPLACE(housing_floor,"#",'') AS housing_floor
+FROM kuaifang_data.inch_housing h ,`show_kfw001`.kfw_project_list as p  WHERE h.housing_status>0 and h.`housing_id` =p.`oldid` 
+
+-- 新老 分类 转换就
+-- 1住宅2商铺3商铺4别墅5排屋6别墅7综合体8花园洋房9酒店公寓13高层洋房
+-- a住宅b商铺c商铺d别墅e排屋f别墅g综合体h花园洋房i酒店公寓j高层洋房
+
+house_type	housing_class	
+别墅 1		  4	->d:	
+		  6	->f
+
+排屋 2		  5	->e	
+洋房 3		  8	->h	
+住宅 4		  1	->a:	
+高层 5		  13	->j	
+酒店公寓 6	  9	->i	
+商业综合体 7	  7	->g
+商铺 8		  2	->b
+		  3	->c;
+
+
+house_type		
+别墅 1		 	
+排屋 2		 	
+洋房 3		  	
+住宅 4		 	
+高层 5		 
+酒店公寓 6	  	
+商业综合体 7	 
+商铺 8		  
+		 
+
+-- 先数值转字母
+update `kfw_project_list` set `house_type`=REPLACE(`house_type`,"1;","a;") where 1 ;
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'2;',"b;");
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'3;',"c;");
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'4;',"d;");
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'5;',"e;");
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'6;',"f;");
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'7;',"g;");
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'8;',"h;");
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'9;',"i;");
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'13;',"j;");
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'11;',"");
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'12;',"");
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'10;',"");
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'14;',"");
+-- 
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'d;',"1;");
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'f;',"1;");
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'e;',"2;");
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'h;',"3;");
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'a;',"4;");
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'j;',"5;");
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'i;',"6;");
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'g;',"7;");
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'b;',"8;");
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,'c;',"8;");
+
+-- 先数值转字母
+update `show_kfw001`.`kfw_project_list` set house_type=REPLACE(house_type,';',",");
+update `kfw_project_list` set `type`=`house_type` where 1 ;
+
+
+
+
+
+
+主力户型：
+1：60-89
+2：90-120
+3：121-141
+4：140以上
+
+				
