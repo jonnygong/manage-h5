@@ -112,7 +112,7 @@
     export default {
         data() {
             return {
-                sysName: '快房传媒后台管理系统',
+                sysName: '快房传媒后台管理',
                 collapsed: false
             }
         },
