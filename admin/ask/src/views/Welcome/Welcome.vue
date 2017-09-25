@@ -1,70 +1,32 @@
 <template>
     <div class="content">
-        <h3>使用说明：</h3>
-        <p>本后台仅适用于杭州快房传媒有限公司案例活动展示系统的管理与维护。</p>
-        <p>请先在下方选择项目进入。</p>
-
-
-        <!--列表-->
-        <el-table :data="projectList" highlight-current-row v-loading="listLoading"
-                  style="width: 100%;">
-            <el-table-column type="selection" width="55">
-            </el-table-column>
-            <el-table-column prop="id" label="项目ID" width="150">
-            </el-table-column>
-            <el-table-column prop="name" label="项目名称" width="150">
-            </el-table-column>
-            <el-table-column prop="desc" label="描述" min-width="120">
-            </el-table-column>
-            <el-table-column label="操作" width="150" fixed="right">
-                <template scope="scope">
-                    <el-button type="primary" size="small" @click="handleSelect(scope.$index, scope.row)">进入此项目</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-
-
-        <h3>其他注意事项：</h3>
-        <p>如遇到任何问题，请反馈至：52admin（ismrwang+kfw@gmail.com）</p>
+        <h3>杭州快房传媒有限公司</h3>
+        <ul>
+            <li><i class="fa fa-arrow-circle-o-right mr5"></i>
+                杭州快房传媒有限公司座落于钱江新城CBD核心商圈，是都市快报控股子公司，年营业额过亿，是都市快报全媒体阵营的重要一员。
+            </li>
+            <li><i class="fa fa-arrow-circle-o-right mr5"></i>
+                公司设有媒体中心、运营中心、家居中心、网络中心、客服中心及宁波分中心，主要经营都市快报的房产广告及快房网的运营。都市快报的房产广告，位列浙江省房产投放量第一，最受房产商青睐。
+            </li>
+            <li><i class="fa fa-arrow-circle-o-right mr5"></i> 公司拥有一支年轻，活力四射，具有激情的团队。团队内有员工100多名，平均年龄29.1岁。</li>
+            <li><i class="fa fa-arrow-circle-o-right mr5"></i>
+                都市快报由杭州日报报业集团主办，于1999年1月1日创刊，是中国第一份四开异型加长报；全国发行，重点覆盖浙江省各地市县，是浙江省发行量最大的报纸。
+            </li>
+            <li><i class="fa fa-arrow-circle-o-right mr5"></i> 公司网址：	http://www.kfw001.com/</li>
+        </ul>
+        <div class="footer-logo">
+            <p class="text">本站由「杭州快房传媒有限公司」提供技术支持</p>
+            <div class="logo">
+                <img src="../../assets/images/logo.png" style="width:420px;height:80px">
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                projectList: [
-                    {
-                        id: 'case',
-                        name: '快房案例',
-                        desc: '快房案例'
-                    },
-                    {
-                        id: 'qa',
-                        name: '快房问答',
-                        desc: '快房问答'
-                    },
-                    {
-                        id: 'build',
-                        name: '楼市爆料',
-                        desc: '楼市爆料'
-                    }
-                    ],
-                listLoading: false
-            }
-        },
-        methods: {
-            handleSelect(index, row) {
-                let param = {
-                    name: row.name,
-                    id: row.id
-                };
-                this.$store.dispatch('set_project', param);
-            }
-        }
-    }
+  export default {}
 </script>
 
 <style lang="scss" scoped>
-
+    @import "Welcome";
 </style>
