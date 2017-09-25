@@ -14,12 +14,6 @@ import ShareConfig from './views/Share/Share.vue'
 import Analysis from './views/Analysis/Analysis.vue'
 
 let routes = [
-    {
-        path: '/login',
-        component: Login,
-        name: '',
-        hidden: true
-    },
     // 欢迎页
     {
         path: '/',

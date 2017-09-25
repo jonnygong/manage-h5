@@ -117,11 +117,11 @@
                 if (type === 'project') {
                     window.sessionStorage.removeItem('PROJECT_ID');
                     window.sessionStorage.removeItem('PROJECT_NAME');
-                    window.location.replace('/#/project')
+                    window.location.replace('/admin/#/project')
                 } else {
                     window.sessionStorage.removeItem('WECHAT_ID');
                     window.sessionStorage.removeItem('WECHAT_NAME');
-                    window.location.replace('/#/')
+                    window.location.replace('/admin/#/')
                 }
             },
             handleopen() {

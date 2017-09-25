@@ -12,22 +12,27 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     document.title = `${configs.title} - ${to.name}`;
-    // 获取当前路由是否需要验证
-    if (to.meta.requiresAuth) {
-        // 判断该路由是否需要登录权限
-        if (window.sessionStorage.getItem("IS_LOGIN")) {
-            // 通过 store 中 isLogin 判断是否已登录
-            next()
-        } else {
-            next({
-                path: '/login',
-                query: {redirect: to.fullPath}
-                // 将跳转的路由path作为参数，登录成功后跳转到该路由
-            })
-        }
+
+// 获取access_token
+    let isLogin = sessionStorage.getItem('IS_LOGIN');
+// 判断是否已登录，未登录则跳转至登录页
+    if (!isLogin) {
+        window.location.href = '/admin/';
     } else {
-        next()
+        // 若已登录，则检查是否已选择公众号
+        let wechatId = sessionStorage.getItem('WECHAT_ID');
+        if (!wechatId && to.path !== '/') {
+            // 错误提示
+            Message.error({
+                message: '请先选择公众号',
+                showClose: true,
+            });
+            window.location.href = '/admin/';
+        } else {
+            next();
+        }
     }
 });
+
 
 export default router;

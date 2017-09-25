@@ -1,13 +1,6 @@
 const Main = () => import( '@/views/Main/Main.vue');
 
 let routes = [
-    // 登录页
-    {
-        path: '/login',
-        component: () => import('@/views/Login/Login.vue'),
-        name: '用户登录',
-        hidden: true
-    },
     // 欢迎页
     {
         path: '/',

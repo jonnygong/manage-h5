@@ -34,7 +34,7 @@
         <el-col :span="24" class="main">
             <aside :class="collapsed?'menu-collapsed':'menu-expanded'">
                 <!--导航菜单-->
-                <el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen"
+                <el-menu :default-active="$route.path" class="el-menu-vertical-aliyun" @open="handleopen"
                          @close="handleclose" @select="handleselect" :collapse="collapsed"
                          unique-opened router>
                     <template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">

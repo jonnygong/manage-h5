@@ -24,7 +24,7 @@ router.beforeEach((to, from, next) => {
     let isLogin = sessionStorage.getItem('IS_LOGIN');
     // 判断是否已登录，未登录则跳转至登录页
     if (!isLogin) {
-        window.location.href = '/';
+        window.location.href = '/admin/';
     }else{
         // 若已登录，则检查是否已选择公众号
         let wechatId = sessionStorage.getItem('WECHAT_ID');
@@ -34,7 +34,7 @@ router.beforeEach((to, from, next) => {
                 message : '请先选择公众号',
                 showClose : true,
             });
-            window.location.href = '/';
+            window.location.href = '/admin/';
         }else{
             next();
         }

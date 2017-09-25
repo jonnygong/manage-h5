@@ -4,29 +4,29 @@
             <el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
                 {{collapsed ? '' : sysName}}
             </el-col>
-            <el-col :span="10" class="header-bar">
+            <el-col :span="1">
                 <div class="tools" @click.prevent="collapse">
                     <i class="fa fa-align-justify"></i>
                 </div>
-                <div class="head-nav">
-                    <div class="select-project">
-                    </div>
-                </div>
+            </el-col>
+            <el-col :span="12">
+                <el-tooltip content="点击可切换公众号" placement="right" effect="light" style="cursor: pointer">
+                    <span @click="handleChange('wechat')">当前公众号：{{ curWechat }}</span>
+                </el-tooltip>
+                <span style="margin: 0 10px">|</span>
+                <el-tooltip content="点击可切换项目" placement="right" effect="light" style="cursor: pointer">
+                    <span @click="handleChange('project')">当前项目：{{ curProject }}</span>
+                </el-tooltip>
             </el-col>
             <el-col :span="4" class="userinfo">
                 <el-dropdown trigger="hover">
-                    <span class="el-dropdown-link userinfo-inner">
-                        <img :src="avatar"/> {{username}}</span>
+                    <span class="el-dropdown-link userinfo-inner"><img
+                            :src="this.sysUserAvatar"/> {{sysUserName}}</span>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item @click.native="handleRedirect('个人资料')">
-                            个人资料
-                        </el-dropdown-item>
-                        <el-dropdown-item @click.native="handleRedirect('个人设置')">
-                            个人设置
-                        </el-dropdown-item>
-                        <el-dropdown-item divided @click.native="logout">
-                            注销
-                        </el-dropdown-item>
+                        <!--<el-dropdown-item>我的消息</el-dropdown-item>-->
+                        <!--<el-dropdown-item>设置</el-dropdown-item>-->
+                        <!--<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>-->
+                        <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </el-col>
@@ -34,49 +34,25 @@
         <el-col :span="24" class="main">
             <aside :class="collapsed?'menu-collapsed':'menu-expanded'">
                 <!--导航菜单-->
-                <el-menu :default-active="$route.path"
-                         class="el-menu-vertical-aliyun" @open="handleopen"
-                         @close="handleclose"
-                         @select="handleselect"
-                         :collapse="collapsed"
+                <el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen"
+                         @close="handleclose" @select="handleselect" :collapse="collapsed"
                          unique-opened router>
-                    <template v-for="(item,index) in $router.options.routes"
-                              v-if="!item.hidden">
-                        <!-- 二级菜单 -->
-                        <el-submenu :index="index+''"
-                                    v-if="!item.leaf">
-                            <!-- 二级菜单顶级 -->
+                    <template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
+                        <el-submenu :index="index+''" v-if="!item.leaf">
                             <template slot="title">
                                 <i :class="['icon',item.iconCls]"></i>
                                 <span slot="title">{{item.name}}</span>
                             </template>
-                            <!-- 二级菜单下级 -->
+
                             <el-menu-item-group>
                                 <span slot="title">{{item.name}}</span>
-                                <template v-for="child in item.children">
-                                    <!--无三级菜单-->
-                                    <el-menu-item
-                                            :index="child.path"
-                                            :key="child.path"
-                                            v-if="!child.hidden && !child.dropdown">
-                                        {{child.name}}
-                                    </el-menu-item>
-                                    <!--有三级菜单-->
-                                    <el-submenu
-                                            :index="child.path"
-                                            :key="child.path"
-                                            v-if="!child.hidden && child.dropdown">
-                                        <span slot="title">{{child.name}}</span>
-                                        <el-menu-item v-for="subChild in child.children"
-                                                      :index="subChild.path"
-                                                      :key="subChild.path">
-                                            {{subChild.name}}
-                                        </el-menu-item>
-                                    </el-submenu>
-                                </template>
+                                <el-menu-item v-for="child in item.children" :index="child.path" :key="child.path"
+                                              v-if="!child.hidden">{{child.name}}
+                                </el-menu-item>
                             </el-menu-item-group>
+
                         </el-submenu>
-                        <!-- 一级菜单 -->
+
                         <el-menu-item v-if="item.leaf&&item.children.length>0"
                                       :index="item.children[0].path">
                             <i :class="['icon',item.iconCls]"></i>
@@ -85,14 +61,14 @@
 
                     </template>
                 </el-menu>
+
             </aside>
             <section class="content-container">
                 <div class="grid-content bg-purple-light">
                     <el-col :span="24" class="breadcrumb-container">
                         <strong class="title">{{$route.name}}</strong>
                         <el-breadcrumb separator="/" class="breadcrumb-inner">
-                            <el-breadcrumb-item v-for="item in $route.matched"
-                                                :key="item.path" :to="item.path">
+                            <el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
                                 {{ item.name }}
                             </el-breadcrumb-item>
                         </el-breadcrumb>
@@ -112,23 +88,41 @@
     export default {
         data() {
             return {
-                sysName: '快房传媒后台管理',
-                collapsed: false
+                sysName: '快房传媒管理后台',
+                collapsed: false,
+                sysUserName: '',
+                sysUserAvatar: '',
+                form: {
+                    name: '',
+                    region: '',
+                    date1: '',
+                    date2: '',
+                    delivery: false,
+                    type: [],
+                    resource: '',
+                    desc: ''
+                }
             }
         },
         computed: {
-            username() {
-                return this.$store.state.user.name;
+            curProject() {
+                return window.sessionStorage.getItem('PROJECT_NAME') === null ? '未选择项目' : window.sessionStorage.getItem('PROJECT_NAME')
             },
-            avatar() {
-                const reg = /[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?/;
-                return reg.test(this.$store.state.user.avatar) ? this.$store.state.user.avatar : require("@/assets/images/loggeduser.png")
+            curWechat() {
+                return window.sessionStorage.getItem('WECHAT_NAME') === null ? '未选择公众号' : window.sessionStorage.getItem('WECHAT_NAME')
             }
         },
         methods: {
-            changeProject() {
-//              this.$store.dispatch('changeProject')
-                this.$router.push({name: '项目列表'})
+            handleChange(type) {
+                if (type === 'project') {
+                    window.sessionStorage.removeItem('PROJECT_ID');
+                    window.sessionStorage.removeItem('PROJECT_NAME');
+                    window.location.replace('/admin/#/project')
+                } else {
+                    window.sessionStorage.removeItem('WECHAT_ID');
+                    window.sessionStorage.removeItem('WECHAT_NAME');
+                    window.location.replace('/admin/#/')
+                }
             },
             handleopen() {
                 //console.log('handleopen');
@@ -137,33 +131,18 @@
                 //console.log('handleclose');
             },
             handleselect(a, b) {
-
-            },
-            // 菜单跳转
-            handleRedirect(data) {
-                this.$router.push({name: data})
             },
             //退出登录
             logout() {
+                let _this = this;
                 this.$confirm('确认退出吗?', '提示', {
-                    type: 'warning'
+                    //type: 'warning'
                 }).then(() => {
-                    this.$http.post('logout');
                     this.$store.dispatch('login_out');
-                    this.$router.push('/login');
+                    window.location.href = '/admin/';
                 }).catch(() => {
 
                 });
-            },
-            // 获取用户信息
-            async getUserData() {
-                const res = await this.$http.post('personData');
-                if (res === null) return;
-                console.log(res);
-                this.$store.dispatch('setUserInfo', {
-                    user: res.param.realname,
-                    avatar: res.param.thumb
-                })
             },
             //折叠导航栏
             collapse() {
@@ -171,12 +150,13 @@
             }
         },
         mounted() {
-            this.getUserData();
+            this.sysUserName = sessionStorage.getItem("USER_NAME") || '';
+            this.sysUserAvatar = require("@/assets/images/loggeduser.png");
         }
     }
 
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
     @import "Main";
 </style>

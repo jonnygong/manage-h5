@@ -4,10 +4,19 @@
             <el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
                 {{collapsed ? '' : sysName}}
             </el-col>
-            <el-col :span="10">
+            <el-col :span="1">
                 <div class="tools" @click.prevent="collapse">
                     <i class="fa fa-align-justify"></i>
                 </div>
+            </el-col>
+            <el-col :span="12">
+                <el-tooltip content="点击可切换公众号" placement="right" effect="light" style="cursor: pointer">
+                    <span @click="handleChange('wechat')">当前公众号：{{ curWechat }}</span>
+                </el-tooltip>
+                <span style="margin: 0 10px">|</span>
+                <el-tooltip content="点击可切换项目" placement="right" effect="light" style="cursor: pointer">
+                    <span @click="handleChange('project')">当前项目：{{ curProject }}</span>
+                </el-tooltip>
             </el-col>
             <el-col :span="4" class="userinfo">
                 <el-dropdown trigger="hover">
@@ -79,7 +88,7 @@
     export default {
         data() {
             return {
-                sysName: '快房案例展示后台',
+                sysName: '快房传媒管理后台',
                 collapsed: false,
                 sysUserName: '',
                 sysUserAvatar: '',
@@ -95,9 +104,25 @@
                 }
             }
         },
+        computed: {
+            curProject() {
+                return window.sessionStorage.getItem('PROJECT_NAME') === null ? '未选择项目' : window.sessionStorage.getItem('PROJECT_NAME')
+            },
+            curWechat() {
+                return window.sessionStorage.getItem('WECHAT_NAME') === null ? '未选择公众号' : window.sessionStorage.getItem('WECHAT_NAME')
+            }
+        },
         methods: {
-            onSubmit() {
-//                console.log('submit!');
+            handleChange(type) {
+                if (type === 'project') {
+                    window.sessionStorage.removeItem('PROJECT_ID');
+                    window.sessionStorage.removeItem('PROJECT_NAME');
+                    window.location.replace('/admin/#/project')
+                } else {
+                    window.sessionStorage.removeItem('WECHAT_ID');
+                    window.sessionStorage.removeItem('WECHAT_NAME');
+                    window.location.replace('/admin/#/')
+                }
             },
             handleopen() {
                 //console.log('handleopen');
@@ -114,7 +139,7 @@
                     //type: 'warning'
                 }).then(() => {
                     this.$store.dispatch('login_out');
-                    _this.$router.push('/login');
+                    window.location.href = '/admin/';
                 }).catch(() => {
 
                 });
@@ -126,7 +151,7 @@
         },
         mounted() {
             this.sysUserName = sessionStorage.getItem("USER_NAME") || '';
-            this.sysUserAvatar = require("@/assets/user.png")
+            this.sysUserAvatar = require("@/assets/user.png");
         }
     }
 
