@@ -358,10 +358,10 @@
 
                     this.listLoading = true;
                     // 非批量删除，带上 status
-                    let para = (action !== 'remove' ? Object.assign({
+                    let para = (Object.assign({
                         ids: ids + '',
                         status: actions[action].status
-                    }, para) : {id: ids + ''});
+                    }, para));
                     api.changeQuestionStatus(para).then((res) => {
                         this.listLoading = false;
                         this.$message({

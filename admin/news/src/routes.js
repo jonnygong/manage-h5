@@ -31,7 +31,7 @@ let routes = [
         component: Main,
         name: '爆料列表',
         id: 'build',
-        iconCls: 'fa fa-bar-chart',
+        iconCls: 'fa fa-tasks',
         leaf: true,//只有一个节点
         children: [
             {path: '/rebellion', component: Rebellion, name: '爆料列表', meta: {requiresAuth: true}},
@@ -43,7 +43,7 @@ let routes = [
         component: Main,
         name: '',
         id: 'build',
-        iconCls: 'fa fa-bar-chart',
+        iconCls: 'fa fa-external-link',
         leaf: true,//只有一个节点
         children: [
             {path: '/rebelliontype', component: RebellionType, name: '爆料分类列表', meta: {requiresAuth: true}}
@@ -55,7 +55,7 @@ let routes = [
         component: Main,
         name: '',
         id: 'build',
-        iconCls: 'fa fa-bar-chart',
+        iconCls: 'fa fa-leaf',
         leaf: true,//只有一个节点
         children: [
             {path: '/reporter', component: Reporter, name: '记者列表', meta: {requiresAuth: true}}

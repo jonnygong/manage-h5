@@ -35,7 +35,7 @@ let routes = [
         component: Main,
         name: '快房问答',
         id: 'qa',
-        iconCls: 'fa fa-bar-chart',
+        iconCls: 'fa fa-file-text',
         children: [
             {path: '/questions', component: Questions, name: '用户问题列表', meta: {requiresAuth: true}},
             {path: '/pump', component: Pump, name: '用户追问列表', meta: {requiresAuth: true}}
@@ -47,7 +47,7 @@ let routes = [
         component: Main,
         name: '问题分类列表',
         id: 'qa',
-        iconCls: 'fa fa-bar-chart',
+        iconCls: 'fa fa-ra',
         leaf: true,//只有一个节点
         children: [
             {path: '/questionstype', component: QuestionsType, name: '问题分类列表', meta: {requiresAuth: true}}
@@ -59,7 +59,7 @@ let routes = [
         component: Main,
         name: '',
         id: 'qa',
-        iconCls: 'fa fa-bar-chart',
+        iconCls: 'fa fa-tasks',
         leaf: true,//只有一个节点
         children: [
             {path: '/expert', component: Expert, name: '专家列表', meta: {requiresAuth: true}}

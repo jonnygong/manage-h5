@@ -367,7 +367,7 @@
             selsChange(sels) {
                 this.sels = sels;
             },
-            //批量删除
+            //批量操作
             batchRemove(action) {
                 // 三种操作：remove disable active
                 let ids = this.sels.map(item => item.id).toString();
@@ -395,10 +395,10 @@
 
                     this.listLoading = true;
                     // 非批量删除，带上 status
-                    let para = (action !== 'remove' ? Object.assign({
+                    let para = (Object.assign({
                         ids: ids + '',
                         status: actions[action].status
-                    }, para) : {id: ids + ''});
+                    }, para));
                     api.changeRebellionTypeStatus(para).then((res) => {
                         this.listLoading = false;
                         this.$message({
