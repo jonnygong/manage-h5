@@ -21,7 +21,7 @@
      */
     // Ueditor 不能放在OSS上
     // production 
-    window.UEDITOR_HOME_URL = "/admin/news/ueditor/";
+    window.UEDITOR_HOME_URL = "/admin/news/static/ueditor/";
     // development
     // window.UEDITOR_HOME_URL = "/static/ueditor/";
     var URL = window.UEDITOR_HOME_URL || getUEBasePath();

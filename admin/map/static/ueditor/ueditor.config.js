@@ -23,7 +23,7 @@
   // window.UEDITOR_HOME_URL = "http://h.oss.kfw001.com/case/admin/ueditor/";
 
   // 开发环境
-  window.UEDITOR_HOME_URL = "/admin/house_map/ueditor/";
+  window.UEDITOR_HOME_URL = "/admin/house_map/static/ueditor/";
   var URL = window.UEDITOR_HOME_URL || getUEBasePath();
 
   /**
