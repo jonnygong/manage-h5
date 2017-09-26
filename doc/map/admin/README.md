@@ -2,8 +2,8 @@
 
 # 接口文档
 
- + [广告接口](/doc/map/ad.md)
- + [楼盘查询数据接口](/doc/map/house.md)
+ + [广告接口](/doc/map/admin/Ad.md)
+ + [楼盘查询数据接口](/doc/map/House.md)
 
 
 # 楼盘地图
