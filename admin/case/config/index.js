@@ -6,7 +6,7 @@ module.exports = {
     env: require('./prod.env'),
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: '',
+    assetsSubDirectory: 'static',
     // assetsPublicPath: 'http://h.oss.kfw001.com/case/admin/', // 静态文件存放目录
     assetsPublicPath: '/admin/case/', // 静态文件存放目录
     productionSourceMap: true,

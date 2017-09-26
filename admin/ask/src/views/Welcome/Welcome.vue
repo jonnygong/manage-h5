@@ -14,12 +14,6 @@
             </li>
             <li><i class="fa fa-arrow-circle-o-right mr5"></i> 公司网址：	http://www.kfw001.com/</li>
         </ul>
-        <div class="footer-logo">
-            <p class="text">本站由「杭州快房传媒有限公司」提供技术支持</p>
-            <div class="logo">
-                <img src="../../assets/images/logo.png" style="width:420px;height:80px">
-            </div>
-        </div>
     </div>
 </template>
 
