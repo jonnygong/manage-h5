@@ -2,7 +2,7 @@
     <section class="setting-wrapper">
         <!--编辑界面-->
         <el-form :model="editForm" label-width="120px" :rules="editFormRules" ref="editForm">
-            <el-form-item :label="item.label" :prop="item.prop" v-for="(item, index) in formItems">
+            <el-form-item :label="item.label" :prop="item.prop" v-for="(item, index) in formItems" :key="index">
                 <el-input v-model.number="editForm[item.prop]"
                           v-if="item.type==='number'"
                           auto-complete="off"></el-input>

@@ -32,6 +32,8 @@
             </el-table-column>
             <el-table-column prop="news" label="用户问题" width="200">
             </el-table-column>
+            <el-table-column prop="answer" label="专家回复" width="200">
+            </el-table-column>
             <el-table-column prop="k_id" label="问题类别" width="100">
                 <template scope="scope">
                     {{ cat[scope.row.k_id] }}
@@ -80,7 +82,7 @@
         </el-col>
 
         <!--编辑界面-->
-        <el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
+        <el-dialog title="编辑" size="large" v-model="editFormVisible" :close-on-click-modal="false">
             <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
                 <el-form-item label="用户问题" prop="news">
                     <el-input type="textarea" v-model="editForm.parent.news" :disabled="true"></el-input>

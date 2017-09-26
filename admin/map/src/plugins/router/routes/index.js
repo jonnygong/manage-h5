@@ -44,6 +44,23 @@ let routes = [
             }
         ]
     },
+    // 区域列表
+    {
+        path: '/',
+        component: Main,
+        name: '区域列表',
+        iconCls: 'fa fa-edit',
+        leaf: true, //只有一个节点
+        children: [
+            {
+                path: '/area',
+                component: () => import('@/views/Estate/Estate.vue'),
+                name: '楼盘列表',
+                meta: {requiresAuth: true}
+            },
+
+        ]
+    },
     // 地铁管理
     {
         path: '/',

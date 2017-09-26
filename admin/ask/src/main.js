@@ -23,7 +23,7 @@ router.beforeEach((to, from, next) => {
     // 获取access_token
     let isLogin = sessionStorage.getItem('IS_LOGIN');
     // 判断是否已登录，未登录则跳转至登录页
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV === 'production') {
         if (!isLogin) {
             window.location.href = '/admin/';
         } else {

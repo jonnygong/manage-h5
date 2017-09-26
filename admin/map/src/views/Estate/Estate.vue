@@ -97,7 +97,7 @@
         </el-col>
 
         <!--编辑界面-->
-        <el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false" :before-close="destroyEditEditor">
+        <el-dialog title="编辑" size="large" v-model="editFormVisible" :close-on-click-modal="false" :before-close="destroyEditEditor">
             <el-form :model="editForm" label-width="120px" :rules="editFormRules" ref="editForm">
                 <el-form-item label="项目标题" prop="title">
                     <el-input v-model="editForm.title" auto-complete="off"></el-input>
@@ -108,60 +108,11 @@
                 <el-form-item label="封面图片" prop="cover">
                     <i-uploader v-model="editForm.cover"></i-uploader>
                 </el-form-item>
-                <el-form-item label="销售热线" prop="sell_phone">
-                    <el-input v-model.number="editForm.sell_phone" auto-complete="off"></el-input>
-                </el-form-item>
                 <el-form-item label="排序" prop="sort">
                     <el-input v-model.number="editForm.sort" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="下次开盘时间" prop="next_open">
-                    <el-date-picker
-                            v-model="editForm.next_open"
-                            type="datetime"
-                            placeholder="选择日期"
-                            :picker-options="pickerOptions">
-                    </el-date-picker>
-                </el-form-item>
                 <el-form-item label="均价" prop="avg_price">
                     <el-input v-model.number="editForm.avg_price" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="项目地址" prop="address">
-                    <el-input v-model="editForm.address" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="经纬度">
-                    <el-row type="flex" justify="space-between">
-                        <el-col :span="9">
-                            <el-form-item prop="latitude">
-                                <el-input placeholder="请输入内容" v-model.number="map.lat">
-                                    <template slot="prepend">经度</template>
-                                </el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="9" :offset="1">
-                            <el-form-item prop="longitude">
-                                <el-input placeholder="请输入内容" v-model.number="map.lng">
-                                    <template slot="prepend">纬度</template>
-                                </el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="4" :offset="1">
-                            <el-button @click="map.display = !map.display">地图查询</el-button>
-                        </el-col>
-                    </el-row>
-                    <div class="map" style="margin-top: 10px;" v-if="map.display">
-                        <el-input placeholder="请输入内容" v-model="map.keyword">
-                            <template slot="prepend">关键字</template>
-                        </el-input>
-                        <baidu-map class="bm-view" style="width: 100%; height: 400px;margin-top: 10px;">
-                            <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-navigation>
-                            <bm-view style="width: 100%; height: 400px;margin-top: 10px;"></bm-view>
-                            <bm-local-search :keyword="map.keyword"
-                                             :auto-viewport="true"
-                                             :panel="false"
-                                             @infohtmlset="locationSuccess"></bm-local-search>
-                        </baidu-map>
-                    </div>
-
                 </el-form-item>
                 <el-form-item label="标签" prop="tags">
                     <el-checkbox-group v-model="editForm.tags" :max="5">
@@ -170,50 +121,6 @@
                                 :key="index"
                                 v-for="(item, index) in options.tags">{{ item.name }}</el-checkbox>
                     </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label="是否开放预约" prop="see_open">
-                    <el-select v-model.number="editForm.see_open" placeholder="请选择">
-                        <el-option
-                                v-for="(item, index) in options.see_open"
-                                :key="index"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="二维码图片" prop="qrcode_img">
-                    <i-uploader v-model="editForm.qrcode_img"></i-uploader>
-                </el-form-item>
-                <el-form-item label="链接地址" prop="link_url">
-                    <el-input v-model="editForm.link_url" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="分享标题" prop="share_title">
-                    <el-input v-model="editForm.share_title" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="分享内容" prop="share_content">
-                    <el-input v-model="editForm.share_content" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="分享图片" prop="share_img">
-                    <i-uploader v-model="editForm.share_img"></i-uploader>
-                </el-form-item>
-                <el-form-item label="微楼书标题" prop="link_title">
-                    <el-input v-model="editForm.link_title" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="销售状态" prop="sale_status">
-                    <el-select v-model.number="editForm.sale_status" placeholder="请选择">
-                        <el-option :label="item.label"
-                                   :value="item.value"
-                                   :key="index"
-                                   v-for="(item, index) in options.sale_status"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="是否合作" prop="is_cooperation">
-                    <el-select v-model.number="editForm.is_cooperation" placeholder="请选择">
-                        <el-option :label="item.label"
-                                   :value="item.value"
-                                   :key="index"
-                                   v-for="(item, index) in options.is_cooperation"></el-option>
-                    </el-select>
                 </el-form-item>
                 <el-form-item label="主推面积" prop="main_area">
                     <el-checkbox-group v-model="editForm.main_area">
@@ -231,17 +138,6 @@
                                 :key="index"
                                 v-for="(item, index) in options.house_type">{{ item.name }}</el-checkbox>
                     </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label="地铁线路" prop="metro_id">
-                    <el-checkbox-group v-model="editForm.metro_id">
-                        <el-checkbox
-                                :label="item.id"
-                                :key="index"
-                                v-for="(item, index) in options.metro_id">{{ item.name }}</el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label="地铁站点" prop="metrostation_id">
-                    <el-input v-model="editForm.metrostation_id" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="区域ID" prop="zone_id">
                     <el-select v-model.number="editForm.zone_id" placeholder="请选择" @change="handleEditChange">
@@ -261,48 +157,6 @@
                                    v-for="(item, index) in options.plate_id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="项目详情" prop="detail">
-                    <UE :defaultMsg=editForm.detail :config=ueditor.config ref="ueEdit"></UE>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click.native="handleEditCancel">取消</el-button>
-                <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
-            </div>
-        </el-dialog>
-
-        <!--新增界面-->
-        <el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false" :before-close="destroyAddEditor">
-            <el-form :model="addForm" label-width="120px" :rules="addFormRules" ref="addForm">
-                <el-form-item label="项目标题" prop="title">
-                    <el-input v-model="addForm.title" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="项目简介" prop="info">
-                    <el-input type="textarea" v-model="addForm.info" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="封面图片" prop="cover">
-                    <i-uploader v-model="addForm.cover"></i-uploader>
-                </el-form-item>
-                <el-form-item label="销售热线" prop="sell_phone">
-                    <el-input v-model.number="addForm.sell_phone" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="排序" prop="sort">
-                    <el-input v-model.number="addForm.sort" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="下次开盘时间" prop="next_open">
-                    <el-date-picker
-                            v-model="addForm.next_open"
-                            type="datetime"
-                            placeholder="选择日期"
-                            :picker-options="pickerOptions">
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item label="均价" prop="avg_price">
-                    <el-input v-model.number="addForm.avg_price" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="项目地址" prop="address">
-                    <el-input v-model="addForm.address" auto-complete="off"></el-input>
-                </el-form-item>
                 <el-form-item label="经纬度">
                     <el-row type="flex" justify="space-between">
                         <el-col :span="9">
@@ -338,16 +192,30 @@
                     </div>
 
                 </el-form-item>
-                <el-form-item label="标签" prop="tags">
-                    <el-checkbox-group v-model="addForm.tags" :max="5">
+                <el-form-item label="项目地址" prop="address">
+                    <el-input v-model="editForm.address" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="地铁线路" prop="metro_id">
+                    <el-checkbox-group v-model="editForm.metro_id">
                         <el-checkbox
                                 :label="item.id"
                                 :key="index"
-                                v-for="(item, index) in options.tags">{{ item.name }}</el-checkbox>
+                                v-for="(item, index) in options.metro_id">{{ item.name }}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
+                <el-form-item label="地铁站点" prop="metrostation_id">
+                    <el-input v-model="editForm.metrostation_id" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="下次开盘时间" prop="next_open">
+                    <el-date-picker
+                            v-model="editForm.next_open"
+                            type="datetime"
+                            placeholder="选择日期"
+                            :picker-options="pickerOptions">
+                    </el-date-picker>
+                </el-form-item>
                 <el-form-item label="是否开放预约" prop="see_open">
-                    <el-select v-model.number="addForm.see_open" placeholder="请选择">
+                    <el-select v-model.number="editForm.see_open" placeholder="请选择">
                         <el-option
                                 v-for="(item, index) in options.see_open"
                                 :key="index"
@@ -356,26 +224,8 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="二维码图片" prop="qrcode_img">
-                    <i-uploader v-model="addForm.qrcode_img"></i-uploader>
-                </el-form-item>
-                <el-form-item label="链接地址" prop="link_url">
-                    <el-input v-model="addForm.link_url" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="分享标题" prop="share_title">
-                    <el-input v-model="addForm.share_title" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="分享内容" prop="share_content">
-                    <el-input v-model="addForm.share_content" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="分享图片" prop="share_img">
-                    <i-uploader v-model="addForm.share_img"></i-uploader>
-                </el-form-item>
-                <el-form-item label="微楼书标题" prop="link_title">
-                    <el-input v-model="addForm.link_title" auto-complete="off"></el-input>
-                </el-form-item>
                 <el-form-item label="销售状态" prop="sale_status">
-                    <el-select v-model.number="addForm.sale_status" placeholder="请选择">
+                    <el-select v-model.number="editForm.sale_status" placeholder="请选择">
                         <el-option :label="item.label"
                                    :value="item.value"
                                    :key="index"
@@ -383,12 +233,72 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="是否合作" prop="is_cooperation">
-                    <el-select v-model.number="addForm.is_cooperation" placeholder="请选择">
+                    <el-select v-model.number="editForm.is_cooperation" placeholder="请选择">
                         <el-option :label="item.label"
                                    :value="item.value"
                                    :key="index"
                                    v-for="(item, index) in options.is_cooperation"></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="销售热线" prop="sell_phone">
+                    <el-input v-model.number="editForm.sell_phone" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="项目详情" prop="detail">
+                    <UE :defaultMsg=editForm.detail :config=ueditor.config ref="ueEdit"></UE>
+                </el-form-item>
+                <el-form-item label="分享标题" prop="share_title">
+                    <el-input v-model="editForm.share_title" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="分享内容" prop="share_content">
+                    <el-input v-model="editForm.share_content" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="分享图片" prop="share_img">
+                    <i-uploader v-model="editForm.share_img"></i-uploader>
+                </el-form-item>
+                <el-form-item label="微楼书标题" prop="link_title">
+                    <el-input v-model="editForm.link_title" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="二维码图片" prop="qrcode_img">
+                    <i-uploader v-model="editForm.qrcode_img"></i-uploader>
+                </el-form-item>
+                <el-form-item label="链接地址" prop="link_url">
+                    <el-input v-model="editForm.link_url" auto-complete="off"></el-input>
+                </el-form-item>
+
+
+
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click.native="handleEditCancel">取消</el-button>
+                <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
+            </div>
+        </el-dialog>
+
+        <!--新增界面-->
+        <el-dialog title="新增" size="large" v-model="addFormVisible" :close-on-click-modal="false" :before-close="destroyAddEditor">
+            <el-form :model="addForm" label-width="120px" :rules="addFormRules" ref="addForm">
+                <el-form-item label="项目标题" prop="title">
+                    <el-input v-model="addForm.title" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="项目简介" prop="info">
+                    <el-input type="textarea" v-model="addForm.info" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="封面图片" prop="cover">
+                    <i-uploader v-model="addForm.cover"></i-uploader>
+                </el-form-item>
+                <el-form-item label="排序" prop="sort">
+                    <el-input v-model.number="addForm.sort" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="均价" prop="avg_price">
+                    <el-input v-model.number="addForm.avg_price" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="标签" prop="tags">
+                    <el-checkbox-group v-model="addForm.tags" :max="5">
+                        <el-checkbox
+                                :label="item.id"
+                                :key="index"
+                                v-for="(item, index) in options.tags">{{ item.name }}</el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="主推面积" prop="main_area">
                     <el-checkbox-group v-model="addForm.main_area">
@@ -398,7 +308,6 @@
                                 v-for="(item, index) in options.main_area">{{ item.name }}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-
                 <el-form-item label="户型" prop="house_type">
                     <el-checkbox-group v-model="addForm.house_type">
                         <el-checkbox
@@ -406,17 +315,6 @@
                                 :key="index"
                                 v-for="(item, index) in options.house_type">{{ item.name }}</el-checkbox>
                     </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label="地铁线路" prop="metro_id">
-                    <el-checkbox-group v-model="addForm.metro_id">
-                        <el-checkbox
-                                :label="item.id"
-                                :key="index"
-                                v-for="(item, index) in options.metro_id">{{ item.name }}</el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label="地铁站点" prop="metrostation_id">
-                    <el-input v-model="addForm.metrostation_id" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="区域ID" prop="zone_id">
                     <el-select v-model.number="addForm.zone_id" placeholder="请选择" @change="handleAddChange">
@@ -436,8 +334,111 @@
                                    v-for="(item, index) in options.plate_id"></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="经纬度">
+                    <el-row type="flex" justify="space-between">
+                        <el-col :span="9">
+                            <el-form-item prop="latitude">
+                                <el-input placeholder="请输入内容" v-model.number="map.lat">
+                                    <template slot="prepend">经度</template>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="9" :offset="1">
+                            <el-form-item prop="longitude">
+                                <el-input placeholder="请输入内容" v-model.number="map.lng">
+                                    <template slot="prepend">纬度</template>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="4" :offset="1">
+                            <el-button @click="map.display = !map.display">地图查询</el-button>
+                        </el-col>
+                    </el-row>
+                    <div class="map" style="margin-top: 10px;" v-if="map.display">
+                        <el-input placeholder="请输入内容" v-model="map.keyword">
+                            <template slot="prepend">关键字</template>
+                        </el-input>
+                        <baidu-map class="bm-view" style="width: 100%; height: 400px;margin-top: 10px;">
+                            <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-navigation>
+                            <bm-view style="width: 100%; height: 400px;margin-top: 10px;"></bm-view>
+                            <bm-local-search :keyword="map.keyword"
+                                             :auto-viewport="true"
+                                             :panel="false"
+                                             @infohtmlset="locationSuccess"></bm-local-search>
+                        </baidu-map>
+                    </div>
+                </el-form-item>
+                <el-form-item label="项目地址" prop="address">
+                    <el-input v-model="addForm.address" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="地铁线路" prop="metro_id">
+                    <el-checkbox-group v-model="addForm.metro_id">
+                        <el-checkbox
+                                :label="item.id"
+                                :key="index"
+                                v-for="(item, index) in options.metro_id">{{ item.name }}</el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+                <el-form-item label="地铁站点" prop="metrostation_id">
+                    <el-input v-model="addForm.metrostation_id" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="下次开盘时间" prop="next_open">
+                    <el-date-picker
+                            v-model="addForm.next_open"
+                            type="datetime"
+                            placeholder="选择日期"
+                            :picker-options="pickerOptions">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="是否开放预约" prop="see_open">
+                    <el-select v-model.number="addForm.see_open" placeholder="请选择">
+                        <el-option
+                                v-for="(item, index) in options.see_open"
+                                :key="index"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="销售状态" prop="sale_status">
+                    <el-select v-model.number="addForm.sale_status" placeholder="请选择">
+                        <el-option :label="item.label"
+                                   :value="item.value"
+                                   :key="index"
+                                   v-for="(item, index) in options.sale_status"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="是否合作" prop="is_cooperation">
+                    <el-select v-model.number="addForm.is_cooperation" placeholder="请选择">
+                        <el-option :label="item.label"
+                                   :value="item.value"
+                                   :key="index"
+                                   v-for="(item, index) in options.is_cooperation"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="销售热线" prop="sell_phone">
+                    <el-input v-model.number="addForm.sell_phone" auto-complete="off"></el-input>
+                </el-form-item>
                 <el-form-item label="项目详情" prop="detail">
                     <UE :defaultMsg=addForm.detail :config=ueditor.config ref="ueAdd"></UE>
+                </el-form-item>
+                <el-form-item label="分享标题" prop="share_title">
+                    <el-input v-model="addForm.share_title" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="分享内容" prop="share_content">
+                    <el-input v-model="addForm.share_content" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="分享图片" prop="share_img">
+                    <i-uploader v-model="addForm.share_img"></i-uploader>
+                </el-form-item>
+                <el-form-item label="微楼书标题" prop="link_title">
+                    <el-input v-model="addForm.link_title" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="二维码图片" prop="qrcode_img">
+                    <i-uploader v-model="addForm.qrcode_img"></i-uploader>
+                </el-form-item>
+                <el-form-item label="链接地址" prop="link_url">
+                    <el-input v-model="addForm.link_url" auto-complete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -487,10 +488,10 @@
                 },
                 filters: {
                     value: '',
-                    key: 'zone',
+                    key: 'zone_id',
                     options: [
-                        {value: 'zone', label: '区域'},
-                        {value: 'price', label: '均价'},
+                        {value: 'zone_id', label: '区域'},
+                        {value: 'avg_price', label: '均价'},
                         {value: 'is_cooperation', label: '是否合作'}
                     ]
                 },
@@ -597,7 +598,7 @@
                         {type: 'number',required: true, message: '请选择是否合作', trigger: 'blur'}
                     ],
                     detail: [
-                        {validator: validateAddContent, trigger: 'blur'}
+                        {validator: validateEditContent, trigger: 'blur'}
                     ],
                 },
                 //编辑界面数据
@@ -733,9 +734,7 @@
                 this.getListPlate(val);
             },
             handleEditChange(val) {
-
-                    this.getListPlate(val);
-
+                this.getListPlate(val);
             },
             handleRedirect(row, target) {
                 this.$router.push({name: target, params: {id: row.id}})
