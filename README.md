@@ -20,7 +20,15 @@
 - [移动端接口](/doc/map/README.md)   `开发中`
 - [后台管理接口](/doc/map/admin/README.md)  `开发中`
 
+### 部署说明
+- 后台： http://h.kfw001.com/admin/hous_map/
+- 前端： http://h.kfw001.com/web/hous_map/
+
 
 ## [快房案例接口]
 
 - [快房案例接口](/doc/case/README.md)  
+
+### 部署说明
+- 后台： http://h.kfw001.com/admin/case/
+- 前端： http://h.kfw001.com/web/case/

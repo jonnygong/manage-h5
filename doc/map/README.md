@@ -6,7 +6,16 @@
  + [楼盘查询数据接口](/doc/map/House.md)
 
 
-# 楼盘地图
+# 部署说明
+
+- 后台： http://h.kfw001.com/admin/hous_map/
+- 前端： http://h.kfw001.com/web/hous_map/
+
+# 相关数据库
+
+- show_kfw001  以projiect 相关的表
+
+# 楼盘地图相关需求描述
 
 > 采用原来快房的数据库： kfw001_data  inch_housing
 
