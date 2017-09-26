@@ -3,7 +3,9 @@
 # 接口文档
 
  + [广告接口](/doc/map/admin/Ad.md)
- + [楼盘查询数据接口](/doc/map/House.md)
+ + [区域接口](/doc/map/admin/Area.md)
+ 
+ + [楼盘查询数据接口](/doc/admin/House.md)
 
 
 # 楼盘地图
