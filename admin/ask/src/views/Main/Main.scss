@@ -34,7 +34,7 @@
       font-size: 20px;
       padding-left: 20px;
       padding-right: 20px;
-      border-color: #167ecc;
+      border-color: #2b2b2b;
       border-right-width: 1px;
       border-right-style: solid;
       img {
@@ -140,6 +140,7 @@
   }
 }
 
+// 表单内图片展示样式
 .code-img, .logo-img {
   text-align: center;
 }
@@ -148,28 +149,9 @@
   max-width: 150px;
 }
 
-.avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-
-.avatar-uploader .el-upload:hover {
-  border-color: #20a0ff;
-}
-
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  min-width: 178px;
-  min-height: 178px;
-  line-height: 178px;
-  text-align: center;
-}
-
-.avatar {
-  max-width: 200px;
+// 按钮内超链接样式
+.el-button a {
   display: block;
+  color: #fff;
+  text-decoration: none;
 }
