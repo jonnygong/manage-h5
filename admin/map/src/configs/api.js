@@ -48,5 +48,20 @@ export default {
 
         mapadminSpecsEdit: '/Mapadmin/Specs/edit',// 规划参数接口
         mapadminSpecsSave: '/Mapadmin/Specs/save',
+
+        mapadminAdList: '/Mapadmin/Ad/list',// 广告列表接口
+        mapadminAdInfo: '/Mapadmin/Ad/info',
+        mapadminAdAdd: '/Mapadmin/Ad/add',
+        mapadminAdUpdate: '/Mapadmin/Ad/update',
+        mapadminAdStatus: '/Mapadmin/Ad/status',
+        mapadminAdDelete: '/Mapadmin/Ad/delete',
+
+        mapadminAreaList: '/Mapadmin/Area/list',// 区域列表接口
+        mapadminAreaInfo: '/Mapadmin/Area/info',
+        mapadminAreaAdd: '/Mapadmin/Area/add',
+        mapadminAreaUpdate: '/Mapadmin/Area/update',
+        mapadminAreaStatus: '/Mapadmin/Area/status',
+        mapadminAreaDelete: '/Mapadmin/Area/delete',
+        mapadminAreaSelect: '/Mapadmin/Area/select',
     }
 };

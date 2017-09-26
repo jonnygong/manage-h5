@@ -5,10 +5,13 @@
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">
                 <el-form-item>
-                    <el-input v-model="filters.value" placeholder="关键词"></el-input>
+                    <el-input v-model="filters.keyword" placeholder="关键词"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-select v-model="filters.key" placeholder="请选择搜索字段">
+                    <el-input v-model="filters.price" placeholder="均价"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-select v-model="filters.is_cooperation" placeholder="请选择是否合作">
                         <el-option
                                 v-for="(item,index) in filters.options"
                                 :key="index"
@@ -97,10 +100,106 @@
         </el-col>
 
         <!--编辑界面-->
-        <el-dialog title="编辑" size="large" v-model="editFormVisible" :close-on-click-modal="false" :before-close="destroyEditEditor">
+        <el-dialog title="编辑" size="large" v-model="editFormVisible" :close-on-click-modal="false">
             <el-form :model="editForm" label-width="120px" :rules="editFormRules" ref="editForm">
                 <el-form-item label="项目标题" prop="title">
                     <el-input v-model="editForm.title" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="区域ID" prop="zone_id">
+                    <el-select v-model.number="editForm.zone_id" placeholder="请选择" @change="handleEditChange">
+                        <el-option
+                                v-for="(item, index) in options.zone"
+                                :key="index"
+                                :label="item.name"
+                                :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="均价" prop="avg_price">
+                    <el-input v-model.number="editForm.avg_price" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="经纬度">
+                    <el-row type="flex" justify="space-between">
+                        <el-col :span="9">
+                            <el-form-item prop="latitude">
+                                <el-input placeholder="请输入内容" v-model.number="map.lat">
+                                    <template slot="prepend">经度</template>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="9" :offset="1">
+                            <el-form-item prop="longitude">
+                                <el-input placeholder="请输入内容" v-model.number="map.lng">
+                                    <template slot="prepend">纬度</template>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="4" :offset="1">
+                            <el-button @click="map.display = !map.display">地图查询</el-button>
+                        </el-col>
+                    </el-row>
+                    <div class="map" style="margin-top: 10px;" v-if="map.display">
+                        <el-input placeholder="请输入内容" v-model="map.keyword">
+                            <template slot="prepend">关键字</template>
+                        </el-input>
+                        <baidu-map class="bm-view" style="width: 100%; height: 400px;margin-top: 10px;" :center="{lng: this.map.lng, lat: this.map.lat}" :zoom="15" :scroll-wheel-zoom="true">
+                            <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-navigation>
+                            <bm-view style="width: 100%; height: 400px;margin-top: 10px;"></bm-view>
+                            <bm-context-menu>
+                                <bm-context-menu-item :callback="locationSuccess" text="使用此位置"></bm-context-menu-item>
+                            </bm-context-menu>
+                            <bm-marker :position="{lng: this.map.lng, lat: this.map.lat}" animation="BMAP_ANIMATION_BOUNCE"></bm-marker>
+                            <bm-local-search :keyword="map.keyword"
+                                             :auto-viewport="true"
+                                             :panel="false"
+                                             @infohtmlset="locationSuccess"></bm-local-search>
+                        </baidu-map>
+                    </div>
+
+                </el-form-item>
+                <el-form-item label="户型" prop="house_type">
+                    <el-checkbox-group v-model="editForm.house_type">
+                        <el-checkbox
+                                :label="item.id"
+                                :key="index"
+                                v-for="(item, index) in options.house_type">{{ item.name }}</el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+                <el-form-item label="是否合作" prop="is_cooperation">
+                    <el-select v-model.number="editForm.is_cooperation" placeholder="请选择">
+                        <el-option :label="item.label"
+                                   :value="item.value"
+                                   :key="index"
+                                   v-for="(item, index) in options.is_cooperation"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="销售状态" prop="sale_status">
+                    <el-select v-model.number="editForm.sale_status" placeholder="请选择">
+                        <el-option :label="item.label"
+                                   :value="item.value"
+                                   :key="index"
+                                   v-for="(item, index) in options.sale_status"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="排序" prop="sort">
+                    <el-input v-model.number="editForm.sort" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="销售热线" prop="sell_phone">
+                    <el-input v-model.number="editForm.sell_phone" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="地铁线路" prop="metro_id">
+                    <el-checkbox-group v-model="editForm.metro_id">
+                        <el-checkbox
+                                :label="item.id"
+                                :key="index"
+                                v-for="(item, index) in options.metro_id">{{ item.name }}</el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+                <el-form-item label="地铁站点" prop="metrostation_id">
+                    <el-input v-model="editForm.metrostation_id" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="项目地址" prop="address">
+                    <el-input v-model="editForm.address" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="项目简介" prop="info">
                     <el-input type="textarea" v-model="editForm.info" auto-complete="off"></el-input>
@@ -108,11 +207,13 @@
                 <el-form-item label="封面图片" prop="cover">
                     <i-uploader v-model="editForm.cover"></i-uploader>
                 </el-form-item>
-                <el-form-item label="排序" prop="sort">
-                    <el-input v-model.number="editForm.sort" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="均价" prop="avg_price">
-                    <el-input v-model.number="editForm.avg_price" auto-complete="off"></el-input>
+                <el-form-item label="下次开盘时间" prop="next_open">
+                    <el-date-picker
+                            v-model="editForm.next_open"
+                            type="datetime"
+                            placeholder="选择日期"
+                            :picker-options="pickerOptions">
+                    </el-date-picker>
                 </el-form-item>
                 <el-form-item label="标签" prop="tags">
                     <el-checkbox-group v-model="editForm.tags" :max="5">
@@ -130,24 +231,8 @@
                                 v-for="(item, index) in options.main_area">{{ item.name }}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-
-                <el-form-item label="户型" prop="house_type">
-                    <el-checkbox-group v-model="editForm.house_type">
-                        <el-checkbox
-                                :label="item.id"
-                                :key="index"
-                                v-for="(item, index) in options.house_type">{{ item.name }}</el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label="区域ID" prop="zone_id">
-                    <el-select v-model.number="editForm.zone_id" placeholder="请选择" @change="handleEditChange">
-                        <el-option
-                                v-for="(item, index) in options.zone"
-                                :key="index"
-                                :label="item.name"
-                                :value="item.id">
-                        </el-option>
-                    </el-select>
+                <el-form-item label="主力户型" prop="mainhouseing">
+                    <el-input v-model="editForm.mainhouseing" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="下级区域" prop="plate_id">
                     <el-select v-model.number="editForm.plate_id" placeholder="请选择">
@@ -156,6 +241,62 @@
                                    :key="index"
                                    v-for="(item, index) in options.plate_id"></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="是否开放预约" prop="see_open">
+                    <el-select v-model.number="editForm.see_open" placeholder="请选择">
+                        <el-option
+                                v-for="(item, index) in options.see_open"
+                                :key="index"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
+
+                <!--<el-form-item label="项目详情" prop="detail">-->
+                    <!--<UE :defaultMsg=editForm.detail :config=ueditor.config ref="ueEdit"></UE>-->
+                <!--</el-form-item>-->
+                <el-form-item label="分享标题" prop="share_title">
+                    <el-input v-model="editForm.share_title" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="分享内容" prop="share_content">
+                    <el-input v-model="editForm.share_content" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="分享图片" prop="share_img">
+                    <i-uploader v-model="editForm.share_img"></i-uploader>
+                </el-form-item>
+                <el-form-item label="链接地址" prop="link_title">
+                    <el-input v-model="editForm.link_title" auto-complete="off"></el-input>
+                </el-form-item>
+
+
+
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click.native="handleEditCancel">取消</el-button>
+                <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
+            </div>
+        </el-dialog>
+
+        <!--新增界面-->
+        <el-dialog title="新增" size="large" v-model="addFormVisible" :close-on-click-modal="false">
+            <el-form :model="addForm" label-width="120px" :rules="addFormRules" ref="addForm">
+                <el-form-item label="项目标题" prop="title">
+                    <el-input v-model="addForm.title" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="区域ID" prop="zone_id">
+                    <el-select v-model.number="addForm.zone_id" placeholder="请选择" @change="handleEditChange">
+                        <el-option
+                                v-for="(item, index) in options.zone"
+                                :key="index"
+                                :label="item.name"
+                                :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="均价" prop="avg_price">
+                    <el-input v-model.number="addForm.avg_price" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="经纬度">
                     <el-row type="flex" justify="space-between">
@@ -181,9 +322,13 @@
                         <el-input placeholder="请输入内容" v-model="map.keyword">
                             <template slot="prepend">关键字</template>
                         </el-input>
-                        <baidu-map class="bm-view" style="width: 100%; height: 400px;margin-top: 10px;">
+                        <baidu-map class="bm-view" style="width: 100%; height: 400px;margin-top: 10px;" :center="{lng: this.map.lng, lat: this.map.lat}" :zoom="15" :scroll-wheel-zoom="true">
                             <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-navigation>
                             <bm-view style="width: 100%; height: 400px;margin-top: 10px;"></bm-view>
+                            <bm-context-menu>
+                                <bm-context-menu-item :callback="locationSuccess" text="使用此位置"></bm-context-menu-item>
+                            </bm-context-menu>
+                            <bm-marker :position="{lng: this.map.lng, lat: this.map.lat}" animation="BMAP_ANIMATION_BOUNCE"></bm-marker>
                             <bm-local-search :keyword="map.keyword"
                                              :auto-viewport="true"
                                              :panel="false"
@@ -192,11 +337,38 @@
                     </div>
 
                 </el-form-item>
-                <el-form-item label="项目地址" prop="address">
-                    <el-input v-model="editForm.address" auto-complete="off"></el-input>
+                <el-form-item label="户型" prop="house_type">
+                    <el-checkbox-group v-model="addForm.house_type">
+                        <el-checkbox
+                                :label="item.id"
+                                :key="index"
+                                v-for="(item, index) in options.house_type">{{ item.name }}</el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+                <el-form-item label="是否合作" prop="is_cooperation">
+                    <el-select v-model.number="addForm.is_cooperation" placeholder="请选择">
+                        <el-option :label="item.label"
+                                   :value="item.value"
+                                   :key="index"
+                                   v-for="(item, index) in options.is_cooperation"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="销售状态" prop="sale_status">
+                    <el-select v-model.number="addForm.sale_status" placeholder="请选择">
+                        <el-option :label="item.label"
+                                   :value="item.value"
+                                   :key="index"
+                                   v-for="(item, index) in options.sale_status"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="排序" prop="sort">
+                    <el-input v-model.number="addForm.sort" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="销售热线" prop="sell_phone">
+                    <el-input v-model.number="addForm.sell_phone" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="地铁线路" prop="metro_id">
-                    <el-checkbox-group v-model="editForm.metro_id">
+                    <el-checkbox-group v-model="addForm.metro_id">
                         <el-checkbox
                                 :label="item.id"
                                 :key="index"
@@ -204,81 +376,10 @@
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="地铁站点" prop="metrostation_id">
-                    <el-input v-model="editForm.metrostation_id" auto-complete="off"></el-input>
+                    <el-input v-model="addForm.metrostation_id" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="下次开盘时间" prop="next_open">
-                    <el-date-picker
-                            v-model="editForm.next_open"
-                            type="datetime"
-                            placeholder="选择日期"
-                            :picker-options="pickerOptions">
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item label="是否开放预约" prop="see_open">
-                    <el-select v-model.number="editForm.see_open" placeholder="请选择">
-                        <el-option
-                                v-for="(item, index) in options.see_open"
-                                :key="index"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="销售状态" prop="sale_status">
-                    <el-select v-model.number="editForm.sale_status" placeholder="请选择">
-                        <el-option :label="item.label"
-                                   :value="item.value"
-                                   :key="index"
-                                   v-for="(item, index) in options.sale_status"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="是否合作" prop="is_cooperation">
-                    <el-select v-model.number="editForm.is_cooperation" placeholder="请选择">
-                        <el-option :label="item.label"
-                                   :value="item.value"
-                                   :key="index"
-                                   v-for="(item, index) in options.is_cooperation"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="销售热线" prop="sell_phone">
-                    <el-input v-model.number="editForm.sell_phone" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="项目详情" prop="detail">
-                    <UE :defaultMsg=editForm.detail :config=ueditor.config ref="ueEdit"></UE>
-                </el-form-item>
-                <el-form-item label="分享标题" prop="share_title">
-                    <el-input v-model="editForm.share_title" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="分享内容" prop="share_content">
-                    <el-input v-model="editForm.share_content" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="分享图片" prop="share_img">
-                    <i-uploader v-model="editForm.share_img"></i-uploader>
-                </el-form-item>
-                <el-form-item label="微楼书标题" prop="link_title">
-                    <el-input v-model="editForm.link_title" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="二维码图片" prop="qrcode_img">
-                    <i-uploader v-model="editForm.qrcode_img"></i-uploader>
-                </el-form-item>
-                <el-form-item label="链接地址" prop="link_url">
-                    <el-input v-model="editForm.link_url" auto-complete="off"></el-input>
-                </el-form-item>
-
-
-
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click.native="handleEditCancel">取消</el-button>
-                <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
-            </div>
-        </el-dialog>
-
-        <!--新增界面-->
-        <el-dialog title="新增" size="large" v-model="addFormVisible" :close-on-click-modal="false" :before-close="destroyAddEditor">
-            <el-form :model="addForm" label-width="120px" :rules="addFormRules" ref="addForm">
-                <el-form-item label="项目标题" prop="title">
-                    <el-input v-model="addForm.title" auto-complete="off"></el-input>
+                <el-form-item label="项目地址" prop="address">
+                    <el-input v-model="addForm.address" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="项目简介" prop="info">
                     <el-input type="textarea" v-model="addForm.info" auto-complete="off"></el-input>
@@ -286,11 +387,13 @@
                 <el-form-item label="封面图片" prop="cover">
                     <i-uploader v-model="addForm.cover"></i-uploader>
                 </el-form-item>
-                <el-form-item label="排序" prop="sort">
-                    <el-input v-model.number="addForm.sort" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="均价" prop="avg_price">
-                    <el-input v-model.number="addForm.avg_price" auto-complete="off"></el-input>
+                <el-form-item label="下次开盘时间" prop="next_open">
+                    <el-date-picker
+                            v-model="addForm.next_open"
+                            type="datetime"
+                            placeholder="选择日期"
+                            :picker-options="pickerOptions">
+                    </el-date-picker>
                 </el-form-item>
                 <el-form-item label="标签" prop="tags">
                     <el-checkbox-group v-model="addForm.tags" :max="5">
@@ -308,24 +411,17 @@
                                 v-for="(item, index) in options.main_area">{{ item.name }}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="户型" prop="house_type">
-                    <el-checkbox-group v-model="addForm.house_type">
-                        <el-checkbox
-                                :label="item.id"
-                                :key="index"
-                                v-for="(item, index) in options.house_type">{{ item.name }}</el-checkbox>
-                    </el-checkbox-group>
+                <el-form-item label="主力户型" prop="mainhouseing">
+                    <el-input v-model="addForm.mainhouseing" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="区域ID" prop="zone_id">
-                    <el-select v-model.number="addForm.zone_id" placeholder="请选择" @change="handleAddChange">
-                        <el-option
-                                v-for="(item, index) in options.zone"
-                                :key="index"
-                                :label="item.name"
-                                :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
+                <!--<el-form-item label="对应城市" prop="city_id">-->
+                    <!--<el-select v-model.number="addForm.city_id" placeholder="请选择">-->
+                        <!--<el-option :label="item.name"-->
+                                   <!--:value="item.id"-->
+                                   <!--:key="index"-->
+                                   <!--v-for="(item, index) in options.city_id"></el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
                 <el-form-item label="下级区域" prop="plate_id">
                     <el-select v-model.number="addForm.plate_id" placeholder="请选择">
                         <el-option :label="item.name"
@@ -333,62 +429,6 @@
                                    :key="index"
                                    v-for="(item, index) in options.plate_id"></el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item label="经纬度">
-                    <el-row type="flex" justify="space-between">
-                        <el-col :span="9">
-                            <el-form-item prop="latitude">
-                                <el-input placeholder="请输入内容" v-model.number="map.lat">
-                                    <template slot="prepend">经度</template>
-                                </el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="9" :offset="1">
-                            <el-form-item prop="longitude">
-                                <el-input placeholder="请输入内容" v-model.number="map.lng">
-                                    <template slot="prepend">纬度</template>
-                                </el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="4" :offset="1">
-                            <el-button @click="map.display = !map.display">地图查询</el-button>
-                        </el-col>
-                    </el-row>
-                    <div class="map" style="margin-top: 10px;" v-if="map.display">
-                        <el-input placeholder="请输入内容" v-model="map.keyword">
-                            <template slot="prepend">关键字</template>
-                        </el-input>
-                        <baidu-map class="bm-view" style="width: 100%; height: 400px;margin-top: 10px;">
-                            <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-navigation>
-                            <bm-view style="width: 100%; height: 400px;margin-top: 10px;"></bm-view>
-                            <bm-local-search :keyword="map.keyword"
-                                             :auto-viewport="true"
-                                             :panel="false"
-                                             @infohtmlset="locationSuccess"></bm-local-search>
-                        </baidu-map>
-                    </div>
-                </el-form-item>
-                <el-form-item label="项目地址" prop="address">
-                    <el-input v-model="addForm.address" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="地铁线路" prop="metro_id">
-                    <el-checkbox-group v-model="addForm.metro_id">
-                        <el-checkbox
-                                :label="item.id"
-                                :key="index"
-                                v-for="(item, index) in options.metro_id">{{ item.name }}</el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label="地铁站点" prop="metrostation_id">
-                    <el-input v-model="addForm.metrostation_id" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="下次开盘时间" prop="next_open">
-                    <el-date-picker
-                            v-model="addForm.next_open"
-                            type="datetime"
-                            placeholder="选择日期"
-                            :picker-options="pickerOptions">
-                    </el-date-picker>
                 </el-form-item>
                 <el-form-item label="是否开放预约" prop="see_open">
                     <el-select v-model.number="addForm.see_open" placeholder="请选择">
@@ -400,28 +440,11 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="销售状态" prop="sale_status">
-                    <el-select v-model.number="addForm.sale_status" placeholder="请选择">
-                        <el-option :label="item.label"
-                                   :value="item.value"
-                                   :key="index"
-                                   v-for="(item, index) in options.sale_status"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="是否合作" prop="is_cooperation">
-                    <el-select v-model.number="addForm.is_cooperation" placeholder="请选择">
-                        <el-option :label="item.label"
-                                   :value="item.value"
-                                   :key="index"
-                                   v-for="(item, index) in options.is_cooperation"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="销售热线" prop="sell_phone">
-                    <el-input v-model.number="addForm.sell_phone" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="项目详情" prop="detail">
-                    <UE :defaultMsg=addForm.detail :config=ueditor.config ref="ueAdd"></UE>
-                </el-form-item>
+
+
+                <!--<el-form-item label="项目详情" prop="detail">-->
+                <!--<UE :defaultMsg=addForm.detail :config=ueditor.config ref="ueAdd"></UE>-->
+                <!--</el-form-item>-->
                 <el-form-item label="分享标题" prop="share_title">
                     <el-input v-model="addForm.share_title" auto-complete="off"></el-input>
                 </el-form-item>
@@ -431,14 +454,8 @@
                 <el-form-item label="分享图片" prop="share_img">
                     <i-uploader v-model="addForm.share_img"></i-uploader>
                 </el-form-item>
-                <el-form-item label="微楼书标题" prop="link_title">
+                <el-form-item label="链接地址" prop="link_title">
                     <el-input v-model="addForm.link_title" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="二维码图片" prop="qrcode_img">
-                    <i-uploader v-model="addForm.qrcode_img"></i-uploader>
-                </el-form-item>
-                <el-form-item label="链接地址" prop="link_url">
-                    <el-input v-model="addForm.link_url" auto-complete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -456,30 +473,30 @@
 
     export default {
         data() {
-            var validateAddContent = (rule, value, callback) => {
-                value = this.$refs['ueAdd'].getUEContent();
-                if (value === '') {
-                    callback(new Error('请输入内容'));
-                } else {
-                    callback();
-                }
-            };
-            var validateEditContent = (rule, value, callback) => {
-                value = this.$refs['ueEdit'].getUEContent();
-                if (value === '') {
-                    callback(new Error('请输入内容'));
-                } else {
-                    callback();
-                }
-            };
+//            var validateAddContent = (rule, value, callback) => {
+//                value = this.$refs['ueAdd'].getUEContent();
+//                if (value === '') {
+//                    callback(new Error('请输入内容'));
+//                } else {
+//                    callback();
+//                }
+//            };
+//            var validateEditContent = (rule, value, callback) => {
+//                value = this.$refs['ueEdit'].getUEContent();
+//                if (value === '') {
+//                    callback(new Error('请输入内容'));
+//                } else {
+//                    callback();
+//                }
+//            };
             return {
-                ueditor: {
-                    config: {
-                        initialFrameWidth: null,
-                        initialFrameHeight: 350,
-                        zIndex: 9999
-                    }
-                },
+//                ueditor: {
+//                    config: {
+//                        initialFrameWidth: null,
+//                        initialFrameHeight: 350,
+//                        zIndex: 9999
+//                    }
+//                },
                 map: {
                     display: false,
                     keyword: '',
@@ -487,13 +504,14 @@
                     lng: ''
                 },
                 filters: {
-                    value: '',
-                    key: 'zone_id',
+                    keyword: '',
+                    price: '',
+                    is_cooperation: '',
                     options: [
-                        {value: 'zone_id', label: '区域'},
-                        {value: 'avg_price', label: '均价'},
-                        {value: 'is_cooperation', label: '是否合作'}
-                    ]
+                        {value: 0, label: '没有合作'},
+                        {value: 1, label: '合作'},
+                        {value: '', label: '不限'}
+                    ],
                 },
 
                 list: [],
@@ -527,6 +545,7 @@
                     tags: [],
                     metro_id: [],
                     zone: [],
+//                    city_id: [],
                 },
                 total: 0,
                 page: 1,
@@ -540,66 +559,66 @@
                     zone_id: [
                         {type: 'number',required: true, message: '请选择区域', trigger: 'blur'}
                     ],
-                    cover: [
-                        {required: true, message: '请上传封面图片', trigger: 'blur'}
-                    ],
+//                    cover: [
+//                        {required: true, message: '请上传封面图片', trigger: 'blur'}
+//                    ],
                     title: [
                         {required: true, message: '请输入项目标题', trigger: 'blur'}
                     ],
-                    info: [
-                        {required: true, message: '请输入项目简介', trigger: 'blur'}
-                    ],
-                    sort: [
-                        {type: 'number', required: true, message: '请输入排序', trigger: 'blur'}
-                    ],
-                    next_open: [
-                        {type: 'date', required: true, message: '请选择下次开盘时间', trigger: 'blur'}
-                    ],
+//                    info: [
+//                        {required: true, message: '请输入项目简介', trigger: 'blur'}
+//                    ],
+//                    sort: [
+//                        {type: 'number', required: true, message: '请输入排序', trigger: 'blur'}
+//                    ],
+//                    next_open: [
+//                        {type: 'date', required: true, message: '请选择下次开盘时间', trigger: 'blur'}
+//                    ],
                     avg_price: [
                         {type: 'number', required: true, message: '请输入均价', trigger: 'blur'}
                     ],
-                    sell_phone: [
-                        {type: 'number', required: true, message: '请输入销售热线', trigger: 'blur'}
-                    ],
-                    address: [
-                        {required: true, message: '请输入地址', trigger: 'blur'}
-                    ],
+//                    sell_phone: [
+//                        {type: 'number', required: true, message: '请输入销售热线', trigger: 'blur'}
+//                    ],
+//                    address: [
+//                        {required: true, message: '请输入地址', trigger: 'blur'}
+//                    ],
                     latitude: [
                         {type: 'number', required: true, message: '请选择纬度', trigger: 'blur'}
                     ],
                     longitude: [
                         {type: 'number', required: true, message: '请选择经度', trigger: 'blur'}
                     ],
-                    tags: [
-                        {type: 'array', required: true, message: '请选择标签', trigger: 'blur'}
-                    ],
-                    see_open: [
-                        {type: 'number',required: true, message: '请选择是否开放看房报名', trigger: 'blur'}
-                    ],
-                    main_area: [
-                        {type: 'array', required: true, message: '请选择主推面积', trigger: 'blur'}
-                    ],
-                    sale_status: [
-                        {type: 'number',required: true, message: '请选择销售状态', trigger: 'blur'}
-                    ],
-                    house_type: [
-                        {type: 'array', required: true, message: '请选择户型', trigger: 'blur'}
-                    ],
-                    metro_id: [
-                        {type: 'array', required: true, message: '请选择地铁线路', trigger: 'blur'}
-                    ],
-                    metrostation_id: [
-                        {required: true, message: '请选择地铁站点', trigger: 'blur'}
-                    ],
+//                    tags: [
+//                        {type: 'array', required: true, message: '请选择标签', trigger: 'blur'}
+//                    ],
+//                    see_open: [
+//                        {type: 'number',required: true, message: '请选择是否开放看房报名', trigger: 'blur'}
+//                    ],
+//                    main_area: [
+//                        {type: 'array', required: true, message: '请选择主推面积', trigger: 'blur'}
+//                    ],
+//                    sale_status: [
+//                        {type: 'number',required: true, message: '请选择销售状态', trigger: 'blur'}
+//                    ],
+//                    house_type: [
+//                        {type: 'array', required: true, message: '请选择户型', trigger: 'blur'}
+//                    ],
+//                    metro_id: [
+//                        {type: 'array', required: true, message: '请选择地铁线路', trigger: 'blur'}
+//                    ],
+//                    metrostation_id: [
+//                        {required: true, message: '请选择地铁站点', trigger: 'blur'}
+//                    ],
 //                    plate_id: [
 //                        {type: 'number',required: true, message: '请选择下级区域', trigger: 'blur'}
 //                    ],
-                    is_cooperation: [
-                        {type: 'number',required: true, message: '请选择是否合作', trigger: 'blur'}
-                    ],
-                    detail: [
-                        {validator: validateEditContent, trigger: 'blur'}
-                    ],
+//                    is_cooperation: [
+//                        {type: 'number',required: true, message: '请选择是否合作', trigger: 'blur'}
+//                    ],
+//                    detail: [
+//                        {validator: validateEditContent, trigger: 'blur'}
+//                    ],
                 },
                 //编辑界面数据
                 editForm: {
@@ -627,8 +646,10 @@
                     metro_id: '',
                     metrostation_id: '',
                     plate_id: '',
-                    detail: '',
+//                    detail: '',
                     is_cooperation: '',
+                    mainhouseing: '',
+//                    city_id: '',
                 },
 
                 addFormVisible: false,//新增界面是否显示
@@ -637,66 +658,66 @@
                     zone_id: [
                         {type: 'number',required: true, message: '请选择区域', trigger: 'blur'}
                     ],
-                    cover: [
-                        {required: true, message: '请上传封面图片', trigger: 'blur'}
-                    ],
+//                    cover: [
+//                        {required: true, message: '请上传封面图片', trigger: 'blur'}
+//                    ],
                     title: [
                         {required: true, message: '请输入项目标题', trigger: 'blur'}
                     ],
-                    info: [
-                        {required: true, message: '请输入项目简介', trigger: 'blur'}
-                    ],
-                    sort: [
-                        {type: 'number', required: true, message: '请输入排序', trigger: 'blur'}
-                    ],
-                    next_open: [
-                        {type: 'date', required: true, message: '请选择下次开盘时间', trigger: 'blur'}
-                    ],
+//                    info: [
+//                        {required: true, message: '请输入项目简介', trigger: 'blur'}
+//                    ],
+//                    sort: [
+//                        {type: 'number', required: true, message: '请输入排序', trigger: 'blur'}
+//                    ],
+//                    next_open: [
+//                        {type: 'date', required: true, message: '请选择下次开盘时间', trigger: 'blur'}
+//                    ],
                     avg_price: [
                         {type: 'number', required: true, message: '请输入均价', trigger: 'blur'}
                     ],
-                    sell_phone: [
-                        {type: 'number', required: true, message: '请输入销售热线', trigger: 'blur'}
-                    ],
-                    address: [
-                        {required: true, message: '请输入地址', trigger: 'blur'}
-                    ],
+//                    sell_phone: [
+//                        {type: 'number', required: true, message: '请输入销售热线', trigger: 'blur'}
+//                    ],
+//                    address: [
+//                        {required: true, message: '请输入地址', trigger: 'blur'}
+//                    ],
                     latitude: [
                         {type: 'number', required: true, message: '请选择纬度', trigger: 'blur'}
                     ],
                     longitude: [
                         {type: 'number', required: true, message: '请选择经度', trigger: 'blur'}
                     ],
-                    tags: [
-                        {type: 'array', required: true, message: '请选择标签', trigger: 'blur'}
-                    ],
-                    see_open: [
-                        {type: 'number',required: true, message: '请选择是否开放看房报名', trigger: 'blur'}
-                    ],
-                    main_area: [
-                        {type: 'array', required: true, message: '请选择主推面积', trigger: 'blur'}
-                    ],
-                    sale_status: [
-                        {type: 'number',required: true, message: '请选择销售状态', trigger: 'blur'}
-                    ],
-                    house_type: [
-                        {type: 'array', required: true, message: '请选择户型', trigger: 'blur'}
-                    ],
-                    metro_id: [
-                        {type: 'array', required: true, message: '请选择地铁线路', trigger: 'blur'}
-                    ],
-                    metrostation_id: [
-                        {required: true, message: '请选择地铁站点', trigger: 'blur'}
-                    ],
+//                    tags: [
+//                        {type: 'array', required: true, message: '请选择标签', trigger: 'blur'}
+//                    ],
+//                    see_open: [
+//                        {type: 'number',required: true, message: '请选择是否开放看房报名', trigger: 'blur'}
+//                    ],
+//                    main_area: [
+//                        {type: 'array', required: true, message: '请选择主推面积', trigger: 'blur'}
+//                    ],
+//                    sale_status: [
+//                        {type: 'number',required: true, message: '请选择销售状态', trigger: 'blur'}
+//                    ],
+//                    house_type: [
+//                        {type: 'array', required: true, message: '请选择户型', trigger: 'blur'}
+//                    ],
+//                    metro_id: [
+//                        {type: 'array', required: true, message: '请选择地铁线路', trigger: 'blur'}
+//                    ],
+//                    metrostation_id: [
+//                        {required: true, message: '请选择地铁站点', trigger: 'blur'}
+//                    ],
 //                    plate_id: [
 //                        {type: 'number',required: true, message: '请选择下级区域', trigger: 'blur'}
 //                    ],
-                    is_cooperation: [
-                        {type: 'number',required: true, message: '请选择是否合作', trigger: 'blur'}
-                    ],
-                    detail: [
-                        {validator: validateAddContent, trigger: 'blur'}
-                    ],
+//                    is_cooperation: [
+//                        {type: 'number',required: true, message: '请选择是否合作', trigger: 'blur'}
+//                    ],
+//                    detail: [
+//                        {validator: validateAddContent, trigger: 'blur'}
+//                    ],
                 },
                 //新增界面数据
                 addForm: {
@@ -724,8 +745,10 @@
                     metro_id: '',
                     metrostation_id: '',
                     plate_id: '',
-                    detail: '',
+//                    detail: '',
                     is_cooperation: '',
+                    mainhouseing: '',
+//                    city_id: '',
                 }
             }
         },
@@ -749,19 +772,6 @@
             formateDate(row, column) {
                 return ` ${util.formatDate.format(new Date(row.update_time * 1000), 'yyyy-MM-dd hh:mm:ss')}`
             },
-            // 图片上传前限制条件
-            beforeImageUpload(file) {
-                const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
-                const isLt2M = file.size / 1024 / 1024 < 2;
-
-                if (!isJPG) {
-                    this.$message.error('上传头像图片只能是 JPG 或 PNG 格式!');
-                }
-                if (!isLt2M) {
-                    this.$message.error('上传头像图片大小不能超过 2MB!');
-                }
-                return isJPG && isLt2M;
-            },
             handleCurrentChange(val) {
                 this.page = val;
                 this.getListData();
@@ -771,8 +781,9 @@
                 this.listLoading = true;
                 let params = {
                     page: this.page,
-                    key: this.filters.key, // 可选参数查询
-                    value: this.filters.value // 可选参数查询
+                    keyword: this.filters.keyword, // 可选参数查询
+                    price: this.filters.price, // 可选参数查询
+                    is_cooperation: this.filters.is_cooperation, // 可选参数查询
                 };
                 this.getListZone();
                 const res = await this.$http.post(`mapadminListList`, params);
@@ -856,11 +867,11 @@
             },
             handleAddCancel() {
                 this.addFormVisible = false;
-                this.destroyAddEditor()
+//                this.destroyAddEditor()
             },
             handleEditCancel() {
                 this.editFormVisible = false;
-                this.destroyEditEditor()
+//                this.destroyEditEditor()
             },
             //显示编辑界面
             async handleEdit(index, row) {
@@ -869,19 +880,19 @@
                     id: row.id
                 };
                 this.getListArray();
-                this.getListPlate();
+//                this.getListPlate();
                 const res = await this.$http.post(`mapadminListEdit`, params);
                 if (res === null) return;
-                this.map.lng = res.param.longitude;
-                this.map.lat = res.param.latitude;
+                this.map.lng = Number(res.param.longitude);
+                this.map.lat = Number(res.param.latitude);
                 this.editForm = Object.assign({}, res.param);
-                this.getCity(this.editForm.province_id, this.editForm.city_id, true);
+                this.editForm.avg_price = Number(res.param.avg_price);
             },
             //显示新增界面
             handleAdd() {
                 this.addFormVisible = true;
                 this.getListArray();
-                this.getListPlate();
+//                this.getListPlate();
                 this.addForm = {
                     zone_id: '',
                     cover: '',
@@ -907,8 +918,10 @@
                     metro_id: [],
                     metrostation_id: '',
                     plate_id: '',
-                    detail: '',
+//                    detail: '',
                     is_cooperation: '',
+                    mainhouseing: '',
+//                    city_id: '',
                 };
             },
             //编辑
@@ -930,7 +943,7 @@
                             params.latitude = this.map.lat;
                             params.longitude = this.map.lng;
                             params.next_open = _next_open_; // 后台接收10位时间戳，需要转换
-                            params.detail = this.getUEContent('ueEdit'); // 富文本内容
+//                            params.detail = this.getUEContent('ueEdit'); // 富文本内容
                             const res = await this.$http.post(`mapadminListEditsave`, params);
                             this.editLoading = false;
                             if (res === null) return;
@@ -957,7 +970,7 @@
                             let params = Object.assign({}, this.addForm);
                             params.latitude = this.map.lat;
                             params.longitude = this.map.lng;
-                            params.detail = this.getUEContent('ueAdd'); // 富文本内容
+//                            params.detail = this.getUEContent('ueAdd'); // 富文本内容
                             const res = await this.$http.post(`mapadminListAddsave`, params);
                             this.addLoading = false;
                             if (res === null) return;
@@ -1033,22 +1046,22 @@
 
                 });
             },
-            // Ueditor 获取内容
-            getUEContent(ele) {
-                return this.$refs[ele].getUEContent();
-            },
-            destroyAddEditor(done) {
-                this.addForm.detail = this.getUEContent('ueAdd');
-                if (typeof done === 'function') {
-                    done();
-                }
-            },
-            destroyEditEditor(done) {
-                this.editForm.detail = this.getUEContent('ueEdit');
-                if (typeof done === 'function') {
-                    done();
-                }
-            },
+//            // Ueditor 获取内容
+//            getUEContent(ele) {
+//                return this.$refs[ele].getUEContent();
+//            },
+//            destroyAddEditor(done) {
+//                this.addForm.detail = this.getUEContent('ueAdd');
+//                if (typeof done === 'function') {
+//                    done();
+//                }
+//            },
+//            destroyEditEditor(done) {
+//                this.editForm.detail = this.getUEContent('ueEdit');
+//                if (typeof done === 'function') {
+//                    done();
+//                }
+//            },
         },
         mounted() {
             this.getListData();
