@@ -34,12 +34,12 @@
                   style="width: 100%;">
             <el-table-column type="selection" width="55">
             </el-table-column>
-            <el-table-column prop="ad_type" label="广告分类" width="100" sortable>
+            <el-table-column prop="ad_type" label="广告分类" width="120" sortable>
                 <template scope="scope">
                     {{ advType[scope.row.ad_type].label }}
                 </template>
             </el-table-column>
-            <el-table-column prop="name" label="广告名称" width="100" sortable>
+            <el-table-column prop="name" label="广告名称" width="120" sortable>
             </el-table-column>
             <el-table-column prop="place" label="广告位置" min-width="120">
                 <template scope="scope">
@@ -519,8 +519,6 @@
             },
             //新增
             addSubmit() {
-//                this.addForm.latitude = this.map.lat;
-//                this.addForm.longitude = this.map.lng;
                 this.$refs.addForm.validate((valid) => {
                     if (valid) {
                         this.$confirm('确认提交吗？', '提示', {}).then(async () => {
