@@ -2,10 +2,9 @@
 # 本系统为快房内部功能接口
 
 
-
 ## 系统管理（登录权限等）
 
-- [后台系统接口](/doc/system/user.md) `开发中`
+- [后台系统接口](/doc/system/README.md)
 
 ## 新闻报料接口
 - [移动端接口](/doc/news/admin/README.md)   `开发中`
