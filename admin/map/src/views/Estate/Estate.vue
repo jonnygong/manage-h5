@@ -142,13 +142,17 @@
                         <el-input placeholder="请输入内容" v-model="map.keyword">
                             <template slot="prepend">关键字</template>
                         </el-input>
-                        <baidu-map class="bm-view" style="width: 100%; height: 400px;margin-top: 10px;" :center="{lng: this.map.lng, lat: this.map.lat}" :zoom="15" :scroll-wheel-zoom="true">
+                        <baidu-map class="bm-view" style="width: 100%; height: 400px;margin-top: 10px;"
+                                   :center="{lng: this.map.lng, lat: this.map.lat}" :zoom="15"
+                                   :scroll-wheel-zoom="true">
                             <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-navigation>
                             <bm-view style="width: 100%; height: 400px;margin-top: 10px;"></bm-view>
                             <bm-context-menu>
                                 <bm-context-menu-item :callback="locationSuccess" text="使用此位置"></bm-context-menu-item>
                             </bm-context-menu>
-                            <bm-marker :position="{lng: this.map.lng, lat: this.map.lat}" animation="BMAP_ANIMATION_BOUNCE"></bm-marker>
+                            <bm-marker :position="{lng: this.map.lng, lat: this.map.lat}"
+                                       :dragging="true"
+                                       @dragend="locationSuccess"></bm-marker>
                             <bm-local-search :keyword="map.keyword"
                                              :auto-viewport="true"
                                              :panel="false"
@@ -322,13 +326,17 @@
                         <el-input placeholder="请输入内容" v-model="map.keyword">
                             <template slot="prepend">关键字</template>
                         </el-input>
-                        <baidu-map class="bm-view" style="width: 100%; height: 400px;margin-top: 10px;" :center="{lng: this.map.lng, lat: this.map.lat}" :zoom="15" :scroll-wheel-zoom="true">
+                        <baidu-map class="bm-view" style="width: 100%; height: 400px;margin-top: 10px;"
+                                   :center="{lng: this.map.lng, lat: this.map.lat}" :zoom="15"
+                                   :scroll-wheel-zoom="true">
                             <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-navigation>
                             <bm-view style="width: 100%; height: 400px;margin-top: 10px;"></bm-view>
                             <bm-context-menu>
                                 <bm-context-menu-item :callback="locationSuccess" text="使用此位置"></bm-context-menu-item>
                             </bm-context-menu>
-                            <bm-marker :position="{lng: this.map.lng, lat: this.map.lat}" animation="BMAP_ANIMATION_BOUNCE"></bm-marker>
+                            <bm-marker :position="{lng: this.map.lng, lat: this.map.lat}"
+                                       :dragging="true"
+                                       @dragend="locationSuccess"></bm-marker>
                             <bm-local-search :keyword="map.keyword"
                                              :auto-viewport="true"
                                              :panel="false"
