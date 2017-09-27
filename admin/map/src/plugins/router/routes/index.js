@@ -44,6 +44,40 @@ let routes = [
             }
         ]
     },
+    // 区域列表
+    {
+        path: '/',
+        component: Main,
+        name: '区域列表',
+        iconCls: 'fa fa-edit',
+        leaf: true, //只有一个节点
+        children: [
+            {
+                path: '/area',
+                component: () => import('@/views/Area/Area.vue'),
+                name: '区域列表',
+                meta: {requiresAuth: true}
+            },
+
+        ]
+    },
+    // 广告列表
+    {
+        path: '/',
+        component: Main,
+        name: '广告列表',
+        iconCls: 'fa fa-edit',
+        leaf: true, //只有一个节点
+        children: [
+            {
+                path: '/adv',
+                component: () => import('@/views/Adv/Adv.vue'),
+                name: '广告列表',
+                meta: {requiresAuth: true}
+            },
+
+        ]
+    },
     // 地铁管理
     {
         path: '/',

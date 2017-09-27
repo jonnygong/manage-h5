@@ -22,6 +22,9 @@
                 <el-form-item>
                     <el-button type="primary" @click="getList">刷新</el-button>
                 </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" :disabled="true" @click="getList">添加问题</el-button>
+                </el-form-item>
             </el-form>
         </el-col>
 
@@ -31,6 +34,8 @@
             <el-table-column type="selection" width="55">
             </el-table-column>
             <el-table-column prop="news" label="用户问题" width="200">
+            </el-table-column>
+            <el-table-column prop="answer" label="专家回复" width="200">
             </el-table-column>
             <el-table-column prop="k_id" label="问题类别" width="100">
                 <template scope="scope">
@@ -88,10 +93,10 @@
         </el-col>
 
         <!--编辑界面-->
-        <el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
+        <el-dialog title="编辑" size="large" v-model="editFormVisible" :close-on-click-modal="false">
             <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
                 <el-form-item label="用户问题" prop="news">
-                    <el-input type="textarea" v-model="editForm.news" :disabled="true"></el-input>
+                    <el-input type="textarea" v-model="editForm.news"></el-input>
                 </el-form-item>
                 <el-form-item label="专家回答" prop="answer">
                     <el-input type="textarea" v-model="editForm.answer"></el-input>
@@ -106,21 +111,26 @@
                         {{ item.name }}
                     </el-radio>
                 </el-form-item>
+
                 <el-form-item label="问题类别" prop="category_id">
-                    <el-select v-model.number="editForm.category_id" placeholder="请选择">
-                        <el-option
-                                v-for="(item, index) in categoryType.options"
-                                :key="index"
-                                :label="item.name"
-                                :value="item.id">
-                        </el-option>
-                    </el-select>
+                    <template>
+                        <el-select v-model.number="editForm.category_id" placeholder="请选择">
+                            <el-option
+                                    v-for="(item, index) in categoryType.options"
+                                    :key="index"
+                                    :label="item.name"
+                                    :value="item.id">
+                            </el-option>
+                        </el-select>
+                        <el-button type="primary" @click.native="editSubmit" :loading="editLoading">添加问题分类</el-button>
+                    </template>
+
                 </el-form-item>
 
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click.native="editFormVisible = false">取消</el-button>
-                <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
+                    <el-button @click.native="editFormVisible = false">取消</el-button>
+                    <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
             </div>
         </el-dialog>
     </section>
