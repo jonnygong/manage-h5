@@ -39,6 +39,16 @@ let res = [
       }
     ]
   },
+    {
+        name: "广告管理",
+        url: "",
+        children: [
+            {
+                name: "广告管理",
+                url: "/aplace"
+            }
+        ]
+    },
 
 
 ];
