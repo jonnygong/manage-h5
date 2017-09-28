@@ -31,3 +31,11 @@
 ### 部署说明
 - 后台： http://h.kfw001.com/admin/case/
 - 前端： http://h.kfw001.com/web/case/
+
+
+## [快房活动接口接口]
+
+- [活动计数接口](/doc/activity/code.md)  
+
+### 部署说明
+- 后台： http://api.mp.kfw001.com/
