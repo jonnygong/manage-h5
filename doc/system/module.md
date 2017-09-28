@@ -87,12 +87,12 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| name | int(11) | 模型名称 |
+| *name | int(11) | 模型名称 |
+| *adminurl | varchar(50) | 路由地址 |
+| *info | varchar(255) | 模型描述 |
+| mb_url | varchar(255) | 展示端url |
 | create_time | int(11) |  |
 | update_time | int(11) |  |
-| adminurl | varchar(50) | 路由地址 |
-| info | varchar(255) | 模型描述 |
-| mb_url | varchar(255) | 展示端url |
 
 + __响应参数__
 
@@ -113,12 +113,12 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| name | int(11) | 模型名称 |
+| *name | int(11) | 模型名称 |
+| *adminurl | varchar(50) | 路由地址 |
+| *info | varchar(255) | 模型描述 |
+| mb_url | varchar(255) | 展示端url |
 | create_time | int(11) |  |
 | update_time | int(11) |  |
-| adminurl | varchar(50) | 路由地址 |
-| info | varchar(255) | 模型描述 |
-| mb_url | varchar(255) | 展示端url |
 
 
 + __响应参数__

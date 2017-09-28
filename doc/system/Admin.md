@@ -104,14 +104,14 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| pid | int(11) | 父级ID |
-| level | int(11) | 人员等级 |
-| email | varchar(255) | 用户名 |
+| *email | varchar(255) | 用户名 |
+| *password | varchar(255) | 密码 |
+| *realname | varchar(255) | 真名 |
 | status | tinyint(1) | 状态 |
-| realname | varchar(255) | 真名 |
 | tel | varchar(255) | 联系电话 |
 | thumb | varchar(255) | 用户头像 |
-| password | varchar(255) | 密码 |
+| pid | int(11) | 父级ID |
+| level | int(11) | 人员等级 |
 | path | varchar(255) | 层级路径 |
 | role_id | int(1) | 角色ID |
 | client_id | int(11) | 客户编号 |
@@ -129,7 +129,6 @@
 ``` javascript
 ```
 
-
 ###修改接口
 
 + __接口地址__： __/System/Admin/update__
@@ -138,20 +137,19 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| pid | int(11) | 父级ID |
-| level | int(11) | 人员等级 |
-| email | varchar(255) | 用户名 |
+| *email | varchar(255) | 用户名 |
+| *password | varchar(255) | 密码 |
+| *realname | varchar(255) | 真名 |
 | status | tinyint(1) | 状态 |
-| realname | varchar(255) | 真名 |
 | tel | varchar(255) | 联系电话 |
 | thumb | varchar(255) | 用户头像 |
-| password | varchar(255) | 密码 |
+| pid | int(11) | 父级ID |
+| level | int(11) | 人员等级 |
 | path | varchar(255) | 层级路径 |
 | role_id | int(1) | 角色ID |
 | client_id | int(11) | 客户编号 |
 | update_time | int(11) | 更新时间 |
 | create_time | int(11) | 创建时间 |
-
 
 + __响应参数__
 
