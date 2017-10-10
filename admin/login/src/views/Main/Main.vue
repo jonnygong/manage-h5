@@ -116,10 +116,10 @@
             handleChange(type) {
                 if (type === 'project') {
                     this.$store.dispatch('clear_project');
-                    window.location.replace('/#/project')
+                    window.location.replace('/admin/#/project')
                 } else {
                     this.$store.dispatch('clear_wechat');
-                    window.location.replace('/#/')
+                    window.location.replace('/admin/#/')
                 }
             },
             handleopen() {

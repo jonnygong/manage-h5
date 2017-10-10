@@ -118,6 +118,7 @@
                             class="is_show"
                             v-model.number="editForm.is_show"
                             :label="item.label"
+                            :key="index"
                             v-for="(item,index) in radio">
                         {{ item.name }}
                     </el-radio>

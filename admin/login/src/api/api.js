@@ -52,6 +52,10 @@ export const requestCode = params => {
 export const requestLogin = params => {
     return axios.post('/system/user/login', qs.stringify(params))
 };
+// 图片上传
+export const imgUpload = params => {
+    return axios.post('/System/img/upload', qs.stringify(params))
+};
 
 // 获取验证码
 export const getWechatList = params => {
@@ -60,4 +64,51 @@ export const getWechatList = params => {
 // 登录
 export const getProjectList = params => {
     return axios.post('/System/User/modules', qs.stringify(params))
+};
+
+// 用户管理
+export const getAdminList = params => {
+    return axios.post('/System/Admin/list', qs.stringify(params))
+};
+export const getAdmintInfo = params => {
+    return axios.post('/System/Admin/info', qs.stringify(params))
+};
+export const getAdminAdd = params => {
+    return axios.post('/System/Admin/add', qs.stringify(params))
+};
+export const getAdmintUpdate = params => {
+    return axios.post('/System/Admin/update', qs.stringify(params))
+};
+export const getAdmintStatus = params => {
+    return axios.post('/System/Admin/status', qs.stringify(params))
+};
+export const getAdmintDelete = params => {
+    return axios.post('/System/Admin/delete', qs.stringify(params))
+};
+export const getAdmintModule = params => {
+    return axios.post('/System/Admin/module', qs.stringify(params))
+};
+export const getAdmintModules = params => {
+    return axios.post('/System/Admin/modules', qs.stringify(params))
+};
+
+
+// 模块管理
+export const geModuleList = params => {
+    return axios.post('/System/Module/list', qs.stringify(params))
+};
+export const getModuleInfo = params => {
+    return axios.post('/System/Module/info', qs.stringify(params))
+};
+export const geModuleAdd = params => {
+    return axios.post('/System/Module/add', qs.stringify(params))
+};
+export const getModuleUpdate = params => {
+    return axios.post('/System/Module/update', qs.stringify(params))
+};
+export const getModuleStatus = params => {
+    return axios.post('/System/Module/status', qs.stringify(params))
+};
+export const getModuleDelete = params => {
+    return axios.post('/System/Module/delete', qs.stringify(params))
 };
