@@ -94,7 +94,7 @@
 
         <!--编辑界面-->
         <el-dialog title="编辑" size="large" v-model="editFormVisible" :close-on-click-modal="false">
-            <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
+            <el-form :model="editForm" label-width="100px" :rules="editFormRules" ref="editForm">
                 <el-form-item label="用户问题" prop="news">
                     <el-input type="textarea" v-model="editForm.news"></el-input>
                 </el-form-item>
@@ -122,15 +122,20 @@
                                     :value="item.id">
                             </el-option>
                         </el-select>
-                        <el-button type="primary" @click.native="editSubmit" :loading="editLoading">添加问题分类</el-button>
+                        <el-button type="primary" @click.native="showShowType" :loading="editLoading">新增问题分类</el-button>
                     </template>
-
                 </el-form-item>
-
+                <el-form-item label="新增问题分类" prop="typename" v-show="this.showType">
+                    <template scope="scope">
+                        <el-input v-model="typename"></el-input>
+                        <el-button type="primary" @click.native="addQaType(scope.row)" :loading="editLoading">新增</el-button>
+                        <el-button type="normal" @click.native="hiddeShowType" :loading="editLoading">取消</el-button>
+                    </template>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                    <el-button @click.native="editFormVisible = false">取消</el-button>
-                    <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
+                <el-button @click.native="editFormVisible = false">取消</el-button>
+                <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
             </div>
         </el-dialog>
     </section>
@@ -163,6 +168,8 @@
                     {label: 0, name: '不展示'}
                 ],
                 cat: [],
+                typename: '',
+                showType: false,
                 is_show: 0,
                 page: 1,
                 total: 0,
@@ -370,6 +377,36 @@
                     }
                 });
             },
+
+            addQaType(row) {
+
+                this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                    this.addLoading = true;
+                    let params = {
+                        name: this.typename,
+                        pid: row.pid,
+                        project_id: 2
+                    };
+
+                    api.addRebellionType(params)
+                        .then((res) => {
+
+                            this.addLoading = false;
+                            if (res.data.status === 200) {
+                                this.$message({
+                                    message: res.data.info,
+                                    type: 'success'
+                                });
+
+                                this.$refs['addForm'].resetFields();
+                                this.addFormVisible = false;
+                                this.getSonTypeList();
+                                this.hiddeShowType();
+                            }
+                        });
+                });
+
+            },
             //批量操作
             batchRemove(action) {
                 // 三种操作：remove disable active
@@ -418,6 +455,20 @@
             selsChange(sels) {
                 this.sels = sels;
             },
+            showShowType() {
+//                if (this.showType) {
+//                    this.showType = false;
+//                } else {
+                    this.showType = true;
+//                }
+            },
+            hiddeShowType() {
+//                if (this.showType) {
+                    this.showType = false;
+//                } else {
+//                this.showType = true;
+//                }
+            }
         },
         mounted() {
             this.getList();

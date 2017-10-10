@@ -63,5 +63,7 @@ export default {
         mapadminAreaStatus: '/Mapadmin/Area/status',
         mapadminAreaDelete: '/Mapadmin/Area/delete',
         mapadminAreaSelect: '/Mapadmin/Area/select',
+
+
     }
 };
