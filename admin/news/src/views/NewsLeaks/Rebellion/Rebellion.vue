@@ -133,7 +133,9 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-
+                <el-form-item label="调查文章" prop="article">
+                    <el-input type="textarea" v-model="editForm.article"></el-input>
+                </el-form-item>
 
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -222,6 +224,7 @@
                     k_id: '',
                     category_id: '',
                     is_show: '',
+                    article: '',
                 },
 
                 addFormVisible: false, //编辑界面是否显示
@@ -282,6 +285,7 @@
                         this.total = res.data.param.count;
                         this.list = res.data.param.list;
                         this.is_show = res.data.param.list.is_show;
+                        this.addForm.follow = res.data.param.list.follow;
                     }
                 });
             },
@@ -378,6 +382,7 @@
                                 k_id: this.editForm.k_id,
                                 category_id: this.editForm.category_id,
                                 is_show: this.editForm.is_show,
+                                article: this.editForm.article,
                             };
                             api.editReporterAnswer(params)
                                 .then((res) => {
@@ -399,10 +404,15 @@
             //显示新增界面
             handleAdd(index, row) {
                 this.addFormVisible = true;
-                this.addForm = {
+                let para = {
                     id: row.id,
-                    follow: ''
                 };
+                api.getReporterAnswerInfo(para).then((res) => {
+                    if (res.data.status === 200) {
+                        this.listLoading = false;
+                        this.addForm = res.data.param;
+                    }
+                });
             },
             //新增
             addSubmit() {
