@@ -322,6 +322,7 @@
                     if (res.data.status === 200) {
                         this.listLoading = false;
                         this.categoryType.options = res.data.param;
+
                     }
                 });
             },
@@ -331,6 +332,7 @@
                 this.editFormVisible = true;
 //                this.getTopList();
                 this.getSonTypeList(index, row);
+
                 let para = {
                     id: row.id,
                 };
@@ -338,6 +340,9 @@
                     if (res.data.status === 200) {
                         this.listLoading = false;
                         this.editForm = res.data.param;
+                        if ( this.editForm.category_id === 0){
+                            this.editForm.category_id = '';
+                        }
                     }
                 });
             },
