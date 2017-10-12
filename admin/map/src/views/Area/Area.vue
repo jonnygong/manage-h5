@@ -139,7 +139,8 @@
                                 <bm-context-menu-item :callback="locationSuccess" text="使用此位置"></bm-context-menu-item>
                             </bm-context-menu>
                             <bm-marker :position="{lng: this.map.lng, lat: this.map.lat}"
-                                       animation="BMAP_ANIMATION_BOUNCE"></bm-marker>
+                                       :dragging="true"
+                                       @dragend="locationSuccess"></bm-marker>
                             <bm-local-search :keyword="map.keyword"
                                              :auto-viewport="true"
                                              :panel="false"
@@ -213,7 +214,8 @@
                                 <bm-context-menu-item :callback="locationSuccess" text="使用此位置"></bm-context-menu-item>
                             </bm-context-menu>
                             <bm-marker :position="{lng: this.map.lng, lat: this.map.lat}"
-                                       animation="BMAP_ANIMATION_BOUNCE"></bm-marker>
+                                       :dragging="true"
+                                       @dragend="locationSuccess"></bm-marker>
                             <bm-local-search :keyword="map.keyword"
                                              :auto-viewport="true"
                                              :panel="false"

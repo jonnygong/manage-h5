@@ -31,16 +31,20 @@ router.beforeEach((to, from, next) => {
     if (!isLogin && to.path !== '/login') {
         return next({ path: '/login' });
     }else{
-        // 若已登录，则检查是否已选择公众号
-        let wechatId = sessionStorage.getItem('WECHAT_ID');
-        if (!wechatId && to.path !== '/') {
-            // 错误提示
-            Message.error({
-                message : '请先选择公众号',
-                showClose : true,
-            });
-            return next({ path: '/' });
-        }else{
+        if(to.meta.requiresAuth){
+            // 若已登录，则检查是否已选择公众号
+            let wechatId = sessionStorage.getItem('WECHAT_ID');
+            if (!wechatId && to.path !== '/') {
+                // 错误提示
+                Message.error({
+                    message : '请先选择公众号',
+                    showClose : true,
+                });
+                return next({ path: '/' });
+            }else{
+                next();
+            }
+        } else {
             next();
         }
     }

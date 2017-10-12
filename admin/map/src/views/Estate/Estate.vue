@@ -8,12 +8,19 @@
                     <el-input v-model="filters.keyword" placeholder="关键词"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-input v-model="filters.price" placeholder="均价"></el-input>
+                    <el-select v-model="filters.price" placeholder="请选择均价">
+                        <el-option
+                                v-for="(item,index) in filters.optionsPrice"
+                                :key="index"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item>
                     <el-select v-model="filters.is_cooperation" placeholder="请选择是否合作">
                         <el-option
-                                v-for="(item,index) in filters.options"
+                                v-for="(item,index) in filters.optionsCooperation"
                                 :key="index"
                                 :label="item.label"
                                 :value="item.value">
@@ -142,13 +149,17 @@
                         <el-input placeholder="请输入内容" v-model="map.keyword">
                             <template slot="prepend">关键字</template>
                         </el-input>
-                        <baidu-map class="bm-view" style="width: 100%; height: 400px;margin-top: 10px;" :center="{lng: this.map.lng, lat: this.map.lat}" :zoom="15" :scroll-wheel-zoom="true">
+                        <baidu-map class="bm-view" style="width: 100%; height: 400px;margin-top: 10px;"
+                                   :center="{lng: this.map.lng, lat: this.map.lat}" :zoom="15"
+                                   :scroll-wheel-zoom="true">
                             <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-navigation>
                             <bm-view style="width: 100%; height: 400px;margin-top: 10px;"></bm-view>
                             <bm-context-menu>
                                 <bm-context-menu-item :callback="locationSuccess" text="使用此位置"></bm-context-menu-item>
                             </bm-context-menu>
-                            <bm-marker :position="{lng: this.map.lng, lat: this.map.lat}" animation="BMAP_ANIMATION_BOUNCE"></bm-marker>
+                            <bm-marker :position="{lng: this.map.lng, lat: this.map.lat}"
+                                       :dragging="true"
+                                       @dragend="locationSuccess"></bm-marker>
                             <bm-local-search :keyword="map.keyword"
                                              :auto-viewport="true"
                                              :panel="false"
@@ -286,7 +297,7 @@
                     <el-input v-model="addForm.title" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="区域ID" prop="zone_id">
-                    <el-select v-model.number="addForm.zone_id" placeholder="请选择" @change="handleEditChange">
+                    <el-select v-model.number="addForm.zone_id" placeholder="请选择" @change="handleAddChange">
                         <el-option
                                 v-for="(item, index) in options.zone"
                                 :key="index"
@@ -322,13 +333,17 @@
                         <el-input placeholder="请输入内容" v-model="map.keyword">
                             <template slot="prepend">关键字</template>
                         </el-input>
-                        <baidu-map class="bm-view" style="width: 100%; height: 400px;margin-top: 10px;" :center="{lng: this.map.lng, lat: this.map.lat}" :zoom="15" :scroll-wheel-zoom="true">
+                        <baidu-map class="bm-view" style="width: 100%; height: 400px;margin-top: 10px;"
+                                   :center="{lng: this.map.lng, lat: this.map.lat}" :zoom="15"
+                                   :scroll-wheel-zoom="true">
                             <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-navigation>
                             <bm-view style="width: 100%; height: 400px;margin-top: 10px;"></bm-view>
                             <bm-context-menu>
                                 <bm-context-menu-item :callback="locationSuccess" text="使用此位置"></bm-context-menu-item>
                             </bm-context-menu>
-                            <bm-marker :position="{lng: this.map.lng, lat: this.map.lat}" animation="BMAP_ANIMATION_BOUNCE"></bm-marker>
+                            <bm-marker :position="{lng: this.map.lng, lat: this.map.lat}"
+                                       :dragging="true"
+                                       @dragend="locationSuccess"></bm-marker>
                             <bm-local-search :keyword="map.keyword"
                                              :auto-viewport="true"
                                              :panel="false"
@@ -507,10 +522,17 @@
                     keyword: '',
                     price: '',
                     is_cooperation: '',
-                    options: [
+                    optionsPrice: [
+                        {value: 1, label: '15000元/㎡以下'},
+                        {value: 2, label: '15000元/㎡-20000元/㎡'},
+                        {value: 3, label: '20000元/㎡-30000元/㎡'},
+                        {value: 4, label: '30000元/㎡以上'},
+                        {value: '', label: '不限价格'}
+                    ],
+                    optionsCooperation: [
                         {value: 0, label: '没有合作'},
                         {value: 1, label: '合作'},
-                        {value: '', label: '不限'}
+                        {value: '', label: '不限是否合作'}
                     ],
                 },
 
@@ -806,24 +828,9 @@
                 this.options.metro_id = res.param.underground;
                 this.options.zone = res.param.zone;
             },
-            //获下拉列表
-            async getListStation() {
-                this.listLoading = true;
-                let params = {
-
-                };
-                const res = await this.$http.post(`mapadminListArray`, params);
-                this.listLoading = false;
-                if (res === null) return;
-                this.options.house_type = res.param.house_type;
-                this.options.main_area = res.param.main_area;
-                this.options.price = res.param.price;
-                this.options.tags = res.param.tags;
-                this.options.metro_id = res.param.underground;
-                this.options.zone = res.param.zone;
-            },
             //获区域列表
             async getListPlate(id) {
+                if (id === '') return;
                 this.listLoading = true;
                 let params = {
                     zone_id: id
