@@ -290,7 +290,6 @@
                         });
                         row.status = 1 - row.status;
                     }
-                    ;
                 });
             },
             //获取列表
