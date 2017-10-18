@@ -6,6 +6,7 @@
 - 使用： 1、建立新的表单活动： 通过  /form/getcode 获取一个表单ID
 -       2、  通过  /form/add  保存表单数据
 -       3、   通过  /form/list 获取表单数据
+- 调用： http://api.mp.kfw001.com/game/
 
 
 #### 获取一个表单基础信息
