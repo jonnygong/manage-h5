@@ -336,3 +336,13 @@ export const addQuestionPump = params => {
 export const changeQuestionStatus = params => {
     return axios.post('/Newsadmin/Kfqa/status', qs.stringify(params))
 };
+
+
+// 欢迎页
+export const publicInfo = params => {
+  return axios.post('/Newsadmin/Set/info', qs.stringify(params))
+};
+export const publicSave = params => {
+  return axios.post('/Newsadmin/Set/save', qs.stringify(params))
+};
+

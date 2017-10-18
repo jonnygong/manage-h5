@@ -112,3 +112,17 @@ export const getModuleStatus = params => {
 export const getModuleDelete = params => {
     return axios.post('/System/Module/delete', qs.stringify(params))
 };
+
+// 公众号
+export const gePublicList = params => {
+  return axios.post('/System/Public/list', qs.stringify(params))
+};
+export const getPublicInfo = params => {
+  return axios.post('/System/Public/info', qs.stringify(params))
+};
+export const gePublicAdd = params => {
+  return axios.post('/System/Public/add', qs.stringify(params))
+};
+export const getPublicUpdate = params => {
+  return axios.post('/System/Public/update', qs.stringify(params))
+};
