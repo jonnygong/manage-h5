@@ -36,6 +36,7 @@
 ## [快房活动接口接口]
 
 - [活动计数接口](/doc/activity/code.md)  
+- [快房通用表单接口](/doc/activity/form.md)  
 
 ### 部署说明
 - 后台： http://api.mp.kfw001.com/
