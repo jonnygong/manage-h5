@@ -67,10 +67,10 @@
 | --------- | -------- | ------- |
 | *code | string | 活动唯一编号 |
 | *pwd | string  | 接口密码   ： 默认填写 kfw00120171019 为了安全暂时设置 |
-| wxname_cn | string | 微信号中文名称 |
+| wxname | string | 微信号中文名称 |
 | wxname_en | string | 微信号英文名称 |
 | url | string | 上线后的URL地址 |
-| type | string | 活动类型：1、计数统计 2表单填写  |
+| type | string | 活动类型：1、计数统计 2、表单 3、投票 4、问答 5、刮刮卡 6、大转盘 7、海报 9、邀请函  |
 | name | string | 活动名称 |
 | stattime | string | 活动开始时间 |
 | endtime | string | 活动结束时间 |
