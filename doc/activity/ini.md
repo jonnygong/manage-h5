@@ -29,11 +29,11 @@
 | *wxname | string | 微信号中文名称 |
 | *wxname_en | string | 微信号英文名称 |
 | *url | string | 上线实际URL地址: 例如： http://game.kfw001.com/wx.html |
-| *type | string | 活动类型：1、计数统计 2、表单 3、投票 4、问答 5、刮刮卡 6、大转盘 7、海报 9、邀请函 |
+| *type | int | 活动类型：1、计数统计 2、表单 3、投票 4、问答 5、刮刮卡 6、大转盘 7、海报 9、邀请函 |
 | *name | string | 活动名称 |
-| *startdate | string | 活动开始时间 |
-| *enddate | string | 活动结束时间 |
-|  num | string | 活动参与限制总数  0 为不限制 默认 |
+| *startdate | int | 活动开始时间： 时间搓 |
+| *enddate | int | 活动结束时间： 时间搓 |
+|  num | int | 活动参与限制总数  0 为不限制 默认 |
 |  other | string | 扩展参数 |
 
 - 为了便于数据后期的统计需要填写微信公众号的中英文名称，关注该微信号获得
@@ -71,10 +71,10 @@
 | wxname | string | 微信号中文名称 |
 | wxname_en | string | 微信号英文名称 |
 | url | string | 上线后的URL地址 |
-| type | string | 活动类型：1、计数统计 2、表单 3、投票 4、问答 5、刮刮卡 6、大转盘 7、海报 9、邀请函  |
+| type | int | 活动类型：1、计数统计 2、表单 3、投票 4、问答 5、刮刮卡 6、大转盘 7、海报 9、邀请函  |
 | name | string | 活动名称 |
-| startdate | string | 活动开始时间 |
-| enddate | string | 活动结束时间 |
+| startdate | int | 活动开始时间 |
+| enddate | int | 活动结束时间 |
 
 - 为了便于数据后期的统计需要填写微信公众号的中英文名称，关注该微信号获得
 - 活动的开始时间和结束时间很重要，决定接口是否可以使用；只有在设定的活动区间内接口才可以正常使用的；
