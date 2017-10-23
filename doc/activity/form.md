@@ -2,6 +2,7 @@
 
 # 0、通用表单接口
 
+-  作者： ljw
 - 使用场景: 收集表单数据
 - 使用条件： 本接口默认不需要微信授权
 - 调用： http://api.mp.kfw001.com/game/
@@ -26,6 +27,8 @@
 | user_name | string | 表单：用户名称 |
 | user_tel | string | 表单：用户手机， 需要做简单的验证 |
 | user_address | string |  表单：用户地址 |
+| user_sex | int |  表单： 1 女 2男 |
+| user_email | string |  表单：邮箱地址|
 | user_other | string |  表单：其它信息 |
 | auth | string | 微信授权auth加密串 |
 | appid | string | 微信授权授权快房提供的用于ID |
