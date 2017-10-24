@@ -27,6 +27,7 @@
 | *type | int | 积分保存方式  0 保存最高分  1为保存最低分   |
 | tel | string | 用户电话  |
 | name | string | 用户名称  |
+| sex | int | 0 保密 1 女 2 男  |
 | address | string | 用户地址  |
 
 + __响应参数__
@@ -37,9 +38,7 @@
 ```text
 
   {status: true, info: "您没有超越您原来的分数"}
-
   {status: true, info: "保存用户数据成功!"}
-
   {status: false, info: "请稍等!"}
 
 ```
