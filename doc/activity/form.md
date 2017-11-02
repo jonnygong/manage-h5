@@ -31,6 +31,8 @@
 | user_sex | int |  表单： 1 女 2男 |
 | user_email | string |  表单：邮箱地址|
 | user_other | string |  表单：其它信息 |
+| img_urls | string |  表单：图片地址 |
+
 
 + __响应参数__
 
@@ -56,6 +58,8 @@
 | user_tel | string | 表单：用户手机， 需要做简单的验证 |
 | user_address | string |  表单：用户地址 |
 | user_other | string |  表单：其它信息 |
+| user_email | string |  表单：邮箱地址|
+| img_urls | string |  表单：图片地址 |
 
 + __响应参数__
 
@@ -84,6 +88,7 @@
 | user_sex | int |  表单： 1 女 2男 |
 | user_email | string |  表单：邮箱地址|
 | user_other | string |  表单：其它信息 |
+| img_urls | string |  表单：图片地址 |
 | *auth | string | 授权接口: 微信授权auth加密串  `必须填` |
 | *appid | string |授权接口: 微信授权授权快房提供的用于ID   `必须填` |
 
@@ -111,6 +116,8 @@
 | user_tel | string | 表单：用户手机， 需要做简单的验证 |
 | user_address | string |  表单：用户地址 |
 | user_other | string |  表单：其它信息 |
+| user_email | string |  表单：邮箱地址|
+| img_urls | string |  表单：图片地址 |
 | *auth | string | 微信授权auth加密串 |
 | *appid | string | 微信授权授权快房提供的用于ID |
 
