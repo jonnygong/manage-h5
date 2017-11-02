@@ -39,5 +39,7 @@
 - [活动计数接口](/doc/activity/code.md)  
 - [快房通用表单接口](/doc/activity/form.md)  
 - [积分接口](/doc/activity/score.md)  
+- [图片上传接口](/doc/activity/img.md)  
+
 ### 部署说明
 - 后台： http://api.mp.kfw001.com/
