@@ -8,6 +8,7 @@ let routes = [
         name: '',
         iconCls: 'fa fa-bookmark',
         leaf: true, //只有一个节点
+        redirect: {path: '/main'}
         children: [{
             path: '/main',
             component: () =>
