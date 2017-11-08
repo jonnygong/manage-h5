@@ -37,26 +37,26 @@
                     </el-tag>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" width="100" fixed="right">
+            <el-table-column label="操作" width="230" fixed="right">
                 <template scope="scope">
-                    <!--<el-button size="small" @click="statusSubmit(scope.$index, scope.row)"-->
-                               <!--:disabled="scope.row.status === -1">-->
-                        <!--{{ scope.row.status === 1 ? '停用' : scope.row.status === 0 ? '启用' : '已删除' }}-->
-                    <!--</el-button>-->
+                    <el-button size="small" @click="statusSubmit(scope.$index, scope.row)"
+                               :disabled="scope.row.status === -1">
+                        {{ scope.row.status === 1 ? '停用' : scope.row.status === 0 ? '启用' : '已删除' }}
+                    </el-button>
                     <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                    <!--<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>-->
+                    <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
 
         <!--工具条-->
         <el-col :span="24" class="toolbar">
-            <!--<el-button type="danger" @click="batchAction('remove')" :disabled="this.sels.length===0">批量删除-->
-            <!--</el-button>-->
-            <!--<el-button type="warning" @click="batchAction('disable')" :disabled="this.sels.length===0">批量禁用-->
-            <!--</el-button>-->
-            <!--<el-button type="primary" @click="batchAction('active')" :disabled="this.sels.length===0">批量启用-->
-            <!--</el-button>-->
+            <el-button type="danger" @click="batchAction('remove')" :disabled="this.sels.length===0">批量删除
+            </el-button>
+            <el-button type="warning" @click="batchAction('disable')" :disabled="this.sels.length===0">批量禁用
+            </el-button>
+            <el-button type="primary" @click="batchAction('active')" :disabled="this.sels.length===0">批量启用
+            </el-button>
             <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="pagesize"
                            :total="total" style="float:right;">
             </el-pagination>
@@ -283,7 +283,7 @@
         const actions = {
           'remove': {
             tip: '删除',
-            api: `getAdmintDelete`
+            api: `getPublicDelete`
           },
           'disable': {
             tip: '停用',
@@ -302,7 +302,7 @@
           this.listLoading = true;
           // 非批量删除，带上 status
           let params = (action !== 'remove' ? Object.assign({
-            id: ids + '',
+            ids: ids + '',
             status: actions[action].status
           }, params) : {id: ids + ''});
           api[actions[action].api](params).then((res) => {
@@ -323,7 +323,7 @@
       // 修改状态
       async statusSubmit(index, row) {
         let para = {
-          id: row.id,
+          ids: row.id,
           status: 1 - row.status
         };
 

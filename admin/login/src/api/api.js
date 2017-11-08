@@ -126,3 +126,9 @@ export const gePublicAdd = params => {
 export const getPublicUpdate = params => {
   return axios.post('/System/Public/update', qs.stringify(params))
 };
+export const getPublicStatus = params => {
+  return axios.post('/System/Public/status', qs.stringify(params))
+};
+export const getPublicDelete = params => {
+  return axios.post('/System/Public/delete', qs.stringify(params))
+};
