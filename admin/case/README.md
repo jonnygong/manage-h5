@@ -1,6 +1,6 @@
-# To start
+# 快房案例后台管理系统
 
-This is a project template for [vue-cli](https://github.com/vuejs/vue-cli)
+## 运行说明
 
 ``` bash
 # install dependencies

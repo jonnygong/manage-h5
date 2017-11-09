@@ -36,6 +36,20 @@
             </el-table-column>
             <el-table-column prop="name" label="分类名称">
             </el-table-column>
+            <el-table-column prop="thumb" label="图片" width="120">
+                <template scope="scope">
+                    <el-popover trigger="hover" placement="top">
+                        <div class="ad-img">
+                            <img :src="scope.row.thumb" :alt="scope.row.name" width="200" height="auto"
+                                 v-if="scope.row.thumb !== ''">
+                            <p v-else>暂无图片</p>
+                        </div>
+                        <div slot="reference" class="name-wrapper">
+                            <el-tag>查看图片</el-tag>
+                        </div>
+                    </el-popover>
+                </template>
+            </el-table-column>
             <el-table-column prop="pid" label="上级分类">
                 <template scope="scope">
                     {{ cat[scope.row.pid] }}
@@ -92,6 +106,17 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="头图" prop="thumb" v-if="editForm.pid === 0">
+                    <el-upload
+                            class="avatar-uploader"
+                            action="https://api.kfw001.com/Newsadmin/Reporter/upload"
+                            :http-request="customEditUpload"
+                            :show-file-list="false"
+                            :before-upload="beforeImageUpload">
+                        <img v-if="editForm.thumb" :src="editForm.thumb" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click.native="editFormVisible = false">取消</el-button>
@@ -115,6 +140,17 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="头图" prop="thumb" v-if="addForm.pid === 0">
+                    <el-upload
+                            class="avatar-uploader"
+                            action="https://api.kfw001.com/Newsadmin/Reporter/upload"
+                            :http-request="customAddUpload"
+                            :show-file-list="false"
+                            :before-upload="beforeImageUpload">
+                        <img v-if="addForm.thumb" :src="addForm.thumb" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click.native="addFormVisible = false">取消</el-button>
@@ -126,305 +162,352 @@
 </template>
 
 <script>
-    import util from '@/common/js/util'
-    import api from '@/api'
+  import util from '@/common/js/util'
+  import api from '@/api'
 
-    export default {
+  export default {
 
-        data() {
-            return {
-                filters: {
-                    value: '',
-                    key: 'name',
-                    options: [
-                        {value: 'name', label: '分类名称'},
-                    ],
-                },
-                selectType: [],
+    data() {
+      return {
+        filters: {
+          value: '',
+          key: 'name',
+          options: [
+            {value: 'name', label: '分类名称'},
+          ],
+        },
+        selectType: [],
 
-                list: [],
-                cat: [],
-                page: 1,
-                total: 0,
-                pagesize: 10,
-                listLoading: false,
-                sels: [], //列表选中列
+        list: [],
+        cat: [],
+        page: 1,
+        total: 0,
+        pagesize: 10,
+        listLoading: false,
+        sels: [], //列表选中列
 
-                editFormVisible: false, //编辑界面是否显示
-                editLoading: false,
-                editFormRules: {
-                    pid: [
-                        {type: 'number', required: true, message: '请选择上级分类', trigger: 'blur'}
-                    ],
-                    name: [
-                        {required: true, message: '请输入分类名称', trigger: 'blur'}
-                    ],
-                },
-                //编辑界面数据
-                editForm: {
-                    id: '',
-                    name: '',
-                    pid: '',
-                },
+        editFormVisible: false, //编辑界面是否显示
+        editLoading: false,
+        editFormRules: {
+          pid: [
+            {type: 'number', required: true, message: '请选择上级分类', trigger: 'blur'}
+          ],
+          name: [
+            {required: true, message: '请输入分类名称', trigger: 'blur'}
+          ],
+        },
+        //编辑界面数据
+        editForm: {
+          id: '',
+          name: '',
+          pid: '',
+          thumb: ''
+        },
 
-                addFormVisible: false,//新增界面是否显示
-                addLoading: false,
-                addFormRules: {
-                    pid: [
-                        {type: 'number', required: true, message: '请选择上级分类', trigger: 'blur'}
-                    ],
-                    name: [
-                        {required: true, message: '请输入分类名称', trigger: 'blur'}
-                    ],
-                },
-                //新增界面数据
-                addForm: {
-                    name: '',
-                    pid: '',
-                },
+        addFormVisible: false,//新增界面是否显示
+        addLoading: false,
+        addFormRules: {
+          pid: [
+            {type: 'number', required: true, message: '请选择上级分类', trigger: 'blur'}
+          ],
+          name: [
+            {required: true, message: '请输入分类名称', trigger: 'blur'}
+          ],
+        },
+        //新增界面数据
+        addForm: {
+          name: '',
+          pid: '',
+          thumb: ''
+        },
+      }
+    },
+    methods: {
+      // 分页切换
+      handleCurrentChange(val) {
+        this.page = val;
+        // 获取数据
+        this.getList();
+      },
+      // 修改单个状态
+      statusSubmit(index, row) {
+        let para = {
+          ids: row.id,
+          status: 1 - row.status
+        };
+        api.changeRebellionTypeStatus(para).then((res) => {
+          if (res.data.status === 200) {
+            this.$message({
+              message: '状态修改成功',
+              type: 'success'
+            });
+            row.status = 1 - row.status;
+          }
+        });
+      },
+      //获取列表
+      getList() {
+        this.listLoading = true;
+        let para = {
+          page: this.page,
+          search: this.filters.value,
+          project_id: 1
+        };
+        this.listLoading = true;
+        api.getRebellionTypeList(para).then((res) => {
+          if (res.data.status === 200) {
+            this.listLoading = false;
+            this.total = res.data.param.count;
+            this.list = res.data.param.list;
+          }
+        });
+      },
+      // 获取顶级分类列表
+      getTopList(index, row) {
+        let para = {
+          project_id: 1
+        };
+        api.getRebellionTypeInfo(para).then((res) => {
+          if (res.data.status === 200) {
+            this.listLoading = false;
+            this.total = res.data.param.count;
+            this.selectType = res.data.param;
+            this.selectType.push({
+              id: 0,
+              name: '顶级分类'
+            })
+          }
+        });
+      },
+      // 获取顶级分类名称列表
+      getTopListName(index, row) {
+        let para = {
+          project_id: 1
+        };
+        api.getRebellionTopTypeList(para).then((res) => {
+          if (res.data.status === 200) {
+            this.listLoading = false;
+            this.total = res.data.param.count;
+            this.cat = res.data.param;
+            this.cat[0] = "顶级分类";
+          }
+        });
+      },
+      //删除
+      handleDel: function (index, row) {
+        this.$confirm('确认删除该记录吗?', '提示', {
+          type: 'warning'
+        }).then(() => {
+          this.listLoading = true;
+          let para = {
+            ids: row.id,
+            status: -1
+          };
+
+          api.changeRebellionTypeStatus(para).then((res) => {
+            if (res.data.status === 200) {
+              this.listLoading = false;
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              });
+              this.getList();
             }
-        },
-        methods: {
-            // 分页切换
-            handleCurrentChange(val) {
-                this.page = val;
-                // 获取数据
-                this.getList();
-            },
-            // 修改单个状态
-            statusSubmit(index, row) {
-                let para = {
-                    ids: row.id,
-                    status: 1 - row.status
-                };
-                api.changeRebellionTypeStatus(para).then((res) => {
-                    if (res.data.status === 200) {
-                        this.$message({
-                            message: '状态修改成功',
-                            type: 'success'
-                        });
-                        row.status = 1 - row.status;
-                    }
-                    ;
-                });
-            },
-            //获取列表
-            getList() {
-                this.listLoading = true;
-                let para = {
-                    page: this.page,
-                    search: this.filters.value,
-                    project_id: 1
-                };
-                this.listLoading = true;
-                api.getRebellionTypeList(para).then((res) => {
-                    if (res.data.status === 200) {
-                        this.listLoading = false;
-                        this.total = res.data.param.count;
-                        this.list = res.data.param.list;
+          })
 
-                    }
-                });
-            },
-            // 获取顶级分类列表
-            getTopList(index, row) {
-                let para = {
-                    project_id: 1
-                };
-                api.getRebellionTypeInfo(para).then((res) => {
-                    if (res.data.status === 200) {
-                        this.listLoading = false;
-                        this.total = res.data.param.count;
-                        this.selectType = res.data.param;
-                    }
-                });
-            },
-            // 获取顶级分类名称列表
-            getTopListName(index, row) {
-                let para = {
-                    project_id: 1
-                };
-                api.getRebellionTopTypeList(para).then((res) => {
-                    if (res.data.status === 200) {
-                        this.listLoading = false;
-                        this.total = res.data.param.count;
-                        this.cat = res.data.param;
-                    }
-                });
-            },
-            //删除
-            handleDel: function (index, row) {
-                this.$confirm('确认删除该记录吗?', '提示', {
-                    type: 'warning'
-                }).then(() => {
-                    this.listLoading = true;
-                    let para = {
-                        ids: row.id,
-                        status: -1
-                    };
+        }).catch(() => {
 
-                    api.changeRebellionTypeStatus(para).then((res) => {
-                        if (res.data.status === 200) {
-                            this.listLoading = false;
-                            this.$message({
-                                message: '删除成功',
-                                type: 'success'
-                            });
-                            this.getList();
-                        }
-                    })
+        });
+      },
+      //显示分类编辑界面
+      handleEdit(index, row) {
+        this.editFormVisible = true;
+        this.getTopList();
+        let para = {
+          id: row.id,
+        };
+        api.changeRebellionType(para).then((res) => {
+          if (res.data.status === 200) {
+            this.listLoading = false;
+            this.total = res.data.param.count;
+            this.editForm = res.data.param;
+          }
+        });
+      },
 
-                }).catch(() => {
-
-                });
-            },
-            //显示分类编辑界面
-            handleEdit(index, row) {
-                this.editFormVisible = true;
-                this.getTopList();
-                let para = {
-                    id: row.id,
-                };
-                api.changeRebellionType(para).then((res) => {
-                    if (res.data.status === 200) {
-                        this.listLoading = false;
-                        this.total = res.data.param.count;
-                        this.editForm = res.data.param;
-                    }
-                });
-            },
-
-            //编辑
-            editSubmit() {
-                this.$refs.editForm.validate((valid) => {
-                    if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            this.editLoading = true;
-                            let params = {
-                                id: this.editForm.id,
-                                name: this.editForm.name,
-                                pid: this.editForm.pid,
-                            };
-                            api.editRebellionType(params)
-                                .then((res) => {
-                                    if (res.data.status === 200) {
-                                        this.editLoading = false;
-                                        this.$message({
-                                            message: '修改成功',
-                                            type: 'success'
-                                        });
-                                        this.$refs['editForm'].resetFields();
-                                        this.editFormVisible = false;
-                                        this.getList();
-                                    }
-                                });
-                        });
-                    }
-                });
-            },
-            //显示新增界面
-            handleAdd() {
-                this.addFormVisible = true;
-                this.addForm = {
-                    name: '',
-                    pid: ''
-                };
-                this.getTopList();
-            },
-            //新增
-            addSubmit() {
-                this.$refs.addForm.validate((valid) => {
-                    if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            this.addLoading = true;
-                            let params = {
-                                name: this.addForm.name,
-                                pid: this.addForm.pid,
-                                project_id: 1
-                            };
-
-                            api.addRebellionType(params)
-                                .then((res) => {
-
-                                    this.addLoading = false;
-                                    if (res.data.status === 200) {
-                                        this.$message({
-                                            message: res.data.info,
-                                            type: 'success'
-                                        });
-
-                                        this.$refs['addForm'].resetFields();
-                                        this.addFormVisible = false;
-                                        this.getList();
-
-                                    }
-                                });
-                        });
-                    }
-                });
-            },
-
-            selsChange(sels) {
-                this.sels = sels;
-            },
-            //批量删除
-            batchRemove(action) {
-                // 三种操作：remove disable active
-                let ids = this.sels.map(item => item.id).toString();
-                const actions = {
-                    'remove': {
-                        tip: '删除',
-                        api: `changeRebellionTypeStatus`,
-                        status: -1
-                    },
-                    'disable': {
-                        tip: '停用',
-                        api: `changeRebellionTypeStatus`,
-                        status: 0
-                    },
-                    'active': {
-                        tip: '启用',
-                        api: `changeRebellionTypeStatus`,
-                        status: 1
-                    }
-                };
-                this.$confirm('确认修改选中项状态吗？', '提示', {
-                    type: 'warning'
-                }).then(() => {
-
-
-                    this.listLoading = true;
-                    // 非批量删除，带上 status
-                    let para = (Object.assign({
-                        ids: ids + '',
-                        status: actions[action].status
-                    }, para));
-                    api.changeRebellionTypeStatus(para).then((res) => {
-                        this.listLoading = false;
-                        this.$message({
-                            message: res.data.info,
-                            type: 'success'
-                        });
-                        this.getList();
+      //编辑
+      editSubmit() {
+        this.$refs.editForm.validate((valid) => {
+          if (valid) {
+            this.$confirm('确认提交吗？', '提示', {}).then(() => {
+              this.editLoading = true;
+              let params = {
+                id: this.editForm.id,
+                name: this.editForm.name,
+                pid: this.editForm.pid,
+              };
+              if(this.editForm.pid === 0 ) {
+                params = Object.assign({thumb: this.editForm.thumb}, params)
+              }
+              api.editRebellionType(params)
+                .then((res) => {
+                  if (res.data.status === 200) {
+                    this.editLoading = false;
+                    this.$message({
+                      message: '修改成功',
+                      type: 'success'
                     });
-                }).catch(() => {
-
+                    this.$refs['editForm'].resetFields();
+                    this.editFormVisible = false;
+                    this.getList();
+                  }
                 });
-            },
-            // 处理新增页面上传
-            customAddUpload(file) {
-                this._uploadImage(file, this.addForm)
-            },
-            // 处理编辑页面上传
-            customEditUpload(file) {
-                this._uploadImage(file, this.editForm)
-            },
-        },
-        mounted() {
+            });
+          }
+        });
+      },
+      //显示新增界面
+      handleAdd() {
+        this.addFormVisible = true;
+        this.addForm = {
+          name: '',
+          pid: '',
+          thumb: ''
+        };
+        this.getTopList();
+      },
+      //新增
+      addSubmit() {
+        this.$refs.addForm.validate((valid) => {
+          if (valid) {
+            this.$confirm('确认提交吗？', '提示', {}).then(() => {
+              this.addLoading = true;
+              let params = {
+                name: this.addForm.name,
+                pid: this.addForm.pid,
+                project_id: 1
+              };
+              if(this.addForm.pid === 0 ) {
+                params = Object.assign({thumb: this.addForm.thumb}, params)
+              }
+              api.addRebellionType(params)
+                .then((res) => {
+
+                  this.addLoading = false;
+                  if (res.data.status === 200) {
+                    this.$message({
+                      message: res.data.info,
+                      type: 'success'
+                    });
+
+                    this.$refs['addForm'].resetFields();
+                    this.addFormVisible = false;
+                    this.getList();
+
+                  }
+                });
+            });
+          }
+        });
+      },
+
+      selsChange(sels) {
+        this.sels = sels;
+      },
+      //批量删除
+      batchRemove(action) {
+        // 三种操作：remove disable active
+        let ids = this.sels.map(item => item.id).toString();
+        const actions = {
+          'remove': {
+            tip: '删除',
+            api: `changeRebellionTypeStatus`,
+            status: -1
+          },
+          'disable': {
+            tip: '停用',
+            api: `changeRebellionTypeStatus`,
+            status: 0
+          },
+          'active': {
+            tip: '启用',
+            api: `changeRebellionTypeStatus`,
+            status: 1
+          }
+        };
+        this.$confirm('确认修改选中项状态吗？', '提示', {
+          type: 'warning'
+        }).then(() => {
+
+
+          this.listLoading = true;
+          // 非批量删除，带上 status
+          let para = (Object.assign({
+            ids: ids + '',
+            status: actions[action].status
+          }, para));
+          api.changeRebellionTypeStatus(para).then((res) => {
+            this.listLoading = false;
+            this.$message({
+              message: res.data.info,
+              type: 'success'
+            });
             this.getList();
-            this.getTopListName();
+          });
+        }).catch(() => {
+
+        });
+      },
+      // 处理新增页面上传
+      customAddUpload(file) {
+        this._uploadImage(file, this.addForm)
+      },
+      // 处理编辑页面上传
+      customEditUpload(file) {
+        this._uploadImage(file, this.editForm)
+      },
+      // 图片上传前限制条件
+      beforeImageUpload(file) {
+        const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG) {
+          this.$message.error('上传头像图片只能是 JPG 或 PNG 格式!');
         }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!');
+        }
+        return isJPG && isLt2M;
+      },
+      /**
+       * 统一上传接口
+       * @param file 接收文件对象
+       * @param type 区分新增和删除， this.addForm 和 this.editForm
+       * @private
+       */
+      _uploadImage(file, type) {
+        // 将文件转为 base64 上传至服务器
+        let reader = new FileReader();
+        reader.readAsDataURL(file.file);
+        reader.onload = function () {
+          // 拿到 base64 代码
+          let param = {
+            uploadimg: reader.result
+          };
+          api.imageUpload(param)
+            .then((res) => {
+              if (res.data.status === 200) {
+                type.thumb = res.data.param.path;
+              }
+            })
+        };
+      },
+    },
+    mounted() {
+      this.getList();
+      this.getTopListName();
     }
+  }
 </script>
 
 <style lang="scss">
