@@ -32,7 +32,7 @@
 | user_email | string |  表单：邮箱地址|
 | user_other | string |  表单：其它信息 |
 | img_urls | string |  表单：图片地址 |
-
+| data_type | string | 数据类型 |
 
 + __响应参数__
 
@@ -60,7 +60,7 @@
 | user_other | string |  表单：其它信息 |
 | user_email | string |  表单：邮箱地址|
 | img_urls | string |  表单：图片地址 |
-
+| data_type | string | 数据类型 |
 + __响应参数__
 
 |  参数名称  | 参数类型 | 参数说明 |
@@ -91,7 +91,7 @@
 | img_urls | string |  表单：图片地址 |
 | *auth | string | 授权接口: 微信授权auth加密串  `必须填` |
 | *appid | string |授权接口: 微信授权授权快房提供的用于ID   `必须填` |
-
+| data_type | string | 数据类型 |
 + __响应参数__
 
 |  参数名称  | 参数类型 | 参数说明 |
@@ -120,6 +120,8 @@
 | img_urls | string |  表单：图片地址 |
 | *auth | string | 微信授权auth加密串 |
 | *appid | string | 微信授权授权快房提供的用于ID |
+| data_type | string | 数据类型 |
+
 
 + __响应参数__
 
