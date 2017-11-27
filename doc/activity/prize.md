@@ -27,8 +27,9 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| kfw_activity | 活动表 | 用户 |
-| kfw_score_record | 活动表用户记录表 |
+| ims_scratch_activity | 活动表用户记录表 |
+| ims_scratch_person | 活动表用户记录表 |
+
 
 # 0、活动创建(编辑和保存)接口
 
@@ -41,11 +42,10 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| *code | string | 活动编码 |
 | *auth | string | 用户 |
-| --------- | -------- | ------- |
 | active_title | string | 活动的 |
-| active_type | int | 活动的类型 |
+| active_type | int | 1：普通活动 2：奖励活动（特定人群才可以进入） |
+| template | int | 10：刮刮卡 11  大转盘  12 红包 |
 | virtual | int | 虚拟人数 |
 | active_time | objec | 活动时间 |
 | prize | objec | 奖品信息 |
@@ -54,20 +54,19 @@
 | max_play | int | 最多可玩次数 |
 | max_eplay | int | 每场最多可玩 |
 | max_share | int | 每场最多可分享 |
-| status | int | 1活动可以使用0获取关闭 |
+| status | int | 1可以使用0获取关闭 |
 | isshare | int | 1允许分享0不允许 |
 | share_title | string | 分享标题 |
-| share_desc | string | 1活动可以使用0获取关闭 |
+| share_desc | string | 分享信息 |
 | share_link | string | 分享链接 |
-| shopinfo | object | 商家信息: 前端传入什么显示什么 |
-| actinfo | object | 商家信息: 前端传入什么显示什么 |
+| actinfo | object | 商家信息或者活动信息 |
 
 - active_time 说明
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| start | string | 活动编码 |
-| end | string | 可以不传递，按活动的类型确定，如果活动要求需求服务授权这个就是必须的 |
+| start | string | 开始时间 |
+| end | string | 结束时间 |
 
 ```text
 [
@@ -78,13 +77,19 @@
 
 ```
 
-- prize 说明
+- prize 说明 `重要`
+- 红包说明: 红包分类：定额红包和随机红包
+- 定额红包: 需要填写：奖品数量和money   奖品数量>0 并且 money>0 认为是定额红包
+- 随机红包: 需要填写：money(总金额)、max>0、min>0  奖品数量=0
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| type | string | physical 实物  |
-| sum | string | 可以不传递，按活动的类型确定，如果活动要求需求服务授权这个就是必须的 |
-| name | string | 奖品名称 |
+| *type | string | physical 实物  |
+| *sum | int | 奖品数量 |
+| *name | string | 奖品名称 |
+| money | float | 金额 |
+| max | float | 金额最大值： 虚拟物如红包就需要 |
+| min | float | 金额最小值： 虚拟物如红包就需要 |
 | img | string | 奖品图片 |
 | info | string | 其他说明 |
 
@@ -127,78 +132,11 @@
 | *code | string | 活动编码 |
 | auth | string | 可以不传递，按活动的类型确定，如果活动要求需求服务授权这个就是必须的 |
 
+
+
 + __响应参数__
 
-|  参数名称  | 参数类型 | 参数说明 |
-| --------- | -------- | ------- |
-| active_title | string | 活动的 |
-| active_type | int | 活动的类型 |
-| virtual | int | 虚拟人数 |
-| active_time | objec | 活动时间 |
-| prize | objec | 奖品信息 |
-| tips | objec | 提示语 |
-| rule | strign | 规则的文本说明 |
-| max_play | int | 最多可玩次数 |
-| max_eplay | int | 每场最多可玩 |
-| max_share | int | 每场最多可分享 |
-| status | int | 1活动可以使用0获取关闭 |
-| isshare | int | 1允许分享0不允许 |
-| share_title | string | 分享标题 |
-| share_desc | string | 1活动可以使用0获取关闭 |
-| share_link | string | 分享链接 |
-| shopinfo | object | 商家信息: 前端传入什么显示什么 |
-| actinfo | object | 商家信息: 前端传入什么显示什么 |
-
-- active_time 说明
-
-|  参数名称  | 参数类型 | 参数说明 |
-| --------- | -------- | ------- |
-| start | string | 活动编码 |
-| end | string | 可以不传递，按活动的类型确定，如果活动要求需求服务授权这个就是必须的 |
-
-```text
-[
-  {"start":"2016-02-02 11:00","end":"2016-02-02 23:59"},
-  {"start":"2016-02-03 00:00","end":"2016-02-03 23:59"},
-  {"start":"2016-02-04 00:00","end":"2016-02-04 23:59"},
-]
-
-```
-
-- prize 说明
-
-|  参数名称  | 参数类型 | 参数说明 |
-| --------- | -------- | ------- |
-| type | string | physical 实物  |
-| sum | string | 可以不传递，按活动的类型确定，如果活动要求需求服务授权这个就是必须的 |
-| name | string | 奖品名称 |
-| img | string | 奖品图片 |
-| info | string | 其他说明 |
-
-```text
-[
-  {
-    "type":"physical",
-    "sum":"0",
-    "name":"\u6298\u53e0\u5f0f\u81ea\u884c\u8f66\u4e00\u8f86\uff08\u4ef7\u503c399\u5143\uff0c\u989c\u8272\u968f\u673a\uff09",
-    "img":"http:\/\/kfw-wechat.oss-cn-hangzhou.aliyuncs.com\/wechat\/images\/118\/2016\/02\/vMD1NL1ZddaTDz11OpSDQMOBnbi1lt.jpg"
-    "info" :"其它说明"
-    },
-]
-
-```
-
-- tips 说明
-
-|  参数名称  | 参数类型 | 参数说明 |
-| --------- | -------- | ------- |
-| have_award | string | 中奖了还来：今天已经获奖过咯~不要贪心哦！  |
-| no_times | string | 抽奖次数用完:可次数已用完了！ |
-| no_award | string | 未中奖：居然没有中奖？不如休息一下赞个手气！ |
-| game_over | string | 活动结束：本场活动已结束，请等待下一场活动 |
-| default | string | 默认值：谢谢！  |
-
-
+- 参考 add 接口
 
 
 # 2、奖品的列表接口
@@ -212,10 +150,14 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-|  *name | string | 奖品名称 |
-|  *type | string | 奖品类型: 1 虚拟 2 实物 3 积分 |
-|  *money | string | 奖品金额 |
-|  other | string | 其他信息：例如时间地址等等详细描述 |
+| *type | string | physical 实物  |
+| *sum | int | 奖品数量 |
+| *name | string | 奖品名称 |
+| money | float | 金额 |
+| max | float | 金额最大值： 虚拟物如红包就需要 |
+| min | float | 金额最小值： 虚拟物如红包就需要 |
+| img | string | 奖品图片 |
+| info | string | 其他说明 |
 
 
 + __响应参数__
@@ -267,11 +209,12 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
+|  *prizeid | int | 奖品id |
 |  *name | string | 奖品名称 |
 |  *type | string | 奖品类型: 1 虚拟 2 实物 3 积分 |
 |  *money | string | 奖品金额 |
 |  *prizecode | string | 奖品核销码 |
-|  other | string | 其他信息：例如时间地址等等 |
+| info | string | 其他说明 |
 
 
 # 5、用户奖品核销接口
@@ -293,11 +236,12 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
+|  *prizeid | int | 奖品id |
 |  *name | string | 奖品名称 |
 |  *type | string | 奖品类型: 1 虚拟 2 实物 3 积分 |
 |  *money | string | 奖品金额 |
 |  *prizecode | string | 奖品核销码 |
-|  other | string | 其他信息：例如时间地址等等 |
+| info | string | 其他说明 |
 |  status | int | 1 已经领取 2没有领取 (虚拟物品都默认为已经领取 ) |
 
 
@@ -320,6 +264,7 @@
 |  *wxname | string | 用户微信名称 |
 |  *headimgurl | string | 用户微信头像 |
 |  *money | string | 中奖金额 |
+|  *name | string | 奖品名称 |
 |  createtime | int | 中奖时间 |
 
 
