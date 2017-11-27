@@ -32,6 +32,8 @@
             </el-table-column>
             <el-table-column prop="news" label="爆料内容" width="200">
             </el-table-column>
+            <el-table-column prop="tel" label="联系电话" width="200">
+            </el-table-column>
             <el-table-column prop="k_id" label="爆料类别" width="100">
                 <template scope="scope">
                     {{ cat[scope.row.k_id] }}
