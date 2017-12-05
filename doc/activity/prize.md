@@ -94,7 +94,7 @@
 | min | float | 金额最小值： 虚拟物如红包就需要 |
 | img | string | 奖品图片 |
 | info | string | 其他说明 |
-| probability | int | 奖品概率 |
+| chance | int | 奖品概率 |
 
 ```text
 [

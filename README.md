@@ -33,6 +33,14 @@
 - 前端： http://h.kfw001.com/web/case/
 
 
+## [快房微信统一授权接口]
+
+- [统一授权接口](/doc/md/md.md)
+- [统一授权获取用户信息](/doc/md/md.md)
+- [统一授权设置用户信息](/doc/md/md.md)
+- [统一分享配置接口](/doc/md/md.md)
+
+
 ## [快房活动接口接口]
 
 - [活动建立](/doc/activity/ini.md)   任何一个活动都需要调用的接口
