@@ -50,10 +50,7 @@
     </div>
     <div class="follow" @touchmove.prevent="" @click="closeFollow" v-show="followDisplay">
       <img :src="otherData.qrcode" alt="" class="follow__img">
-      <div class="follow__text">
-        <p>1、长按二维码，点击“识别二维码”按钮，关注我们</p>
-        <p>2、回复关键字“<span class="follow__text--focus">春夏季</span>”参与当前活动</p>
-        <p>（若您已关注仍弹出此页面，则必须要到当前公众号下回复上述关键字获取活动链接）</p>
+      <div class="follow__text" v-html="otherData.attention">
       </div>
     </div>
     <div class="vote-count" v-show="allChecked.length > 0">
@@ -102,7 +99,8 @@
           qrcode: "",
           rule: "",
           cat_num: "",
-          count: ""
+          count: "",
+          attention: ""
         }
       }
     },
