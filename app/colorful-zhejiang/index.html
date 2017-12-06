@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="renderer" content="webkit">
+  <meta name="format-detection" content="telephone=no,email=no">
+  <title>__title__</title>
+  <style>
+    .kfw-loading {
+      display: flex;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      justify-content: center;
+      align-items: center;
+      background-color: #fff;
+      text-align: center;
+      z-index: 120;
+    }
+
+    .brands {
+      width: 300px;
+      text-align: center;
+    }
+
+    .text {
+      font-size: 28px;
+      font-weight: 700;
+      font-family: -apple-system-font, "Microsoft YaHei", sans-serif, "Helvetica Neue";
+      color: #f04d22;
+      margin-bottom: 20px;
+    }
+
+    .line {
+      position: relative;
+      width: 100%;
+      border: 0;
+      height: 2px;
+      background-image: linear-gradient(to right, rgba(240, 77, 34, 0), rgba(240, 77, 34, 0.75), rgba(240, 77, 34, 0));
+    }
+
+    .ball {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 13px;
+      height: 8px;
+      border-radius: 50%;
+      /* background: -webkit-radial-gradient(contain, #f04d22, #f06d4d, rgba(255, 255, 255, 1)); */
+      box-shadow: 0 0 15px rgb(241, 77, 35);
+      background-color: #f04d22;
+      animation: move 2.5s ease-in-out infinite;
+    }
+
+    @keyframes move {
+      0% {
+        left: 0;
+        opacity: 0;
+        width: 8px;
+        height: 3px;
+      }
+      5% {
+        opacity: 0;
+        width: 8px;
+        height: 3px;
+      }
+      50% {
+        opacity: 1;
+        width: 13px;
+        height: 8px;
+      }
+      95% {
+        opacity: 0;
+        width: 8px;
+        height: 3px;
+      }
+      100% {
+        left: 100%;
+        opacity: 0;
+        width: 8px;
+        height: 3px;
+      }
+    }
+
+    .kfw-text {
+      width: 100%;
+      position: absolute;
+      bottom: 20px;
+      font-size: 14px;
+      color: #2c3e50;
+    }
+  </style>
+</head>
+<body>
+<div class="kfw-loading transition" id="loading">
+  <div class="brands">
+    <div class="text">快房传媒</div>
+    <div class="line">
+      <div class="ball"></div>
+    </div>
+  </div>
+  <p class="kfw-text">页面加载中，请稍候...</p>
+</div>
+<div id="app"></div>
+<!-- built files will be auto injected -->
+<script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script>
+  wx.ready(function () {
+    // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+    // 微信分享
+    wx.onMenuShareTimeline({
+      // 拉活动详情
+      title: "__title__", // 分享标题
+      link: "__url__", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+      imgUrl: "__img__", // 分享图标
+      success: function () {
+        // 用户确认分享后执行的回调函数
+      },
+      cancel: function () {
+        // 用户取消分享后执行的回调函数s
+      }
+    });
+    wx.onMenuShareAppMessage({
+      title: '__title__', // 分享标题
+      desc: '__desc__', // 分享描述
+      link: '__url__', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+      imgUrl: '__img__', // 分享图标
+      type: '', // 分享类型,music、video或link，不填默认为link
+      dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+      success: function () {
+        // 用户确认分享后执行的回调函数
+      },
+      cancel: function () {
+        // 用户取消分享后执行的回调函数
+      }
+    });
+  });
+  window.isShare = "__info__"
+</script>
+</body>
+</html>
