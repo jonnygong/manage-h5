@@ -100,7 +100,9 @@
           cat: "",
           header: "",
           qrcode: "",
-          rule: ""
+          rule: "",
+          cat_num: "",
+          count: ""
         }
       }
     },
@@ -182,14 +184,14 @@
       async submitVote() {
         for (let i = 0, len = this.listData.length; i < len; i++) {
           const category = this.listData[i]
-          if (category.checkedList.length === 0) {
-            this.$message('提示', `${category.title}分类下未勾选任何地点`)
+          if (category.checkedList.length < otherData.cat_num) {
+            this.$message('提示', `${category.title}分类下最少勾选${otherData.cat_num}个地点`)
             return
           }
         }
         // 每人每次须投10票（含10票）以上
-        if (this.allChecked.length < 10) {
-          this.$message('提示', `您勾选了${this.allChecked.length}个地点，还差${10 - this.allChecked.length}个才可投票`)
+        if (this.allChecked.length < otherData.count) {
+          this.$message('提示', `您勾选了${this.allChecked.length}个地点，还差${otherData.count - this.allChecked.length}个才可投票`)
         } else if (this.isToday(+window.localStorage.getItem('VOTE_RECORD'))) {
           this.$message('提示', '今日已经投过票了！')
         } else {
