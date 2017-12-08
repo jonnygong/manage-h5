@@ -56,6 +56,12 @@
     <div class="vote-count" v-show="allChecked.length > 0">
       已勾选 {{ allChecked.length }} 个
     </div>
+    <div class="follow">
+      <a class="follow__item" 
+      v-for="(item, index) in otherData.follow" 
+      :key="index" 
+      :href="item.url">{{item.name}}</a>  
+    </div> 
   </div>
 </template>
 
@@ -100,7 +106,17 @@
           rule: "",
           cat_num: "",
           count: "",
-          attention: ""
+          attention: "",
+          follow: [
+            {
+              "name": "asdasd",
+              "url": "asdad"
+            },
+            {
+              "name": "asdasd",
+              "url": "asdad"
+            }
+          ]
         }
       }
     },
@@ -182,14 +198,14 @@
       async submitVote() {
         for (let i = 0, len = this.listData.length; i < len; i++) {
           const category = this.listData[i]
-          if (category.checkedList.length < otherData.cat_num) {
-            this.$message('提示', `${category.title}分类下最少勾选${otherData.cat_num}个地点`)
+          if (category.checkedList.length < this.otherData.cat_num) {
+            this.$message('提示', `${category.title}分类下最少勾选${this.otherData.cat_num}个地点`)
             return
           }
         }
         // 每人每次须投10票（含10票）以上
-        if (this.allChecked.length < otherData.count) {
-          this.$message('提示', `您勾选了${this.allChecked.length}个地点，还差${otherData.count - this.allChecked.length}个才可投票`)
+        if (this.allChecked.length < this.otherData.count) {
+          this.$message('提示', `您勾选了${this.allChecked.length}个地点，还差${this.otherData.count - this.allChecked.length}个才可投票`)
         } else if (this.isToday(+window.localStorage.getItem('VOTE_RECORD'))) {
           this.$message('提示', '今日已经投过票了！')
         } else {
@@ -483,6 +499,21 @@
     color: #fff;
     font-size: $fontSize;
     text-align: left;
+  }
+
+  .follow {
+    display:flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    height: 2rem;
+    background: rgb(237, 244, 138);
+
+    &__item {
+      color: #333;
+      text-decoration: #333 underline;
+      font-size: 14rem / $rem;
+    }
   }
 
   // for PC
