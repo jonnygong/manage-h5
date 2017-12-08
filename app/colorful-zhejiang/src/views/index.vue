@@ -56,8 +56,8 @@
     <div class="vote-count" v-show="allChecked.length > 0">
       已勾选 {{ allChecked.length }} 个
     </div>
-    <div class="follow">
-      <a class="follow__item" 
+    <div class="partner">
+      <a class="partner__item" 
       v-for="(item, index) in otherData.follow" 
       :key="index" 
       :href="item.url">{{item.name}}</a>  
@@ -109,12 +109,8 @@
           attention: "",
           follow: [
             {
-              "name": "asdasd",
-              "url": "asdad"
-            },
-            {
-              "name": "asdasd",
-              "url": "asdad"
+              "name": "",
+              "url": ""
             }
           ]
         }
@@ -501,10 +497,14 @@
     text-align: left;
   }
 
-  .follow {
-    display:flex;
+  .partner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
     flex-direction: row;
     justify-content: space-around;
+    align-items: center;
     width: 100%;
     height: 2rem;
     background: rgb(237, 244, 138);
