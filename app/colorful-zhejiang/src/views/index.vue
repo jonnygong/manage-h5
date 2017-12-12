@@ -36,8 +36,8 @@
         <button class="container__footer__btn container__footer__btn--enable" @click="submitVote">马上投票</button>
       </div>
     </div>
-    <div class="modal" v-show="modal">
-      <div class="detail">
+    <div class="modal" v-show="modal" @click="handleClose">
+      <div class="detail" @click.stop="">
         <div class="detail__close" @click="handleClose"></div>
         <div class="detail__img">
           <img v-lazy="curSpot.img" alt="">
@@ -60,11 +60,11 @@
       已勾选 {{ allChecked.length }} 个
     </div>
     <div class="partner">
-      <a class="partner__item" 
-      v-for="(item, index) in otherData.follow" 
-      :key="index" 
-      :href="item.url">{{item.name}}</a>  
-    </div> 
+      <a class="partner__item"
+      v-for="(item, index) in otherData.follow"
+      :key="index"
+      :href="item.url">{{item.name}}</a>
+    </div>
   </div>
 </template>
 
