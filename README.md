@@ -1,4 +1,4 @@
-
+﻿
 # 本系统为快房内部功能接口
 
 
@@ -50,5 +50,6 @@
 - [图片上传接口](/doc/activity/img.md)  
 - [抽奖游戏接口](/doc/activity/prize.md)
 - [投票接口](/doc/activity/vote.md)
+- [创建抽奖活动接口](/doc/activity/adminactivity.md)
 ### 部署说明
 - 后台： http://api.mp.kfw001.com/
