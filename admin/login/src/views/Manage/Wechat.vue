@@ -169,8 +169,7 @@
         api.gePublicList(para).then((res) => {
           this.listLoading = false;
           if (res.data.status === 200) {
-            this.total = res.data.param.pages.total;
-            this.pagesize = res.data.param.pages.pagesize;
+            this.total = res.data.param.count;
             this.list = res.data.param.list;
           }
         });
@@ -181,7 +180,7 @@
           type: 'warning'
         }).then(() => {
           this.listLoading = true;
-          let para = {ids: row.id};
+          let para = {ids: row.id, status: -1};
 
           api.getPublicStatus(para).then((res) => {
             if (res.data.status === 200) {

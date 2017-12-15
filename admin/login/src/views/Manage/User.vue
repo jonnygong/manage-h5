@@ -26,9 +26,9 @@
             <el-table-column type="selection" width="55">
             </el-table-column>
             <!--<el-table-column prop="id" label="ID" width="100" sortable></el-table-column>-->
-            <el-table-column prop="email" label="登录邮箱" width="100"></el-table-column>
-            <el-table-column prop="realname" label="真名" width="80"></el-table-column>
-            <el-table-column prop="tel" label="手机号码" width="100"></el-table-column>
+            <el-table-column prop="email" label="登录邮箱" min-width="170"></el-table-column>
+            <el-table-column prop="realname" label="真名" width="110"></el-table-column>
+            <el-table-column prop="tel" label="手机号码" width="120"></el-table-column>
             <el-table-column prop="thumb" label="头像" width="120">
                 <template scope="scope">
                     <el-popover trigger="hover" placement="top">
@@ -95,22 +95,20 @@
                 <el-form-item label="头像" prop="thumb">
                     <i-uploader v-model="editForm.thumb"></i-uploader>
                 </el-form-item>
-                <el-form-item label="公众号集" prop="public_id">
+                <el-form-item label="公众号集" prop="public_id" v-if="editForm.id !== 1">
                     <!--列表-->
-                    <el-table :data="wechatList" highlight-current-row v-loading="authListLoading"
+                    <el-table :data="wechatList" ref="wechatTable" highlight-current-row v-loading="authListLoading"
                               @selection-change="selsWechatChange" style="width: 100%;">
                         <el-table-column type="selection" width="55"></el-table-column>
-                        <el-table-column type="id" width="60"></el-table-column>
                         <el-table-column prop="name" label="公众号名称" min-width="150"></el-table-column>
                     </el-table>
                 </el-form-item>
-                <el-form-item label="模块集" prop="module_id">
+                <el-form-item label="模块集" prop="module_id" v-if="editForm.id !== 1">
                     <!--列表-->
-                    <el-table :data="moduleList" highlight-current-row v-loading="authListLoading"
+                    <el-table :data="moduleList" ref="moduleTable" highlight-current-row v-loading="authListLoading"
                               @selection-change="selsAuthChange" style="width: 100%;">
                         <el-table-column type="selection" width="55"></el-table-column>
                         <el-table-column prop="name" label="模块名称" min-width="150"></el-table-column>
-                        <el-table-column prop="url" label="模块路由" width="150"></el-table-column>
                     </el-table>
                 </el-form-item>
             </el-form>
@@ -140,20 +138,18 @@
                 </el-form-item>
                 <el-form-item label="公众号集" prop="public_id">
                     <!--列表-->
-                    <el-table :data="wechatList" ref="wechatTable" highlight-current-row v-loading="authListLoading"
+                    <el-table :data="wechatList" highlight-current-row v-loading="authListLoading"
                               @selection-change="selsWechatChange" style="width: 100%;">
                         <el-table-column type="selection" width="55"></el-table-column>
-                        <el-table-column type="id" width="60"></el-table-column>
                         <el-table-column prop="name" label="公众号名称" min-width="150"></el-table-column>
                     </el-table>
                 </el-form-item>
                 <el-form-item label="模块集" prop="module_id">
                     <!--列表-->
-                    <el-table :data="moduleList" ref="moduleTable" highlight-current-row v-loading="authListLoading"
+                    <el-table :data="moduleList" highlight-current-row v-loading="authListLoading"
                               @selection-change="selsAuthChange" style="width: 100%;">
                         <el-table-column type="selection" width="55"></el-table-column>
                         <el-table-column prop="name" label="模块名称" min-width="150"></el-table-column>
-                        <el-table-column prop="url" label="模块路由" width="150"></el-table-column>
                     </el-table>
                 </el-form-item>
             </el-form>
@@ -195,7 +191,6 @@
         editFormRules: {
           email: [{required: true, message: '请输入内容', trigger: 'blur'}],
           realname: [{required: true, message: '请输入内容', trigger: 'blur'}],
-          password: [{required: true, message: '请输入内容', trigger: 'blur'}],
           public_id: [{required: true, message: '请选择内容'}],
           module_id: [{required: true, message: '请选择内容'}]
         },
@@ -266,6 +261,11 @@
           if (res.data.status === 200) {
             this.moduleList = res.data.param.module;
             this.wechatList = res.data.param.public;
+            // 勾选已知选项（角色和项目权限）
+            this.moduleSels = this.formatCheckedId(this.moduleList, this.editForm.module_id === null ? [] : this.editForm.module_id.indexOf(',') === -1 ? Number(this.editForm.module_id) : this.editForm.module_id.split(','));
+            this.wechatSels = this.formatCheckedId(this.wechatList, this.editForm.public_id === null ? [] : this.editForm.public_id.indexOf(',') === -1 ? Number(this.editForm.public_id) : this.editForm.public_id.split(','));
+            this.toggleSelection(this.moduleSels, 'moduleTable');
+            this.toggleSelection(this.wechatSels, 'wechatTable');
           }
         });
       },
@@ -275,7 +275,7 @@
           type: 'warning'
         }).then(() => {
           this.listLoading = true;
-          let para = {ids: row.id};
+          let para = {ids: row.id, status: -1};
 
           api.getAdmintStatus(para).then((res) => {
             if (res.data.status === 200) {
@@ -302,14 +302,11 @@
           .then((res) => {
             if (res.data.status === 200) {
               this.editForm = Object.assign({}, res.data.param);
-              // 勾选已知选项（角色和项目权限）
-              this.moduleSels = this.formatCheckedId(this.moduleList, this.editForm.module_id === null ? [] : typeof this.editForm.module_id === 'number' ? this.editForm.module_id : this.editForm.module_id.split(","));
-              this.wechatSels = this.formatCheckedId(this.wechatList, this.editForm.public_id === null ? [] : typeof this.editForm.public_id === 'number' ? this.editForm.public_id : this.editForm.public_id.split(","));
-              this.toggleSelection(this.moduleSels, 'moduleTable');
-              this.toggleSelection(this.wechatSels, 'wechatTable');
+              this.editForm.password = '';
+              this.getAuthData();
             }
           });
-        this.getAuthData();
+
       },
       //显示新增界面
       handleAdd() {
@@ -355,8 +352,8 @@
       },
       //新增
       addSubmit() {
-        this.editForm.public_id = this.wechatSels.map(item => item.id).toString();
-        this.editForm.module_id = this.moduleSels.map(item => item.id).toString();
+        this.addForm.public_id = this.wechatSels.map(item => item.id).toString();
+        this.addForm.module_id = this.moduleSels.map(item => item.id).toString();
         this.$refs.addForm.validate((valid) => {
           if (valid) {
             this.$confirm('确认提交吗？', '提示', {}).then(() => {
@@ -400,19 +397,21 @@
        */
       formatCheckedId(source, ids) {
         let _CheckedIds = [];
+        console.log(source);
         if (typeof ids === 'number') {
           source.forEach((item, index) => {
+
             if (Number(item.id) === Number(ids)) {
-              _CheckedIds.push(source[index])
+              _CheckedIds.push(source[index]);
             }
-          })
+          });
         } else {
           ids.forEach(id => {
             source.forEach((item, index) => {
               if (Number(item.id) === Number(id)) {
-                _CheckedIds.push(source[index])
+                _CheckedIds.push(source[index]);
               }
-            })
+            });
           });
         }
 
@@ -429,7 +428,7 @@
             // 由于数据是异步获取，所以需要等到DOM都加载完毕后，再勾选
             this.$nextTick(() => {
               this.$refs[refName].toggleRowSelection(row);
-            })
+            });
           });
 
         } else {

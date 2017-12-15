@@ -28,7 +28,7 @@
             <el-table-column prop="adminurl" label="后台路由" min-width="100"></el-table-column>
             <!--<el-table-column prop="update_time" label="更新时间" width="200" :formatter="formateDate"></el-table-column>-->
             <!--<el-table-column prop="create_time" label="创建时间" width="200"-->
-                             <!--:formatter="formateDate"></el-table-column>-->
+            <!--:formatter="formateDate"></el-table-column>-->
             <el-table-column prop="status" label="状态" width="100">
                 <template scope="scope">
                     <el-tag :type="scope.row.status === 1 ? 'success' : scope.row.status === -1 ? 'gray' : 'danger'">
@@ -96,248 +96,247 @@
 </template>
 
 <script>
-    import util from '@/common/js/util'
-    import api from '@/api'
+  import util from '@/common/js/util';
+  import api from '@/api';
 
-    export default {
-        data() {
-            return {
-                filters: {
-                    options: [],
-                    pid: ''
-                },
-                list: [], // 列表
-                total: 0,
-                page: 1,
-                pagesize: 0,
-                listLoading: false,
-                sels: [],//列表选中列
-
-                editFormVisible: false,//编辑界面是否显示
-                editLoading: false,
-                editFormRules: {
-                    name: [{required: true, message: '请输入内容', trigger: 'blur'}],
-                    adminurl: [{required: true, message: '请输入内容', trigger: 'blur'}],
-                    info: [{required: true, message: '请输入内容', trigger: 'blur'}],
-                },
-                //编辑界面数据
-                editForm: {
-                    id: 0,
-                    name: '',
-                    adminurl: '',
-                    info: ''
-                },
-
-                addFormVisible: false,//新增界面是否显示
-                addLoading: false,
-                addFormRules: {
-                    name: [{required: true, message: '请输入内容', trigger: 'blur'}],
-                    adminurl: [{required: true, message: '请输入内容', trigger: 'blur'}],
-                    info: [{required: true, message: '请输入内容', trigger: 'blur'}],
-                },
-                //新增界面数据
-                addForm: {
-                    name: '',
-                    adminurl: '',
-                    info: ''
-                }
-            }
+  export default {
+    data() {
+      return {
+        filters: {
+          options: [],
+          pid: ''
         },
-        methods: {
-            // 格式化投放时间
-            formateDate(row, column) {
-                return ` ${util.formatDate.format(new Date(row[column.property] * 1000), 'yyyy-MM-dd hh:mm:ss')}`
-            },
-            // 分页
-            handleCurrentChange(val) {
-                this.page = val;
-                this.getListData();
-            },
-            //获取用户列表
-            getListData() {
-                this.listLoading = true;
-                let para = {
-                    page: this.page
-                };
-                api.geModuleList(para).then((res) => {
-                    this.listLoading = false;
-                    if (res.data.status === 200) {
-                        this.total = res.data.param.pages.total;
-                        this.pagesize = res.data.param.pages.pagesize;
-                        this.list = res.data.param.list;
-                    }
-                });
-            },
-            //删除
-            handleDel(index, row) {
-                this.$confirm('确认删除该记录吗?', '提示', {
-                    type: 'warning'
-                }).then(() => {
-                    this.listLoading = true;
-                    let para = {id: row.id};
+        list: [], // 列表
+        total: 0,
+        page: 1,
+        pagesize: 0,
+        listLoading: false,
+        sels: [],//列表选中列
 
-                    api.getModuleDelete(para).then((res) => {
-                        if (res.data.status === 200) {
-                            this.listLoading = false;
-                            this.$message({
-                                message: '删除成功',
-                                type: 'success'
-                            });
-                            this.getListData();
-                        }
-                    })
-
-                }).catch(() => {
-
-                });
-            },
-            //显示编辑界面
-            handleEdit(index, row) {
-                this.editFormVisible = true;
-                let param = {
-                    id: row.id
-                };
-                api.getModuleInfo(param)
-                    .then((res) => {
-                        if (res.data.status === 200) {
-                            this.editForm = Object.assign({}, res.data.param);
-                        }
-                    });
-            },
-            //显示新增界面
-            handleAdd() {
-                this.addFormVisible = true;
-                this.addForm = {
-                    name: '',
-                    adminurl: '',
-                    info: '',
-                    mb_url: '',
-                };
-            },
-            //编辑
-            editSubmit() {
-                this.$refs.editForm.validate((valid) => {
-                    if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            this.editLoading = true;
-                            let para = Object.assign({}, this.editForm);
-                            api.getModuleUpdate(para)
-                                .then((res) => {
-                                    if (res.data.status === 200) {
-                                        this.editLoading = false;
-                                        //NProgress.done();
-                                        this.$message({
-                                            message: '修改成功',
-                                            type: 'success'
-                                        });
-                                        this.$refs['editForm'].resetFields();
-                                        this.editFormVisible = false;
-                                        this.getListData();
-                                    }
-                                });
-                        });
-                    }
-                });
-            },
-            //新增
-            addSubmit() {
-                this.$refs.addForm.validate((valid) => {
-                    if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            this.addLoading = true;
-                            let para = Object.assign({}, this.addForm);
-                            api.geModuleAdd(para)
-                                .then((res) => {
-
-                                    this.addLoading = false;
-                                    if (res.data.status === 200) {
-                                        this.$message({
-                                            message: res.data.info,
-                                            type: 'success'
-                                        });
-
-                                        this.$refs['addForm'].resetFields();
-                                        this.addFormVisible = false;
-                                        this.getListData();
-
-                                    }
-                                });
-                        });
-                    }
-                });
-            },
-            selsChange(sels) {
-                this.sels = sels;
-            },
-            //批量删除
-            batchAction(action) {
-                // 三种操作：remove disable active
-                let ids = this.sels.map(item => item.id).toString();
-                const actions = {
-                    'remove': {
-                        tip: '删除',
-                        api: `getModuleStatus`
-                    },
-                    'disable': {
-                        tip: '停用',
-                        api: `getModuleStatus`,
-                        status: 0
-                    },
-                    'active': {
-                        tip: '启用',
-                        api: `getModuleStatus`,
-                        status: 1
-                    }
-                };
-                this.$confirm(`确认${actions[action].tip}选中记录吗？`, '提示', {
-                    type: 'warning'
-                }).then(() => {
-                    this.listLoading = true;
-                    // 非批量删除，带上 status
-                    let params = (action !== 'remove' ? Object.assign({
-                        id: ids + '',
-                        status: actions[action].status
-                    }, params) : {id: ids + ''});
-                    api[actions[action].api](params).then((res) => {
-                        this.listLoading = false;
-
-                        if (res.data.status === 200) {
-                            this.$message({
-                                message: res.data.info,
-                                type: 'success'
-                            });
-
-                            this.getListData();
-
-                        }
-                    });
-                });
-            },
-            // 修改状态
-            async statusSubmit(index, row) {
-                let para = {
-                    id: row.id,
-                    status: 1 - row.status
-                };
-
-                api.getModuleStatus(para).then((res) => {
-                    if (res.data.status === 200) {
-                        this.listLoading = false;
-                        this.$message({
-                            message: '状态修改成功',
-                            type: 'success'
-                        });
-                        row.status = 1 - row.status;
-                    }
-                })
-
-
-            },
+        editFormVisible: false,//编辑界面是否显示
+        editLoading: false,
+        editFormRules: {
+          name: [{required: true, message: '请输入内容', trigger: 'blur'}],
+          adminurl: [{required: true, message: '请输入内容', trigger: 'blur'}],
+          info: [{required: true, message: '请输入内容', trigger: 'blur'}],
         },
-        mounted() {
-            this.getListData();
+        //编辑界面数据
+        editForm: {
+          id: 0,
+          name: '',
+          adminurl: '',
+          info: ''
+        },
+
+        addFormVisible: false,//新增界面是否显示
+        addLoading: false,
+        addFormRules: {
+          name: [{required: true, message: '请输入内容', trigger: 'blur'}],
+          adminurl: [{required: true, message: '请输入内容', trigger: 'blur'}],
+          info: [{required: true, message: '请输入内容', trigger: 'blur'}],
+        },
+        //新增界面数据
+        addForm: {
+          name: '',
+          adminurl: '',
+          info: ''
         }
+      };
+    },
+    methods: {
+      // 格式化投放时间
+      formateDate(row, column) {
+        return ` ${util.formatDate.format(new Date(row[column.property] * 1000), 'yyyy-MM-dd hh:mm:ss')}`;
+      },
+      // 分页
+      handleCurrentChange(val) {
+        this.page = val;
+        this.getListData();
+      },
+      //获取用户列表
+      getListData() {
+        this.listLoading = true;
+        let para = {
+          page: this.page
+        };
+        api.geModuleList(para).then((res) => {
+          this.listLoading = false;
+          if (res.data.status === 200) {
+            this.total = res.data.param.pages.total;
+            this.pagesize = res.data.param.pages.pagesize;
+            this.list = res.data.param.list;
+          }
+        });
+      },
+      //删除
+      handleDel(index, row) {
+        this.$confirm('确认删除该记录吗?', '提示', {
+          type: 'warning'
+        }).then(() => {
+          this.listLoading = true;
+          let para = {ids: row.id, status: -1};
+
+          api.getModuleStatus(para).then((res) => {
+            if (res.data.status === 200) {
+              this.listLoading = false;
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              });
+              this.getListData();
+            }
+          });
+
+        }).catch(() => {
+
+        });
+      },
+      //显示编辑界面
+      handleEdit(index, row) {
+        this.editFormVisible = true;
+        let param = {
+          id: row.id
+        };
+        api.getModuleInfo(param)
+          .then((res) => {
+            if (res.data.status === 200) {
+              this.editForm = Object.assign({}, res.data.param);
+            }
+          });
+      },
+      //显示新增界面
+      handleAdd() {
+        this.addFormVisible = true;
+        this.addForm = {
+          name: '',
+          adminurl: '',
+          info: '',
+          mb_url: '',
+        };
+      },
+      //编辑
+      editSubmit() {
+        this.$refs.editForm.validate((valid) => {
+          if (valid) {
+            this.$confirm('确认提交吗？', '提示', {}).then(() => {
+              this.editLoading = true;
+              let para = Object.assign({}, this.editForm);
+              api.getModuleUpdate(para)
+                .then((res) => {
+                  if (res.data.status === 200) {
+                    this.editLoading = false;
+                    //NProgress.done();
+                    this.$message({
+                      message: '修改成功',
+                      type: 'success'
+                    });
+                    this.$refs['editForm'].resetFields();
+                    this.editFormVisible = false;
+                    this.getListData();
+                  }
+                });
+            });
+          }
+        });
+      },
+      //新增
+      addSubmit() {
+        this.$refs.addForm.validate((valid) => {
+          if (valid) {
+            this.$confirm('确认提交吗？', '提示', {}).then(() => {
+              this.addLoading = true;
+              let para = Object.assign({}, this.addForm);
+              api.geModuleAdd(para)
+                .then((res) => {
+
+                  this.addLoading = false;
+                  if (res.data.status === 200) {
+                    this.$message({
+                      message: res.data.info,
+                      type: 'success'
+                    });
+
+                    this.$refs['addForm'].resetFields();
+                    this.addFormVisible = false;
+                    this.getListData();
+
+                  }
+                });
+            });
+          }
+        });
+      },
+      selsChange(sels) {
+        this.sels = sels;
+      },
+      //批量删除
+      batchAction(action) {
+        // 三种操作：remove disable active
+        let ids = this.sels.map(item => item.id).toString();
+        const actions = {
+          'remove': {
+            tip: '删除',
+            api: `getModuleStatus`
+          },
+          'disable': {
+            tip: '停用',
+            api: `getModuleStatus`,
+            status: 0
+          },
+          'active': {
+            tip: '启用',
+            api: `getModuleStatus`,
+            status: 1
+          }
+        };
+        this.$confirm(`确认${actions[action].tip}选中记录吗？`, '提示', {
+          type: 'warning'
+        }).then(() => {
+          this.listLoading = true;
+          // 非批量删除，带上 status
+          let params = (action !== 'remove' ? Object.assign({
+            ids: ids + '',
+            status: actions[action].status
+          }, params) : {id: ids + ''});
+          api[actions[action].api](params).then((res) => {
+            this.listLoading = false;
+
+            if (res.data.status === 200) {
+              this.$message({
+                message: res.data.info,
+                type: 'success'
+              });
+
+              this.getListData();
+
+            }
+          });
+        });
+      },
+      // 修改状态
+      async statusSubmit(index, row) {
+        let para = {
+          id: row.id,
+          status: 1 - row.status
+        };
+
+        api.getModuleStatus(para).then((res) => {
+          if (res.data.status === 200) {
+            this.listLoading = false;
+            this.$message({
+              message: '状态修改成功',
+              type: 'success'
+            });
+            row.status = 1 - row.status;
+          }
+        });
+
+      },
+    },
+    mounted() {
+      this.getListData();
     }
+  };
 
 </script>
 
