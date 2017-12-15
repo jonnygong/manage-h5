@@ -25,12 +25,10 @@
                   style="width: 100%;">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column prop="name" label="模型名称" width="100"></el-table-column>
-            <el-table-column prop="adminurl" label="路由地址" min-width="100"></el-table-column>
-            <el-table-column prop="info" label="模型描述" min-width="100"></el-table-column>
-            <el-table-column prop="mb_url" label="展示端url" min-width="100"></el-table-column>
-            <el-table-column prop="update_time" label="更新时间" width="200" :formatter="formateDate"></el-table-column>
-            <el-table-column prop="create_time" label="创建时间" width="200"
-                             :formatter="formateDate"></el-table-column>
+            <el-table-column prop="adminurl" label="后台路由" min-width="100"></el-table-column>
+            <!--<el-table-column prop="update_time" label="更新时间" width="200" :formatter="formateDate"></el-table-column>-->
+            <!--<el-table-column prop="create_time" label="创建时间" width="200"-->
+                             <!--:formatter="formateDate"></el-table-column>-->
             <el-table-column prop="status" label="状态" width="100">
                 <template scope="scope">
                     <el-tag :type="scope.row.status === 1 ? 'success' : scope.row.status === -1 ? 'gray' : 'danger'">
@@ -38,7 +36,7 @@
                     </el-tag>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" width="230" fixed="right">
+            <el-table-column label="操作" width="220" fixed="right">
                 <template scope="scope">
                     <el-button size="small" @click="statusSubmit(scope.$index, scope.row)"
                                :disabled="scope.row.status === -1">
@@ -69,14 +67,8 @@
                 <el-form-item label="模型名称" prop="name">
                     <el-input v-model="editForm.name" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="路由地址" prop="adminurl">
+                <el-form-item label="后台路由" prop="adminurl">
                     <el-input v-model="editForm.adminurl" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="展示端url" prop="mb_url">
-                    <el-input v-model="editForm.mb_url" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="模型描述" prop="info">
-                    <el-input type="textarea" v-model="editForm.info" auto-complete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -91,14 +83,8 @@
                 <el-form-item label="模型名称" prop="name">
                     <el-input v-model="addForm.name" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="路由地址" prop="adminurl">
+                <el-form-item label="后台路由" prop="adminurl">
                     <el-input v-model="addForm.adminurl" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="展示端url" prop="mb_url">
-                    <el-input v-model="addForm.mb_url" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="模型描述" prop="info">
-                    <el-input type="textarea" v-model="addForm.info" auto-complete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -139,9 +125,7 @@
                     id: 0,
                     name: '',
                     adminurl: '',
-                    info: '',
-                    mb_url: '',
-
+                    info: ''
                 },
 
                 addFormVisible: false,//新增界面是否显示
@@ -155,10 +139,8 @@
                 addForm: {
                     name: '',
                     adminurl: '',
-                    info: '',
-                    mb_url: '',
+                    info: ''
                 }
-
             }
         },
         methods: {
@@ -294,7 +276,7 @@
                 const actions = {
                     'remove': {
                         tip: '删除',
-                        api: `getAdmintDelete`
+                        api: `getModuleStatus`
                     },
                     'disable': {
                         tip: '停用',

@@ -10,7 +10,7 @@
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column prop="id" label="ID" width="80"></el-table-column>
             <el-table-column prop="name" label="项目名称" width="150"></el-table-column>
-            <el-table-column prop="url" label="URL"></el-table-column>
+            <el-table-column prop="adminurl" label="URL"></el-table-column>
             <el-table-column label="操作" width="150" fixed="right">
                 <template scope="scope">
                     <el-button type="primary" size="small" @click="handleSelect(scope.$index, scope.row)">进入此项目</el-button>
@@ -32,7 +32,7 @@
         methods: {
             handleSelect(index, row) {
                 this.$store.dispatch('set_project', row);
-                window.location.href = row.url;
+                window.location.href = row.adminurl;
             },
             getListData() {
                 this.listLoading = true;

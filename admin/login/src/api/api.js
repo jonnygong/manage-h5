@@ -57,11 +57,11 @@ export const imgUpload = params => {
     return axios.post('/System/img/upload', qs.stringify(params))
 };
 
-// 获取验证码
+// 用于显示该账号所拥有权限的公众号
 export const getWechatList = params => {
     return axios.post('/System/User/wechat', qs.stringify(params))
 };
-// 登录
+// 用于显示该账号所拥有权限的模块
 export const getProjectList = params => {
     return axios.post('/System/User/modules', qs.stringify(params))
 };
@@ -82,14 +82,8 @@ export const getAdmintUpdate = params => {
 export const getAdmintStatus = params => {
     return axios.post('/System/Admin/status', qs.stringify(params))
 };
-export const getAdmintDelete = params => {
-    return axios.post('/System/Admin/delete', qs.stringify(params))
-};
-export const getAdmintModule = params => {
-    return axios.post('/System/Admin/module', qs.stringify(params))
-};
-export const getAdmintModules = params => {
-    return axios.post('/System/Admin/modules', qs.stringify(params))
+export const getAdminArray = params => {
+    return axios.post('/System/Admin/array', qs.stringify(params))
 };
 
 
@@ -109,9 +103,6 @@ export const getModuleUpdate = params => {
 export const getModuleStatus = params => {
     return axios.post('/System/Module/status', qs.stringify(params))
 };
-export const getModuleDelete = params => {
-    return axios.post('/System/Module/delete', qs.stringify(params))
-};
 
 // 公众号
 export const gePublicList = params => {
@@ -128,7 +119,4 @@ export const getPublicUpdate = params => {
 };
 export const getPublicStatus = params => {
   return axios.post('/System/Public/status', qs.stringify(params))
-};
-export const getPublicDelete = params => {
-  return axios.post('/System/Public/delete', qs.stringify(params))
 };

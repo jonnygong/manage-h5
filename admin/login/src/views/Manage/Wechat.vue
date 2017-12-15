@@ -24,12 +24,12 @@
         <el-table :data="list" highlight-current-row v-loading="listLoading" @selection-change="selsChange"
                   style="width: 100%;">
             <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column prop="name" label="模型名称" width="100"></el-table-column>
-            <el-table-column prop="appid" label="路由地址" min-width="100"></el-table-column>
-            <el-table-column prop="code" label="模型描述" min-width="100"></el-table-column>
-            <el-table-column prop="update_time" label="更新时间" width="200" :formatter="formateDate"></el-table-column>
-            <el-table-column prop="create_time" label="创建时间" width="200"
-                             :formatter="formateDate"></el-table-column>
+            <el-table-column prop="name" label="公众号名称" width="100"></el-table-column>
+            <el-table-column prop="appid" label="公众号appid" min-width="100"></el-table-column>
+            <el-table-column prop="code" label="自己生成的code" min-width="100"></el-table-column>
+            <!--<el-table-column prop="update_time" label="更新时间" width="200" :formatter="formateDate"></el-table-column>-->
+            <!--<el-table-column prop="create_time" label="创建时间" width="200"-->
+                             <!--:formatter="formateDate"></el-table-column>-->
             <el-table-column prop="status" label="状态" width="100">
                 <template scope="scope">
                     <el-tag :type="scope.row.status === 1 ? 'success' : scope.row.status === -1 ? 'gray' : 'danger'">
@@ -103,8 +103,8 @@
 </template>
 
 <script>
-  import util from '@/common/js/util'
-  import api from '@/api'
+  import util from '@/common/js/util';
+  import api from '@/api';
 
   export default {
     data() {
@@ -146,15 +146,14 @@
         addForm: {
           name: '',
           appid: '',
-          code: '',
+          code: ''
         }
-
-      }
+      };
     },
     methods: {
       // 格式化投放时间
       formateDate(row, column) {
-        return ` ${util.formatDate.format(new Date(row[column.property] * 1000), 'yyyy-MM-dd hh:mm:ss')}`
+        return ` ${util.formatDate.format(new Date(row[column.property] * 1000), 'yyyy-MM-dd hh:mm:ss')}`;
       },
       // 分页
       handleCurrentChange(val) {
@@ -170,7 +169,8 @@
         api.gePublicList(para).then((res) => {
           this.listLoading = false;
           if (res.data.status === 200) {
-            this.total = res.data.param.count;
+            this.total = res.data.param.pages.total;
+            this.pagesize = res.data.param.pages.pagesize;
             this.list = res.data.param.list;
           }
         });
@@ -181,9 +181,9 @@
           type: 'warning'
         }).then(() => {
           this.listLoading = true;
-          let para = {id: row.id};
+          let para = {ids: row.id};
 
-          api.getPublicDelete(para).then((res) => {
+          api.getPublicStatus(para).then((res) => {
             if (res.data.status === 200) {
               this.listLoading = false;
               this.$message({
@@ -192,7 +192,7 @@
               });
               this.getListData();
             }
-          })
+          });
 
         }).catch(() => {
 
@@ -216,9 +216,8 @@
         this.addFormVisible = true;
         this.addForm = {
           name: '',
-          adminurl: '',
-          info: '',
-          mb_url: '',
+          appid: '',
+          code: ''
         };
       },
       //编辑
@@ -283,7 +282,7 @@
         const actions = {
           'remove': {
             tip: '删除',
-            api: `getPublicDelete`
+            api: `getPublicStatus`
           },
           'disable': {
             tip: '停用',
@@ -336,15 +335,14 @@
             });
             row.status = 1 - row.status;
           }
-        })
-
+        });
 
       },
     },
     mounted() {
       this.getListData();
     }
-  }
+  };
 
 </script>
 
