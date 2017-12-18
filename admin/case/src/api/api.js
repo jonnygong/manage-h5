@@ -9,6 +9,17 @@ axios.defaults.baseURL = 'https://api.kfw001.com';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.withCredentials = true;  //是关键 支持跨域携带cookie
 
+/**
+ * todo: 预处理Requests数据
+ * desc: 进行数据转换，添加默认字段等
+ * @return data;
+ **/
+axios.defaults.transformRequest = function _transformRequest(params = {}) {
+  // 返回完整数据，请求ajax
+  params.public_id = sessionStorage.getItem('WECHAT_ID');
+  return qs.stringify(params);
+};
+
 // 处理服务器返回的数据
 axios.defaults.transformResponse = [function (data) {
     // Do whatever you want to transform the data
@@ -46,194 +57,182 @@ axios.defaults.transformResponse = [function (data) {
 
 // 获取验证码
 export const requestCode = params => {
-    return axios.post('/system/user/code', qs.stringify(params))
+    return axios.post('/system/user/code', params)
 };
 // 登录
 export const requestLogin = params => {
-    return axios.post('/system/user/login', qs.stringify(params))
+    return axios.post('/system/user/login', params)
 };
 
 
 // 获取广告位置
 export const getAdspaceList = params => {
-    return axios.post('/Caseadmin/Adsplace/list', qs.stringify(params))
+    return axios.post('/Caseadmin/Adsplace/list', params)
 };
 // todo 获取广告位置详细信息
-export const getAdspaceDetail = para => {
-    return axios.get('/Caseadmin/Adsplace/info', {
-        params: para
-    })
+export const getAdspaceDetail = params => {
+    return axios.post('/Caseadmin/Adsplace/info', params)
 };
 // 获取案例分类层级
 export const getAdspaceSelect = params => {
-    return axios.post('/Caseadmin/Adsplace/select', qs.stringify(params))
+    return axios.post('/Caseadmin/Adsplace/select', params)
 };
 // 添加广告位置
 export const addAdspace = params => {
-    return axios.post('/Caseadmin/Adsplace/add', qs.stringify(params))
+    return axios.post('/Caseadmin/Adsplace/add', params)
 };
 // 删除广告位置
 export const delAdspace = params => {
-    return axios.post('/Caseadmin/Adsplace/delete', qs.stringify(params))
+    return axios.post('/Caseadmin/Adsplace/delete', params)
 };
 // 修改广告位置
 export const editAdspace = params => {
-    return axios.post('/Caseadmin/Adsplace/update', qs.stringify(params))
+    return axios.post('/Caseadmin/Adsplace/update', params)
 };
 // todo 修改广告位置状态
 export const changeAdspaceState = params => {
-    return axios.post('/Caseadmin/Adsplace/status', qs.stringify(params))
+    return axios.post('/Caseadmin/Adsplace/status', params)
 };
 
 
 // 获得广告数据
 export const getAds = params => {
-    return axios.post('/Caseadmin/Ads/list', qs.stringify(params))
+    return axios.post('/Caseadmin/Ads/list', params)
 };
 // 获取广告数据详细信息
-export const getAdsDetail = para => {
-    return axios.get('/Caseadmin/Ads/info', {
-        params: para
-    })
+export const getAdsDetail = params => {
+    return axios.post('/Caseadmin/Ads/info', params)
 };
 // 添加广告数据
 export const addAds = params => {
-    return axios.post('/Caseadmin/Ads/add', qs.stringify(params))
+    return axios.post('/Caseadmin/Ads/add', params)
 };
 // 更新广告数据
 export const editAds = params => {
-    return axios.post('/Caseadmin/Ads/update', qs.stringify(params))
+    return axios.post('/Caseadmin/Ads/update', params)
 };
 // 删除广告数据
 export const deleteAds = params => {
-    return axios.post('/Caseadmin/Ads/delete', qs.stringify(params))
+    return axios.post('/Caseadmin/Ads/delete', params)
 };
 // todo 修改广告状态
 export const changeAdsState = params => {
-    return axios.post('/Caseadmin/Ads/status', qs.stringify(params))
+    return axios.post('/Caseadmin/Ads/status', params)
 };
 
 
 // 图片上传接口
 export const imageUpload = params => {
-    return axios.post('/Caseadmin/img/upload', qs.stringify(params))
+    return axios.post('/Caseadmin/img/upload', params)
 };
 
 
 // 获取客户来源列表
 export const getSourceList = params => {
-    return axios.post('/Caseadmin/source/list', qs.stringify(params))
+    return axios.post('/Caseadmin/source/list', params)
 };
 // 获取客户下拉列表
 export const getSourceSelect = params => {
-    return axios.post('/Caseadmin/source/select', qs.stringify(params))
+    return axios.post('/Caseadmin/source/select', params)
 };
 // 获取客户来源详细信息
-export const getSourceDetail = para => {
-    return axios.get('/Caseadmin/source/info', {
-        params: para
-    })
+export const getSourceDetail = params => {
+    return axios.post('/Caseadmin/source/info', params)
 };
 // 添加客户来源
 export const addSource = params => {
-    return axios.post('/Caseadmin/source/add', qs.stringify(params))
+    return axios.post('/Caseadmin/source/add', params)
 };
 // 删除客户来源
 export const delSource = params => {
-    return axios.post('/Caseadmin/source/delete', qs.stringify(params))
+    return axios.post('/Caseadmin/source/delete', params)
 };
 // 修改客户来源
 export const editSource = params => {
-    return axios.post('/Caseadmin/source/update', qs.stringify(params))
+    return axios.post('/Caseadmin/source/update', params)
 };
 // 修改客户来源状态
 export const changeSourceState = params => {
-    return axios.post('/Caseadmin/source/status', qs.stringify(params))
+    return axios.post('/Caseadmin/source/status', params)
 };
 
 
 // 获取案例列表
 export const getActList = params => {
-    return axios.post('/Caseadmin/Act/list', qs.stringify(params))
+    return axios.post('/Caseadmin/Act/list', params)
 };
 // todo 获取案例详细信息
-export const getActDetail = para => {
-    return axios.get('/Caseadmin/Act/info', {
-        params: para
-    })
+export const getActDetail = params => {
+    return axios.post('/Caseadmin/Act/info', params)
 };
 // 添加案例
 export const addAct = params => {
-    return axios.post('/Caseadmin/Act/add', qs.stringify(params))
+    return axios.post('/Caseadmin/Act/add', params)
 };
 // 删除案例
 export const delAct = params => {
-    return axios.post('/Caseadmin/Act/delete', qs.stringify(params))
+    return axios.post('/Caseadmin/Act/delete', params)
 };
 // 修改案例
 export const editAct = params => {
-    return axios.post('/Caseadmin/Act/update', qs.stringify(params))
+    return axios.post('/Caseadmin/Act/update', params)
 };
 // todo 修改案例状态
 export const changeActState = params => {
-    return axios.post('/Caseadmin/Act/status', qs.stringify(params))
+    return axios.post('/Caseadmin/Act/status', params)
 };
 
 
 // 获取案例分类列表
 export const getCategoryList = params => {
-    return axios.post('/Caseadmin/category/list', qs.stringify(params))
+    return axios.post('/Caseadmin/category/list', params)
 };
 // 获取案例分类层级
 export const getCategorySelect = params => {
-    return axios.post('/Caseadmin/category/select', qs.stringify(params))
+    return axios.post('/Caseadmin/category/select', params)
 };
 // 获取案例分类详细信息
-export const getCategoryDetail = para => {
-    return axios.get('/Caseadmin/category/info', {
-        params: para
-    })
+export const getCategoryDetail = params => {
+    return axios.post('/Caseadmin/category/info', params)
 };
 // 添加案例分类
 export const addCategory = params => {
-    return axios.post('/Caseadmin/category/add', qs.stringify(params))
+    return axios.post('/Caseadmin/category/add', params)
 };
 // 删除案例分类
 export const delCategory = params => {
-    return axios.post('/Caseadmin/category/delete', qs.stringify(params))
+    return axios.post('/Caseadmin/category/delete', params)
 };
 // 修改案例分类
 export const editCategory = params => {
-    return axios.post('/Caseadmin/category/update', qs.stringify(params))
+    return axios.post('/Caseadmin/category/update', params)
 };
 // todo 修改案例分类状态
 export const changeCategoryState = params => {
-    return axios.post('/Caseadmin/category/status', qs.stringify(params))
+    return axios.post('/Caseadmin/category/status', params)
 };
 
 
 // 获取案例分类列表
 export const getShareConfigList = params => {
-    return axios.post('/Caseadmin/share/list', qs.stringify(params))
+    return axios.post('/Caseadmin/share/list', params)
 };
 // 获取案例分类详细信息
-export const getShareConfigDetail = para => {
-    return axios.get('/Caseadmin/share/info', {
-        params: para
-    })
+export const getShareConfigDetail = params => {
+    return axios.post('/Caseadmin/share/info', params)
 };
 // 添加分享配置
 export const addShareConfig = params => {
-    return axios.post('/Caseadmin/share/add', qs.stringify(params))
+    return axios.post('/Caseadmin/share/add', params)
 };
 // 删除分享配置
 export const delShareConfig = params => {
-    return axios.post('/Caseadmin/share/delete', qs.stringify(params))
+    return axios.post('/Caseadmin/share/delete', params)
 };
 // 修改分享配置
 export const editShareConfig = params => {
-    return axios.post('/Caseadmin/share/update', qs.stringify(params))
+    return axios.post('/Caseadmin/share/update', params)
 };
 export const changeShareConfigState = params => {
-    return axios.post('/Caseadmin/share/status', qs.stringify(params))
+    return axios.post('/Caseadmin/share/status', params)
 };

@@ -28,6 +28,7 @@ axios.defaults.withCredentials = true;
  **/
 axios.defaults.transformRequest = function _transformRequest(params = {}) {
   // 返回完整数据，请求ajax
+  params.public_id = sessionStorage.getItem('WECHAT_ID');
   return Qs.stringify(params);
 };
 

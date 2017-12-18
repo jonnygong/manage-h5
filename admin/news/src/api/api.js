@@ -9,6 +9,17 @@ axios.defaults.baseURL = 'https://api.kfw001.com';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.withCredentials = true;  //是关键 支持跨域携带cookie
 
+/**
+ * todo: 预处理Requests数据
+ * desc: 进行数据转换，添加默认字段等
+ * @return data;
+ **/
+axios.defaults.transformRequest = function _transformRequest(params = {}) {
+  // 返回完整数据，请求ajax
+  params.public_id = sessionStorage.getItem('WECHAT_ID');
+  return qs.stringify(params);
+};
+
 // 处理服务器返回的数据
 axios.defaults.transformResponse = [function (data) {
     // Do whatever you want to transform the data
@@ -59,10 +70,8 @@ export const getAdspaceList = params => {
     return axios.post('/Caseadmin/Adsplace/list', qs.stringify(params))
 };
 // todo 获取广告位置详细信息
-export const getAdspaceDetail = para => {
-    return axios.get('/Caseadmin/Adsplace/info', {
-        params: para
-    })
+export const getAdspaceDetail = params => {
+    return axios.post('/Caseadmin/Adsplace/info', params)
 };
 // 获取案例分类层级
 export const getAdspaceSelect = params => {
@@ -92,9 +101,7 @@ export const getAds = params => {
 };
 // 获取广告数据详细信息
 export const getAdsDetail = para => {
-    return axios.get('/Caseadmin/Ads/info', {
-        params: para
-    })
+    return axios.post('/Caseadmin/Ads/info', params)
 };
 // 添加广告数据
 export const addAds = params => {
@@ -130,9 +137,7 @@ export const getSourceSelect = params => {
 };
 // 获取客户来源详细信息
 export const getSourceDetail = para => {
-    return axios.get('/Caseadmin/source/info', {
-        params: para
-    })
+    return axios.post('/Caseadmin/source/info', params)
 };
 // 添加客户来源
 export const addSource = params => {
@@ -158,9 +163,7 @@ export const getActList = params => {
 };
 // todo 获取案例详细信息
 export const getActDetail = para => {
-    return axios.get('/Caseadmin/Act/info', {
-        params: para
-    })
+    return axios.post('/Caseadmin/Act/info', params)
 };
 // 添加案例
 export const addAct = params => {
@@ -190,9 +193,7 @@ export const getCategorySelect = params => {
 };
 // 获取案例分类详细信息
 export const getCategoryDetail = para => {
-    return axios.get('/Caseadmin/category/info', {
-        params: para
-    })
+    return axios.post('/Caseadmin/category/info', params)
 };
 // 添加案例分类
 export const addCategory = params => {
@@ -218,9 +219,7 @@ export const getShareConfigList = params => {
 };
 // 获取案例分类详细信息
 export const getShareConfigDetail = para => {
-    return axios.get('/Caseadmin/share/info', {
-        params: para
-    })
+    return axios.post('/Caseadmin/share/info', params)
 };
 // 添加分享配置
 export const addShareConfig = params => {
