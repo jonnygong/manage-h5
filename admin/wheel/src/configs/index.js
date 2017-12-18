@@ -1,4 +1,4 @@
 export default {
-    title: '快房传媒后台管理',
+    title: '幸运大转盘后台',
     debug: process.env.NODE_ENV !== 'production'
 };

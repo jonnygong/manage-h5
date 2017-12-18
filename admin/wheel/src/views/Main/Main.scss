@@ -37,6 +37,7 @@
       border-color: #2b2b2b;
       border-right-width: 1px;
       border-right-style: solid;
+      text-align: center;
       img {
         width: 40px;
         float: left;
@@ -47,7 +48,7 @@
       }
     }
     .logo-width {
-      width: 230px;
+      width: 200px;
     }
     .logo-collapse-width {
       width: 64px
@@ -68,8 +69,8 @@
     overflow: hidden;
 
     aside {
-      flex: 0 0 230px;
-      width: 230px;
+      flex: 0 0 200px;
+      width: 200px;
       // position: absolute;
       // top: 0px;
       // bottom: 0px;
@@ -107,8 +108,8 @@
       background-color: #eef1f6;
     }
     .menu-expanded {
-      flex: 0 0 230px;
-      width: 230px;
+      flex: 0 0 200px;
+      width: 200px;
       background-color: #eef1f6;
     }
     .content-container {

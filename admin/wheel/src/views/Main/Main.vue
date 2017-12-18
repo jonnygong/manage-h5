@@ -88,7 +88,7 @@
     export default {
         data() {
             return {
-                sysName: '快房传媒管理后台',
+                sysName: '幸运大转盘后台',
                 collapsed: false,
                 sysUserName: '',
                 sysUserAvatar: '',

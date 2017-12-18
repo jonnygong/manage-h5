@@ -1,15 +1,24 @@
 @import '~scss_vars';
 
-.web-view {
-  width: 325px;
-  height: 100%;
-  margin: 20px 20px 0;
-  padding: 100px 16px;
-  box-sizing: border-box;
-  background-image: url("~@/assets/images/phone.png");
-  background-size: 100%;
-  background-repeat: no-repeat;
+.edit-activity {
+  display: flex;
+  flex-direction: row;
+}
 
+.web-view {
+  flex: 0 0 300px;
+  &__phone {
+    width: 325px;
+    height: 100%;
+    //margin: 20px 20px 0;
+    margin-left: -10px;
+    padding: 100px 16px;
+    box-sizing: border-box;
+    background-image: url("~@/assets/images/phone.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    transform: scale(0.8);
+  }
   &__iframe {
     width: 100%;
     height: 510px;
@@ -18,5 +27,39 @@
 }
 
 .options {
+  flex: 1;
+  width: 100%;
   margin-top: 20px;
+
+  &__step-bar {
+    width: 100%;
+    box-sizing: border-box;
+    //display: flex;
+    //justify-content: center;
+  }
+
+  &__content {
+    margin-top: 20px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px dashed #ddd;
+    &--finished {
+      width: 50%;
+      margin: 0 auto;
+      .qrcode-wrapper {
+        margin: 0 auto;
+        width: 250px;
+        height: 250px;
+        padding: 20px;
+        background-color: #fff;
+      }
+    }
+  }
+
+  &__btns {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    height: 35px;
+  }
 }
