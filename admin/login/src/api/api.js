@@ -4,7 +4,7 @@ import qs from 'qs'
 import {vm as Vue} from '@/main.js'
 
 // 确认默认链接
-axios.defaults.baseURL = 'https://api.kfw001.com';
+axios.defaults.baseURL = 'http://api.kfw001.com';
 // 初始化post header
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.withCredentials = true;  //是关键 支持跨域携带cookie
