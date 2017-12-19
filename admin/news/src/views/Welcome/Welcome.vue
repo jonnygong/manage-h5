@@ -102,8 +102,8 @@ export default {
     addSubmit() {
       let para = Object.assign(
         {
-          public_id: 2 || window.sessionStorage.getItem("WECHAT_ID"),
-          project_id: 2 || window.sessionStorage.getItem("PROJECT_ID"),
+          public_id: window.sessionStorage.getItem("WECHAT_ID"),
+          project_id: window.sessionStorage.getItem("PROJECT_ID"),
         },
         this.addForm
       );
@@ -119,8 +119,8 @@ export default {
     },
     getListData() {
       let para = {
-        public_id: 2 || window.sessionStorage.getItem("WECHAT_ID"),
-        project_id: 2 || window.sessionStorage.getItem("PROJECT_ID"),
+        public_id: window.sessionStorage.getItem("WECHAT_ID"),
+        project_id: window.sessionStorage.getItem("PROJECT_ID"),
       };
       api.publicInfo(para).then(res => {
         if (res.data.status === 200) {
