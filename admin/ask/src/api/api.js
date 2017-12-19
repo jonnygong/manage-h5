@@ -17,6 +17,7 @@ axios.defaults.withCredentials = true;  //是关键 支持跨域携带cookie
 axios.defaults.transformRequest = function _transformRequest(params = {}) {
   // 返回完整数据，请求ajax
   params.public_id = sessionStorage.getItem('WECHAT_ID');
+  params.project_id = sessionStorage.getItem('PROJECT_ID');
   return qs.stringify(params);
 };
 
