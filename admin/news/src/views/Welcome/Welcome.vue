@@ -94,7 +94,7 @@ export default {
         };
         api.imageUpload(param).then(res => {
           if (res.data.status === 200) {
-            type.thumb = res.data.param.path;
+            type.img = res.data.param.path;
           }
         });
       };
@@ -103,7 +103,7 @@ export default {
       let para = Object.assign(
         {
           public_id: 2 || window.sessionStorage.getItem("WECHAT_ID"),
-          project_id: 2
+          project_id: 2 || window.sessionStorage.getItem("PROJECT_ID"),
         },
         this.addForm
       );
@@ -120,7 +120,7 @@ export default {
     getListData() {
       let para = {
         public_id: 2 || window.sessionStorage.getItem("WECHAT_ID"),
-        project_id: 2
+        project_id: 2 || window.sessionStorage.getItem("PROJECT_ID"),
       };
       api.publicInfo(para).then(res => {
         if (res.data.status === 200) {

@@ -297,31 +297,31 @@ export default {
       });
     },
     // 获取顶级分类列表
-    getTopList(index, row) {
-      let para = {
-        project_id: 1
-      };
-      api.getRebellionTypeInfo(para).then(res => {
-        if (res.data.status === 200) {
-          this.listLoading = false;
-          this.total = res.data.param.count;
-          this.selectType = res.data.param;
-        }
-      });
-    },
+    // getTopList(index, row) {
+    //   let para = {
+    //     project_id: 1
+    //   };
+    //   api.getRebellionTypeInfo(para).then(res => {
+    //     if (res.data.status === 200) {
+    //       this.listLoading = false;
+    //       this.total = res.data.param.count;
+    //       this.selectType = res.data.param;
+    //     }
+    //   });
+    // },
     // 获取顶级分类名称列表
-    getTopListName(index, row) {
-      let para = {
-        project_id: 1
-      };
-      api.getRebellionTopTypeList(para).then(res => {
-        if (res.data.status === 200) {
-          this.listLoading = false;
-          this.total = res.data.param.count;
-          this.cat = res.data.param;
-        }
-      });
-    },
+    // getTopListName(index, row) {
+    //   let para = {
+    //     project_id: 1
+    //   };
+    //   api.getRebellionTopTypeList(para).then(res => {
+    //     if (res.data.status === 200) {
+    //       this.listLoading = false;
+    //       this.total = res.data.param.count;
+    //       this.cat = res.data.param;
+    //     }
+    //   });
+    // },
     //删除
     handleDel: function(index, row) {
       this.$confirm("确认删除该记录吗?", "提示", {
@@ -529,7 +529,7 @@ export default {
   },
   mounted() {
     this.getList();
-    this.getTopListName();
+    // this.getTopListName();
   }
 };
 </script>
