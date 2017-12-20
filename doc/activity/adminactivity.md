@@ -55,7 +55,7 @@
 > 成功返回200状态码
 
 ```text
- prize字段中type为奖品类型（实物physical、红包red）,sum为奖品数量，chance为奖品中奖概率,name为奖品名称，link为奖品链接，min为最小金额，max为最大金额，奖品图片。
+ prize字段中type为奖品类型（实物physical、红包red、劵码coupon）,sum为奖品数量，chance为奖品中奖概率,name为奖品名称，link为奖品链接，min为最小金额，max为最大金额，total为红包总额，img奖品图片。
  
  active_time字段中start表示开始时间，end表示结束时间。 例如[{"start":"2017-06-21 00:00","end":"2017-06-21 23:59"},{"start":"2017-06-22 00:00","end":"2017-06-22 23:59"}]
  
