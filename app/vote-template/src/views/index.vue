@@ -29,7 +29,7 @@
               <div class="point__img" @click="handleClick(spot)">
                 <img v-lazy="spot.img" alt="">
               </div>
-              <div class="point__text">{{`${spot.title}（${voteList[spot.id]}票）`}}`</div>
+              <div class="point__text">{{`${spot.title}（${voteList[spot.id]}票）`}}</div>
               <div class="point__action">
                 <input type="checkbox"
                        :id="spot.id"
@@ -529,7 +529,9 @@
     }
     &__action {
       position: absolute;
+      left: 50%;
       bottom: 0;
+      transform: translateX(-50%);
       font-size: 12rem / $rem;
       input {
         margin-right: $padding;
@@ -669,7 +671,7 @@
     }
 
     &--hidden {
-      max-height: 8rem;
+      max-height: 8em;
       overflow: hidden;
     }
     &--display {
