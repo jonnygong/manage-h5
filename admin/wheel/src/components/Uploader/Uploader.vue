@@ -8,14 +8,20 @@
                 :show-file-list="false"
                 :before-upload="beforeImageUpload">
             <img v-if="cover" :src="cover" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            <i v-if="!isPhoto" class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
     </div>
 
 </template>
 
 <script>
+  /*
+  * @Author: 52admln (ismrwang@gmail.com)
+  * @Date: 2017/11/8 下午4:46
+  * @Description: null
+  */
   export default {
+    name: 'Uploader',
     props: {
       value: {
         type: String,
@@ -33,6 +39,12 @@
       },
       cover(val) {
         this.$emit('input', val);
+      }
+    },
+    computed:{
+      isPhoto() {
+        let reg = /^http|(jpg|jpeg|png)+$/;
+        return this.cover.match(reg) && this.cover.match(reg).length >= 2;
       }
     },
     methods: {
@@ -68,7 +80,6 @@
             pic: reader.result
           };
           const res = await this.$http.post('imageUpload', params);
-          console.log(res);
           if (res === null) return;
           this.cover = res.param.path;
         };
