@@ -31,6 +31,7 @@
 | *max_play | int(11) | 最多可玩次数 |
 | *max_eplay | int(11) | 每场最多可玩 |
 | *max_share | int(11) | 每场最多可分享 |
+| *max_prize | int(11) | 每场最多中几次 |
 | *active_type | tinyint(11) | 活动类型1普通，2奖励 |
 | *virtual | int(11) | 虚拟人数 |
 | *template | int(11) | 类型（10：刮刮卡 11 大转盘 12 红包） |
@@ -67,4 +68,49 @@
  no_award默认值：'居然没有中奖？不如休息一下赞个手气！'(未中奖)。
  game_over默认值：'本场活动已结束，请等待下一场活动'(活动结束)。
  default默认值：'谢谢！'(默认值)
+```
+
+
+
+#### 修改活动
+
++ __接口地址__： __/Lottery/adminActivity/update__
+
++ __请求参数__
+
+|  参数名称  | 参数类型 | 参数说明 |
+| --------- | -------- | ------- |
+| *id | int(11) | 活动id |
+| *status | tinyint(1) | 是否启用活动，0不启用，1启用 |
+| *active_title | varchar(255) | 活动标题 |
+| *active_time | varchar(2550) | 活动时间,多个时段 |
+| *max_play | int(11) | 最多可玩次数 |
+| *max_eplay | int(11) | 每场最多可玩 |
+| *max_share | int(11) | 每场最多可分享 |
+| *max_prize | int(11) | 每场最多中几次 |
+| *active_type | tinyint(11) | 活动类型1普通，2奖励 |
+| *virtual | int(11) | 虚拟人数 |
+| *template | int(11) | 类型（10：刮刮卡 11 大转盘 12 红包） |
+| *header_img | varchar(255) | 顶部版权图片 |
+| *rule_link | varchar(255) | 领奖说明软文 |
+| *rule | text | 规则说明 |
+| *need_address | tinyint(1) | 地址是否需要填写0否1是 |
+| *tips | varchar(2550) | 各类提示配置 |
+| *prize | text | 各项奖品配置 |
+| *isshare | tinyint(1) | 1允许分享0不允许 |
+| share_title | varchar(255) | 分享标题 |
+| share_desc | varchar(255) | 分享介绍 |
+| share_link | varchar(255) | 分享链接 |
+| share_img | varchar(255) | 分享图片 |
+| config | varchar(255) | 颜色配置 |
+| rid | int(11) | 关联rid |
+| uniacid | int(11) | 公众号 |
+
+
++ __响应参数__
+
+> 成功返回200状态码
+
+```text
+活动一旦正式开始,请勿删除任何奖品;修改奖品,只能添加奖品或修改概率,奖品数量只可增加,否则数据错位后果自负
 ```
