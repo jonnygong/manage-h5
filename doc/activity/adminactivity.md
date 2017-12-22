@@ -6,7 +6,7 @@
 
 + 专家分类，专家信息
 
-+ 调用： http://mp.kfw001.com/Lottery/控制器/方法(247)
++ 调用： http://api.mp.kfw001.com/Lottery/控制器/方法(247)
 
 + 参数前有*为必填
 
