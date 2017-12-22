@@ -25,14 +25,14 @@
                          ref="activityForm"
                          label-width="110px"
                          class="demo-ruleForm">
-                    <el-form-item label="活动标题" prop="name">
+                    <el-form-item label="活动标题" prop="active_title">
                         <el-input v-model="formData['activity'].active_title"></el-input>
                     </el-form-item>
                     <el-form-item label="活动时间" prop="active_time">
                         <!-- 活动时间列表 -->
                         <el-row v-for="(time,index) in formData['activity'].active_time"
                                 :key="index"
-                                style="margin-bottom: 10px;">
+                                style="margin-bottom: 20px;">
                             <el-col :span="2">时间{{index+1}}</el-col>
                             <el-col :span="10">
                                 <el-form-item prop="start">
@@ -67,18 +67,19 @@
                                    icon="plus"
                                    size="mini"
                                    @click="addTime"
-                        >添加活动时间</el-button>
+                        >添加活动时间
+                        </el-button>
                     </el-form-item>
 
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item label="每场最多可分享" prop="max_share">
-                                <el-input v-model="formData['activity'].max_share"></el-input>
+                                <el-input v-model.number="formData['activity'].max_share"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="每场最多可玩" prop="max_eplay">
-                                <el-input v-model="formData['activity'].max_eplay"></el-input>
+                                <el-input v-model.number="formData['activity'].max_eplay"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -86,40 +87,40 @@
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item label="最多可玩次数" prop="max_play">
-                                <el-input v-model="formData['activity'].max_play"></el-input>
+                                <el-input v-model.number="formData['activity'].max_play"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="每场最多中奖数" prop="max_prize">
-                                <el-input v-model="formData['activity'].max_prize"></el-input>
+                                <el-input v-model.number="formData['activity'].max_prize"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-form-item label="虚拟人数" prop="virtual">
-                        <el-input v-model="formData['activity'].virtual"></el-input>
+                        <el-input v-model.number="formData['activity'].virtual"></el-input>
                     </el-form-item>
                     <el-form-item label="模板类型" prop="template">
                         <el-radio class="radio"
-                                  v-model="formData['activity'].template"
+                                  v-model.number="formData['activity'].template"
                                   :label="10">刮刮卡
                         </el-radio>
                         <el-radio class="radio"
-                                  v-model="formData['activity'].template"
+                                  v-model.number="formData['activity'].template"
                                   :label="11">大转盘
                         </el-radio>
                         <el-radio class="radio"
-                                  v-model="formData['activity'].template"
+                                  v-model.number="formData['activity'].template"
                                   :label="12">红包
                         </el-radio>
                     </el-form-item>
 
                     <el-form-item label="活动类型" prop="active_type">
                         <el-radio class="radio"
-                                  v-model="formData['activity'].active_type"
+                                  v-model.number="formData['activity'].active_type"
                                   :label="1">普通
                         </el-radio>
                         <el-radio class="radio"
-                                  v-model="formData['activity'].active_type"
+                                  v-model.number="formData['activity'].active_type"
                                   :label="2">奖励
                         </el-radio>
                     </el-form-item>
@@ -128,12 +129,19 @@
                                    off-text="停用"
                                    :on-value="1"
                                    :off-value="0"
-                                   v-model="formData['activity'].status"></el-switch>
+                                   v-model.number="formData['activity'].status"></el-switch>
                     </el-form-item>
                 </el-form>
             </div>
             <!-- 奖品设置 -->
             <div class="options__content" v-if="active === 1">
+
+                <el-alert style="margin-bottom: 10px;"
+                          title="注意：活动一旦正式开始请勿删除任何奖品、修改奖品，只能添加奖品或修改概率，奖品数量只可增加，否则数据错位后果自负。"
+                          type="error"
+                          :closable="false">
+                </el-alert>
+
 
                 <el-button type="success"
                            icon="plus"
@@ -153,63 +161,64 @@
                             :name="item.name"
                     ></el-tab-pane>
                 </el-tabs>
-
-                <el-row :gutter="24"
-                        class="prize__item"
-                        v-for="(prize,index) in formData['prize'].prize"
-                        :key="index"
-                        v-if="prize.id === prizeTabsValue">
-                    <el-col :span="24">
-                        <el-form :rules="rules['prize']"
-                                 :model="prize"
-                                 label-width="100px">
-                            <el-form-item label="奖品名称" prop="name">
+                <el-form :model="formData['prize']"
+                         ref="prizeForm"
+                         label-width="100px">
+                    <el-row :gutter="24"
+                            class="prize__item"
+                            v-for="(prize,index) in formData['prize'].prize"
+                            :key="index"
+                            v-show="prize.id === prizeTabsValue">
+                        <el-col :span="24">
+                            <el-form-item label="奖品名称" prop="name" required>
                                 <el-input v-model="prize.name"></el-input>
                             </el-form-item>
-                            <el-form-item label="奖品图片" prop="img">
+                            <el-form-item label="奖品图片" prop="img" required>
                                 <i-uploader v-model="prize.img"></i-uploader>
                             </el-form-item>
-                            <el-form-item label="奖品类型" prop="type">
+                            <el-form-item label="奖品类型" prop="type" required>
                                 <el-radio class="radio"
                                           v-for="(item, index) in prizeType"
                                           :key="index"
-                                          v-model="prize.type"
-                                          :label="item.value"
-                                >
+                                          v-model.number="prize.type"
+                                          :label="item.value">
                                     {{item.label}}
                                 </el-radio>
                             </el-form-item>
                             <el-row>
                                 <el-col :span="12">
-                                    <el-form-item label="奖品数量" prop="sum">
-                                        <el-input v-model="prize.sum"></el-input>
+                                    <el-form-item label="奖品数量(个)" prop="sum" required>
+                                        <el-input v-model.number="prize.sum"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="中奖概率" prop="chance">
-                                        <el-input v-model="prize.chance"></el-input>
+                                    <el-form-item label="中奖概率(%)" prop="chance" required>
+                                        <el-input v-model.number="prize.chance"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
                             <el-row>
-                                <el-col :span="12">
-                                    <el-form-item label="最小金额" prop="min">
-                                        <el-input v-model="prize.min"></el-input>
+                                <el-col :span="8">
+                                    <el-form-item label="最小金额" prop="min" required>
+                                        <el-input v-model.number="prize.min"></el-input>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="最大金额" prop="max">
-                                        <el-input v-model="prize.max"></el-input>
+                                <el-col :span="8">
+                                    <el-form-item label="最大金额" prop="max" required>
+                                        <el-input v-model.number="prize.max"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="8">
+                                    <el-form-item label="红包总额" prop="money" required>
+                                        <el-input v-model.number="prize.money"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
-                            <el-form-item label="红包总额" prop="money">
-                                <el-input v-model="prize.money"></el-input>
-                            </el-form-item>
-                        </el-form>
-                    </el-col>
-                </el-row>
 
+
+                        </el-col>
+                    </el-row>
+                </el-form>
 
             </div>
             <!-- 自定义设置 -->
@@ -250,11 +259,11 @@
                         <el-input v-model="formData['config'].rule"></el-input>
                     </el-form-item>
                     <el-form-item label="是否填写地址" prop="need_address">
-                        <el-switch on-text="需要"
-                                   off-text="不需要"
+                        <el-switch on-text="是"
+                                   off-text="否"
                                    :on-value="1"
                                    :off-value="0"
-                                   v-model="formData['config'].need_address"></el-switch>
+                                   v-model.number="formData['config'].need_address"></el-switch>
                     </el-form-item>
                     <el-form-item label="超过中奖数量提示" prop="tips">
                         <el-input v-model="formData['config'].tips.have_award"></el-input>
@@ -298,11 +307,11 @@
                         <el-input v-model="formData['share'].rid"></el-input>
                     </el-form-item>
                     <el-form-item label="是否允许分享" prop="isshare">
-                        <el-switch on-text="允许"
-                                   off-text="不允许"
+                        <el-switch on-text="是"
+                                   off-text="否"
                                    :on-value="1"
                                    :off-value="0"
-                                   v-model="formData['share'].isshare"></el-switch>
+                                   v-model.number="formData['share'].isshare"></el-switch>
                     </el-form-item>
                 </el-form>
 
@@ -330,6 +339,7 @@
                 </el-button>
                 <el-button type="primary"
                            v-if="active === 3"
+                           :loading="submitLoading"
                            @click="submitForm">立即创建
                 </el-button>
                 <el-button @click="next" v-if="active < 3">下一步</el-button>
@@ -346,6 +356,7 @@
   export default {
     data() {
       return {
+        // 奖品列表标签
         prizeTabsValue: '0',
         prizeTabs: [{
           title: '奖品 1',
@@ -354,28 +365,49 @@
         tabIndex: 0,
         // 当前激活的步骤
         active: 1,
+        // 所有步骤表单列表，用于表单验证
+        activeForm: [
+          'activityForm',
+          'prizeForm',
+          'configForm',
+          'shareForm'
+        ],
+        // 奖品字段中英对照
+        prizeKeys: {
+          name: '奖品名称',
+          type: '奖品类型',
+          sum: '奖品数量',
+          chance: '中奖概率',
+          link: 'http://',
+          min: '最小金额',
+          max: '最大金额',
+          money: '红包总额',
+          img: '奖品图片'
+        },
         formData: {
           activity: {
-            name: '',
+            active_title: '',
             status: 0,
             active_time: [{
-              start: '',
-              end: ''
-            }, {
-              start: '',
-              end: ''
+              start: new Date(),
+              end: new Date(new Date().getTime() + 3600 * 1000 * 24 * 7)
             }],
-            max_prize: ''
+            max_share: '',
+            max_eplay: '',
+            max_play: '',
+            max_prize: '',
+            virtual: '',
+            template: '',
+            active_type: ''
           },
           share: {
-            name: '',
-            region: '',
-            date1: '',
-            date2: '',
-            delivery: false,
-            type: [],
-            resource: '',
-            desc: ''
+            share_title: '',
+            share_link: '',
+            share_desc: '',
+            share_img: '',
+            uniacid: '',
+            rid: '',
+            isshare: 0
           },
           config: {
             tips: {
@@ -388,7 +420,11 @@
             config: {
               body_color: '',
               btn_color: ''
-            }
+            },
+            header_img: '',
+            rule_link: '',
+            need_address: '',
+            rule: ''
           },
           prize: {
             prize: [{
@@ -401,29 +437,77 @@
               min: 0,
               max: 0,
               money: 0,
-              img: ''
+              img: '',
+              saved: false
             }]
           }
         },
         rules: {
           activity: {
-            name: [
-              {required: true, message: '请输入活动名称', trigger: 'blur'},
-              {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
+            active_title: [
+              {required: true, message: '请输入活动名称', trigger: 'blur'}
+            ],
+            status: [
+              {type: 'number', required: true, message: '请选择活动状态', trigger: 'change'}
+            ],
+            active_time: [
+              {type: 'array', min: 1, required: true, message: '请至少添加一个活动时间', trigger: 'change'}
+            ],
+            max_share: [
+              {type: 'number', required: true, message: '请输入每场最多可分享', trigger: 'blur'}
+            ],
+            max_eplay: [
+              {type: 'number', required: true, message: '请输入每场最多可玩', trigger: 'blur'}
+            ],
+            max_play: [
+              {type: 'number', required: true, message: '请输入最多可玩次数', trigger: 'blur'}
+            ],
+            max_prize: [
+              {type: 'number', required: true, message: '请输入每场最多中几次', trigger: 'blur'}
+            ],
+            virtual: [
+              {type: 'number', required: true, message: '请输入虚拟人数', trigger: 'blur'}
+            ],
+            template: [
+              {type: 'number', required: true, message: '请输入类型类型', trigger: 'change'}
+            ],
+            active_type: [
+              {type: 'number', required: true, message: '请输入活动类型', trigger: 'change'}
+            ]
+          },
+          share: {
+            isshare: [
+              {type: 'number', required: true, message: '请选择是否分享', trigger: 'change'}
+            ],
+            rid: [
+              {required: true, message: '请输入rid', trigger: 'blur'}
+            ],
+            uniacid: [
+              {required: true, message: '请输入公众号', trigger: 'blur'}
+            ],
+          },
+          config: {
+            tips: [
+              {type: 'object', required: true, message: '请输入活动名称', trigger: 'blur'}
+            ],
+            header_img: [
+              {required: true, message: '请输入顶部版权图片', trigger: 'blur'}
+            ],
+            rule_link: [
+              {required: true, message: '请输入领奖说明软文', trigger: 'blur'}
+            ],
+            need_address: [
+              {type: 'number', required: true, message: '请选择地址是否需要填写', trigger: 'change'}
+            ],
+            rule: [
+              {required: true, message: '请输入规则说明', trigger: 'blur'}
             ]
           },
           prize: {
-            name: [
-              {required: true, message: '请输入活动名称', trigger: 'blur'},
-              {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
-            ],
-            money: [
-              {required: true, message: '请输入活动名称', trigger: 'blur'},
-              {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
+            prize: [
+              {type: 'array', required: true, message: '请输入奖品信息', trigger: 'blur'}
             ]
-          },
-          share: {},
-          config: {}
+          }
         },
         // 实物physical、红包red、劵码coupon
         prizeType: [
@@ -453,7 +537,8 @@
           {
             title: '分享设置'
           },
-        ]
+        ],
+        submitLoading: false
       };
     },
     methods: {
@@ -484,11 +569,19 @@
         if (this.formData['prize'].prize.length === 0) return;
         this.formData['prize'].prize.forEach((item, index) => {
           if (item.id === targetName) {
-            this.formData['prize'].prize.splice(index, 1);
+            if (item.saved) {
+              this.$message({
+                message: '不能删除已保存的奖品',
+                type: 'error'
+              });
+            } else {
+              this.formData['prize'].prize.splice(index, 1);
+              this.prizeTabsValue = activeName;
+              this.prizeTabs = tabs.filter(tab => tab.name !== targetName);
+            }
           }
         });
-        this.prizeTabsValue = activeName;
-        this.prizeTabs = tabs.filter(tab => tab.name !== targetName);
+
       },
       // 增加奖品
       _addPrize(id) {
@@ -502,19 +595,20 @@
           min: 0,
           max: 0,
           money: 0,
-          img: ''
+          img: '',
+          saved: false
         });
       },
       // 添加活动时间
       addTime() {
         this.formData.activity.active_time.push({
-          start: '',
-          end: ''
-        })
+          start: new Date(),
+          end: new Date(new Date().getTime() + 3600 * 1000 * 24 * 7)
+        });
       },
       // 删除活动时间
       removeTime(index) {
-        this.formData.activity.active_time.splice(index, 1)
+        this.formData.activity.active_time.splice(index, 1);
       },
       // 上一步
       prev() {
@@ -522,35 +616,156 @@
       },
       // 下一步
       next() {
-        if (this.active++ > 3) {
-          // generate qr-code
-          this.active = 0;
-        }
-      },
-      // 提交创建活动
-      submitForm(formName) {
-        this.active++;
-        // this.$refs[formName].validate((valid) => {
-        //   if (valid) {
-        //     alert('submit!');
-        //   } else {
-        //     console.log('error submit!!');
-        //     return false;
-        //   }
-        // });
-        if (this.active === 4) {
-          this.$nextTick(() => {
-            new QRCode(this.$refs.qrcode, { // eslint-disable-line no-new
-              text: `${window.location.host}${window.location.pathname}`,
-              width: 250,
-              height: 250,
-              colorDark: '#000000',
-              colorLight: '#ffffff',
-              correctLevel: QRCode.CorrectLevel.H
+        // 奖品表单验证单独校验
+        if (this.activeForm[this.active] === 'prizeForm') {
+          if (this.formData.prize.prize.length === 0) {
+            this.$message({
+              message: '至少添加一个奖品',
+              type: 'warning'
             });
+          } else {
+            // 对奖品做表单校验，防止空数据提交
+            let result = true;
+            for (let i = 0; i < this.formData.prize.prize.length; i++) {
+              const item = this.formData.prize.prize[i];
+              for (let key in item) {
+                if (item[key] === '') {
+                  this.$message({
+                    message: `请填写「${item.name}」表单「${this.prizeKeys[key]}」字段内容`,
+                    type: 'warning'
+                  });
+                  result = false;
+                  break;
+                }
+              }
+            }
+            // 验证通过，则下一步
+            if (result) {
+              if (this.active++ > 3) {
+                // generate qr-code
+                this.active = 0;
+              }
+            }
+          }
+        } else {
+          this.$refs[this.activeForm[this.active]].validate((valid) => {
+            if (valid) {
+              if (this.active++ > 3) {
+                // generate qr-code
+                this.active = 0;
+              }
+            } else {
+              this.$message({
+                message: `请填写表单内容`,
+                type: 'warning'
+              });
+              return false;
+            }
           });
         }
       },
+      // 提交创建活动
+      async submitForm() {
+
+        this.submitLoading = true;
+
+        let params = Object.assign({},
+          this.formData.prize,
+          this.formData.activity,
+          this.formData.config,
+          this.formData.share
+        );
+        // 转换指定字段为 JSON
+        params.tips = JSON.stringify(params.tips);
+        params.config = JSON.stringify(params.config);
+        params.active_time = JSON.stringify(params.active_time);
+        params.prize = JSON.stringify(params.prize);
+
+        console.log(params);
+        const res = await this.$http.post(`adminActivityAdd`, params);
+        this.submitLoading = false;
+        if (res === null) return;
+        this.$message({
+          message: res.info,
+          type: 'success'
+        });
+        this.$nextTick(() => {
+          new QRCode(this.$refs.qrcode, { // eslint-disable-line no-new
+            text: `${window.location.host}${window.location.pathname}`,
+            width: 250,
+            height: 250,
+            colorDark: '#000000',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+          });
+        });
+        this.active++;
+      },
+      // 提交创建活动
+      async getFormData() {
+
+        let params = {
+          id: 1
+        };
+
+        const res = await this.$http.post(`adminActivityInfo`, params);
+        if (res === null) return;
+        // 转换指定字段为 JSON
+        const {
+          active_title, status, active_time, max_share, max_eplay, max_play, max_prize, virtual, template, active_type,
+
+          share_title, share_link, share_desc, share_img, uniacid, rid, isshare,
+
+          tips, config, header_img, rule_link, need_address, rule,
+
+          prize
+        } = res.param;
+
+        this.formData.activity = {
+          active_title: active_title,
+          status: status,
+          active_time: active_time,
+          max_share: max_share,
+          max_eplay: max_eplay,
+          max_play: max_play,
+          max_prize: max_prize,
+          virtual: virtual,
+          template: template,
+          active_type: active_type,
+        };
+        this.formData.share = {
+          share_title: share_title,
+          share_link: share_link,
+          share_desc: share_desc,
+          share_img: share_img,
+          uniacid: uniacid,
+          rid: rid,
+          isshare: isshare
+        };
+        this.formData.prize = {
+          prize: prize
+        };
+        this.formData.config = {
+          tips: tips,
+          config: config,
+          header_img: header_img,
+          rule_link: rule_link,
+          need_address: need_address,
+          rule: rule
+        };
+
+        this.formData.tips = JSON.parse(this.formData.tips);
+        this.formData.config = JSON.parse(this.formData.config);
+        this.formData.active_time = JSON.parse(this.formData.active_time);
+        this.formData.prize = JSON.parse(this.formData.prize);
+
+        this.formData.prize.prize.forEach(item => {
+          item.saved = true;
+        });
+      },
+    },
+    mounted() {
+      this.getFormData();
     },
     components: {
       'i-uploader': Uploader
