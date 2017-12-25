@@ -321,9 +321,9 @@
             <div class="options__content" v-if="active === 4">
                 <div class="options__content--finished">
                     <el-alert
-                            title="活动创建成功"
+                            title="活动发布成功"
                             type="success"
-                            description="您创建的活动已发布，下方为本活动二维码，扫码可访问。"
+                            description="您的活动已发布，下方为本活动二维码，扫码可访问。"
                             :closable="false"
                             show-icon>
                     </el-alert>
@@ -364,7 +364,7 @@
         }],
         tabIndex: 0,
         // 当前激活的步骤
-        active: 1,
+        active: 0,
         // 所有步骤表单列表，用于表单验证
         activeForm: [
           'activityForm',

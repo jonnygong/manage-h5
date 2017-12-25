@@ -26,6 +26,12 @@ let routes = [
     leaf: false, //只有一个节点
     children: [
       {
+        path: '/list',
+        component: () => import('@/views/List/List.vue'),
+        name: '活动列表',
+        meta: {requiresAuth: true}
+      },
+      {
         path: '/create',
         component: () => import('@/views/Create/Create.vue'),
         name: '创建活动',
