@@ -19,7 +19,7 @@
                         <li><i class="fa fa-arrow-circle-o-right mr5"></i>
                             都市快报由杭州日报报业集团主办，于1999年1月1日创刊，是中国第一份四开异型加长报；全国发行，重点覆盖浙江省各地市县，是浙江省发行量最大的报纸。
                         </li>
-                        <li><i class="fa fa-arrow-circle-o-right mr5"></i> 公司网址：	http://www.kfw001.com/</li>
+                        <li><i class="fa fa-arrow-circle-o-right mr5"></i> 公司网址： http://www.kfw001.com/</li>
                     </ul>
                 </div>
             </el-col>
@@ -64,7 +64,7 @@
         </el-row>
         <div class="login-footer">
             <div class="copyright">
-                ©  2017 版权所有：杭州快房传媒有限公司  浙ICP备09096541号
+                © 2017 版权所有：杭州快房传媒有限公司 浙ICP备09096541号
             </div>
             <div class="author">
                 Created By: 快房传媒
@@ -102,156 +102,155 @@
 </template>
 
 <script>
-    import api from '@/api'
+  import api from '@/api';
 
-    export default {
-        data() {
-            return {
-                logining: false,
-                loginForm: {
-                    user: '',
-                    pwd: '',
-                    code: ''
-                },
-                codeShow: '', // 获取到的验证码
-                loginRule: {
-                    user: [
-                        {required: true, message: '请输入账号', trigger: 'blur'},
-                    ],
-                    pwd: [
-                        {required: true, message: '请输入密码', trigger: 'blur'},
-                    ],
-                    code: [
-                        {required: true, len: 4,message: '请输入验证码', trigger: 'blur'},
-                    ]
-                },
-                checked: true,
-                editFormVisible: false, //编辑界面是否显示
-                editLoading: false,
-                editFormRules: {
-                },
-                //编辑界面数据
-                editForm: {
-                    code: '',
-                    tel: '',
-                    password: '',
-                    repassword: '',
-                },
+  export default {
+    data() {
+      return {
+        logining: false,
+        loginForm: {
+          user: '',
+          pwd: '',
+          code: ''
+        },
+        codeShow: '', // 获取到的验证码
+        loginRule: {
+          user: [
+            {required: true, message: '请输入账号', trigger: 'blur'},
+          ],
+          pwd: [
+            {required: true, message: '请输入密码', trigger: 'blur'},
+          ],
+          code: [
+            {required: true, len: 4, message: '请输入验证码', trigger: 'blur'},
+          ]
+        },
+        checked: true,
+        editFormVisible: false, //编辑界面是否显示
+        editLoading: false,
+        editFormRules: {},
+        //编辑界面数据
+        editForm: {
+          code: '',
+          tel: '',
+          password: '',
+          repassword: '',
+        },
+      };
+    },
+    methods: {
+      //显示编辑界面
+      async handleEdit(index, row) {
+        this.editFormVisible = true;
+        let params = {
+          id: row.id,
+          pid: row.pid,
+        };
+        const res = await this.$http.post(`${MODEL_NAME}/reply`, params);
+        if (res === null) return;
+        this.editForm = res.param;
+      },
+      //编辑
+      editSubmit() {
+        this.$refs.editForm.validate((valid) => {
+          if (valid) {
+            this.$confirm('确认提交吗？', '提示', {}).then(async () => {
+              this.editLoading = true;
+              let params = {
+                id: this.editForm.id,
+                rcontent: this.editForm.rcontent,
+                pid: this.selectRow.pid,
+              };
+              const res = await this.$http.post(`${MODEL_NAME}/rsave`, params);
+              this.editLoading = false;
+              if (res === null) return;
+              this.$message({
+                message: res.info,
+                type: 'success'
+              });
+              this.$refs['editForm'].resetFields();
+              this.editFormVisible = false;
+              this.getListData();
+            });
+          }
+        });
+      },
+      handleSubmit(ev) {
+        let _this = this;
+        this.$refs.loginForm.validate((valid) => {
+          if (valid) {
+            this.logining = true;
+            const loginParams = {
+              user: this.loginForm.user,
+              pwd: this.loginForm.pwd,
+              code: this.loginForm.code
             };
-        },
-        methods: {
-            //显示编辑界面
-            async handleEdit(index, row) {
-                this.editFormVisible = true;
-                let params = {
-                    id: row.id,
-                    pid: row.pid,
-                };
-                const res = await this.$http.post(`${MODEL_NAME}/reply`, params);
-                if (res === null) return;
-                this.editForm = res.param;
-            },
-            //编辑
-            editSubmit() {
-                this.$refs.editForm.validate((valid) => {
-                    if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(async () => {
-                            this.editLoading = true;
-                            let params = {
-                                id: this.editForm.id,
-                                rcontent: this.editForm.rcontent,
-                                pid: this.selectRow.pid,
-                            };
-                            const res = await this.$http.post(`${MODEL_NAME}/rsave`, params);
-                            this.editLoading = false;
-                            if (res === null) return;
-                            this.$message({
-                                message: res.info,
-                                type: 'success'
-                            });
-                            this.$refs['editForm'].resetFields();
-                            this.editFormVisible = false;
-                            this.getListData();
-                        });
-                    }
+            api.requestLogin(loginParams).then(res => {
+              this.logining = false;
+              if (res.data.status === 200) {
+                // 存储 用户名 信息
+                _this.$message.success(res.data.info);
+                this.$store.dispatch('login', {
+                  user: this.loginForm.user
                 });
-            },
-            handleSubmit(ev) {
-                let _this = this;
-                this.$refs.loginForm.validate((valid) => {
-                    if (valid) {
-                        this.logining = true;
-                        const loginParams = {
-                            user: this.loginForm.user,
-                            pwd: this.loginForm.pwd,
-                            code: this.loginForm.code
-                        };
-                        api.requestLogin(loginParams).then(res => {
-                            this.logining = false;
-                            if (res.data.status === 200) {
-                                // 存储 用户名 信息
-                                _this.$message.success(res.data.info);
-                                this.$store.dispatch('login', {
-                                    user: this.loginForm.user
-                                });
-                                this.$router.push({
-                                    path: '/'
-                                });
-                            } else { // 错误后，重新获取验证码
-                                _this.getCode();
-                                _this.$message.error(res.data.info);
-                            }
-                        });
-                    } else {
-                        _this.$message.error("请正确填写表单后提交！");
-                        return false;
-                    }
+                this.$router.push({
+                  path: '/'
                 });
-            },
-            // 获取验证码
-            getCode() {
-                let _this = this;
-                api.requestCode()
-                    .then(function (res) {
-                        if (res.data.status === 200) {
-                            _this.codeShow = res.data.param.code.toUpperCase();
-                            _this.generateCode();
-                        }
-                    });
-            },
-            // 干扰线的随机x坐标值
-            _lineX() {
-                return Math.floor(Math.random() * 90);
-            },
-            // 干扰线的随机y坐标值
-            _lineY() {
-                return Math.floor(Math.random() * 40);
-            },
-            // 生成验证码图片
-            generateCode() {
-                let cxt = this.$refs['code'].getContext('2d');
-                cxt.fillStyle = '#fff';
-                cxt.fillRect(0, 0, 90, 40);
-                // 生成干扰线20条
-                for (let j = 0; j < 20; j++) {
-                    cxt.strokeStyle = '#ccc';
-                    cxt.beginPath(); // 若省略beginPath，则每点击一次验证码会累积干扰线的条数
-                    cxt.moveTo(this._lineX(), this._lineY());
-                    cxt.lineTo(this._lineX(), this._lineY());
-                    cxt.lineWidth = 0.5;
-                    cxt.closePath();
-                    cxt.stroke();
-                }
-                cxt.fillStyle = '#666';
-                cxt.font = 'bold 20px Arial';
-                cxt.fillText(this.codeShow, 25, 25); // 把rand()生成的随机数文本填充到canvas中
+              } else { // 错误后，重新获取验证码
+                _this.getCode();
+                _this.$message.error(res.data.info);
+              }
+            });
+          } else {
+            _this.$message.error('请正确填写表单后提交！');
+            return false;
+          }
+        });
+      },
+      // 获取验证码
+      getCode() {
+        let _this = this;
+        api.requestCode()
+          .then(function (res) {
+            if (res.data.status === 200) {
+              _this.codeShow = res.data.param.code.toUpperCase();
+              _this.generateCode();
             }
-        },
-        mounted() {
-            // 获取验证码
-            this.getCode();
+          });
+      },
+      // 干扰线的随机x坐标值
+      _lineX() {
+        return Math.floor(Math.random() * 90);
+      },
+      // 干扰线的随机y坐标值
+      _lineY() {
+        return Math.floor(Math.random() * 40);
+      },
+      // 生成验证码图片
+      generateCode() {
+        let cxt = this.$refs['code'].getContext('2d');
+        cxt.fillStyle = '#fff';
+        cxt.fillRect(0, 0, 90, 40);
+        // 生成干扰线20条
+        for (let j = 0; j < 20; j++) {
+          cxt.strokeStyle = '#ccc';
+          cxt.beginPath(); // 若省略beginPath，则每点击一次验证码会累积干扰线的条数
+          cxt.moveTo(this._lineX(), this._lineY());
+          cxt.lineTo(this._lineX(), this._lineY());
+          cxt.lineWidth = 0.5;
+          cxt.closePath();
+          cxt.stroke();
         }
+        cxt.fillStyle = '#666';
+        cxt.font = 'bold 20px Arial';
+        cxt.fillText(this.codeShow, 25, 25); // 把rand()生成的随机数文本填充到canvas中
+      }
+    },
+    mounted() {
+      // 获取验证码
+      this.getCode();
     }
+  };
 
 </script>
 

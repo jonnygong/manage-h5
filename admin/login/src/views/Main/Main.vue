@@ -37,26 +37,47 @@
                 <el-menu :default-active="$route.path" class="el-menu-vertical-aliyun" @open="handleopen"
                          @close="handleclose" @select="handleselect" :collapse="collapsed"
                          unique-opened router>
-                    <template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
-                        <el-submenu :index="index+''" v-if="!item.leaf">
+                    <template v-for="(item,index) in nav">
+                        <!-- 二级菜单 -->
+                        <el-submenu :index="index+''"
+                                    v-if="item.children && item.children.length > 0">
+                            <!-- 二级菜单顶级 -->
                             <template slot="title">
                                 <i :class="['icon',item.iconCls]"></i>
                                 <span slot="title">{{item.name}}</span>
                             </template>
-
-                            <el-menu-item-group>
-                                <span slot="title">{{item.name}}</span>
-                                <el-menu-item v-for="child in item.children" :index="child.path" :key="child.path"
-                                              v-if="!child.hidden">{{child.name}}
-                                </el-menu-item>
+                            <!-- 二级菜单下级 -->
+                            <el-menu-item-group style="overflow: hidden">
+                                <!--<span slot="title">{{item.name}}</span>-->
+                                <!-- && child.url-->
+                                <template v-for="child in item.children">
+                                    <!--无三级菜单-->
+                                    <el-menu-item
+                                            :index="child.url"
+                                            :key="child.url"
+                                            v-if="!child.children">
+                                        {{child.name}}
+                                    </el-menu-item>
+                                    <!--有三级菜单-->
+                                    <el-submenu
+                                            :index="child.url"
+                                            :key="child.url"
+                                            v-if="child.children">
+                                        <span slot="title">{{child.name}}</span>
+                                        <el-menu-item v-for="subChild in child.children"
+                                                      :index="subChild.url"
+                                                      :key="subChild.url">
+                                            {{subChild.name}}
+                                        </el-menu-item>
+                                    </el-submenu>
+                                </template>
                             </el-menu-item-group>
-
                         </el-submenu>
-
-                        <el-menu-item v-if="item.leaf&&item.children.length>0"
-                                      :index="item.children[0].path">
+                        <!-- 一级菜单 -->
+                        <el-menu-item v-if="!item.children"
+                                      :index="item.url">
                             <i :class="['icon',item.iconCls]"></i>
-                            <span slot="title">{{item.children[0].name}}</span>
+                            <span slot="title">{{item.name}}</span>
                         </el-menu-item>
 
                     </template>
@@ -85,73 +106,87 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                sysName: '快房传媒管理后台',
-                collapsed: false,
-                sysUserName: '',
-                sysUserAvatar: '',
-                form: {
-                    name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
-                }
-            }
-        },
-        computed: {
-            curProject() {
-                return this.$store.state.project_name;
-            },
-            curWechat() {
-                return this.$store.state.wechat_name;
-            }
-        },
-        methods: {
-            handleChange(type) {
-                if (type === 'project') {
-                    this.$store.dispatch('clear_project');
-                    window.location.replace('/admin/#/project')
-                } else {
-                    this.$store.dispatch('clear_wechat');
-                    window.location.replace('/admin/#/')
-                }
-            },
-            handleopen() {
-                //console.log('handleopen');
-            },
-            handleclose() {
-                //console.log('handleclose');
-            },
-            handleselect(a, b) {
-            },
-            //退出登录
-            logout() {
-                let _this = this;
-                this.$confirm('确认退出吗?', '提示', {
-                    //type: 'warning'
-                }).then(() => {
-                    this.$store.dispatch('login_out');
-                    _this.$router.push('/login');
-                }).catch(() => {
+  import api from '@/api';
 
-                });
-            },
-            //折叠导航栏
-            collapse() {
-                this.collapsed = !this.collapsed;
-            }
-        },
-        mounted() {
-            this.sysUserName = sessionStorage.getItem("USER_NAME") || '';
-            this.sysUserAvatar = require("@/assets/user.png");
+  export default {
+    data() {
+      return {
+        sysName: '快房传媒管理后台',
+        collapsed: false,
+        sysUserName: '',
+        sysUserAvatar: '',
+        form: {
+          name: '',
+          region: '',
+          date1: '',
+          date2: '',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
         }
+      };
+    },
+    computed: {
+      curProject() {
+        return this.$store.state.project_name;
+      },
+      curWechat() {
+        return this.$store.state.wechat_name;
+      },
+      // 导航菜单
+      nav() {
+        return this.$store.state.nav;
+      }
+    },
+    methods: {
+      handleChange(type) {
+        if (type === 'project') {
+          this.$store.dispatch('clear_project');
+          window.location.replace('/admin/#/project');
+        } else {
+          this.$store.dispatch('clear_wechat');
+          window.location.replace('/admin/#/');
+        }
+      },
+      handleopen() {
+        //console.log('handleopen');
+      },
+      handleclose() {
+        //console.log('handleclose');
+      },
+      handleselect(a, b) {
+      },
+      //退出登录
+      logout() {
+        let _this = this;
+        this.$confirm('确认退出吗?', '提示', {
+          //type: 'warning'
+        }).then(() => {
+          this.$store.dispatch('login_out');
+          _this.$router.push('/login');
+        }).catch(() => {
+
+        });
+      },
+      //折叠导航栏
+      collapse() {
+        this.collapsed = !this.collapsed;
+      }
+    },
+    mounted() {
+      this.sysUserName = sessionStorage.getItem('USER_NAME') || '';
+      this.sysUserAvatar = require('@/assets/user.png');
+
+      api.getUserAuth({}).then((res) => {
+        this.listLoading = false;
+        if (res.data.status === 200 && res.data.param === 'true') {
+          this.$store.dispatch('add_setting_nav');
+        }
+      });
+
     }
+  };
 
 </script>
 

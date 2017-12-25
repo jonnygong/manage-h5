@@ -25,10 +25,10 @@
                   style="width: 100%;">
             <el-table-column type="selection" width="55">
             </el-table-column>
-            <el-table-column prop="id" label="ID" width="100" sortable></el-table-column>
-            <el-table-column prop="email" label="用户名" width="80"></el-table-column>
-            <el-table-column prop="realname" label="真名" width="80"></el-table-column>
-            <el-table-column prop="tel" label="联系电话" width="100"></el-table-column>
+            <!--<el-table-column prop="id" label="ID" width="100" sortable></el-table-column>-->
+            <el-table-column prop="email" label="登录邮箱" min-width="170"></el-table-column>
+            <el-table-column prop="realname" label="真名" width="110"></el-table-column>
+            <el-table-column prop="tel" label="手机号码" width="120"></el-table-column>
             <el-table-column prop="thumb" label="头像" width="120">
                 <template scope="scope">
                     <el-popover trigger="hover" placement="top">
@@ -43,8 +43,8 @@
                     </el-popover>
                 </template>
             </el-table-column>
-            <el-table-column prop="update_time" label="更新时间" width="200" :formatter="formateDate"></el-table-column>
-            <el-table-column prop="create_time" label="创建时间" width="200" :formatter="formateDate"></el-table-column>
+            <!--<el-table-column prop="update_time" label="更新时间" width="200" :formatter="formateDate"></el-table-column>-->
+            <!--<el-table-column prop="create_time" label="创建时间" width="200" :formatter="formateDate"></el-table-column>-->
             <el-table-column prop="status" label="状态" width="100">
                 <template scope="scope">
                     <el-tag :type="scope.row.status === 1 ? 'success' : scope.row.status === -1 ? 'gray' : 'danger'">
@@ -52,7 +52,7 @@
                     </el-tag>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" width="300" fixed="right">
+            <el-table-column label="操作" width="210" fixed="right">
                 <template scope="scope">
                     <el-button size="small" @click="statusSubmit(scope.$index, scope.row)"
                                :disabled="scope.row.status === -1">
@@ -60,7 +60,6 @@
                     </el-button>
                     <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                     <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
-                    <el-button size="small" @click="handleAuth(scope.$index, scope.row)">设置权限</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -81,7 +80,7 @@
         <!--编辑界面-->
         <el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
             <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-                <el-form-item label="用户名" prop="email">
+                <el-form-item label="登录邮箱" prop="email">
                     <el-input v-model="editForm.email" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="真名" prop="realname">
@@ -90,11 +89,27 @@
                 <el-form-item label="密码" prop="password">
                     <el-input v-model="editForm.password" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="联系电话" prop="tel">
+                <el-form-item label="手机号码" prop="tel">
                     <el-input v-model="editForm.tel" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="用户头像" prop="thumb">
+                <el-form-item label="头像" prop="thumb">
                     <i-uploader v-model="editForm.thumb"></i-uploader>
+                </el-form-item>
+                <el-form-item label="公众号集" prop="public_id" v-if="editForm.id !== 1">
+                    <!--列表-->
+                    <el-table :data="wechatList" ref="wechatTable" highlight-current-row v-loading="authListLoading"
+                              @selection-change="selsWechatChange" style="width: 100%;">
+                        <el-table-column type="selection" width="55"></el-table-column>
+                        <el-table-column prop="name" label="公众号名称" min-width="150"></el-table-column>
+                    </el-table>
+                </el-form-item>
+                <el-form-item label="模块集" prop="module_id" v-if="editForm.id !== 1">
+                    <!--列表-->
+                    <el-table :data="moduleList" ref="moduleTable" highlight-current-row v-loading="authListLoading"
+                              @selection-change="selsAuthChange" style="width: 100%;">
+                        <el-table-column type="selection" width="55"></el-table-column>
+                        <el-table-column prop="name" label="模块名称" min-width="150"></el-table-column>
+                    </el-table>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -106,7 +121,7 @@
         <!--新增界面-->
         <el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false">
             <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-                <el-form-item label="用户名" prop="email">
+                <el-form-item label="登录邮箱" prop="email">
                     <el-input v-model="addForm.email" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="真名" prop="realname">
@@ -115,11 +130,27 @@
                 <el-form-item label="密码" prop="password">
                     <el-input v-model="addForm.password" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="联系电话" prop="tel">
+                <el-form-item label="手机号码" prop="tel">
                     <el-input v-model="addForm.tel" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="用户头像" prop="thumb">
+                <el-form-item label="头像" prop="thumb">
                     <i-uploader v-model="addForm.thumb"></i-uploader>
+                </el-form-item>
+                <el-form-item label="公众号集" prop="public_id">
+                    <!--列表-->
+                    <el-table :data="wechatList" highlight-current-row v-loading="authListLoading"
+                              @selection-change="selsWechatChange" style="width: 100%;">
+                        <el-table-column type="selection" width="55"></el-table-column>
+                        <el-table-column prop="name" label="公众号名称" min-width="150"></el-table-column>
+                    </el-table>
+                </el-form-item>
+                <el-form-item label="模块集" prop="module_id">
+                    <!--列表-->
+                    <el-table :data="moduleList" highlight-current-row v-loading="authListLoading"
+                              @selection-change="selsAuthChange" style="width: 100%;">
+                        <el-table-column type="selection" width="55"></el-table-column>
+                        <el-table-column prop="name" label="模块名称" min-width="150"></el-table-column>
+                    </el-table>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -127,335 +158,354 @@
                 <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
             </div>
         </el-dialog>
-
-        <!--设置权限-->
-        <el-dialog title="设置权限" v-model="authFormVisible" :close-on-click-modal="false">
-            <el-form :model="authForm" label-width="80px" ref="authForm">
-                <!--列表-->
-                <el-table :data="authList" highlight-current-row v-loading="authListLoading" @selection-change="selsAuthChange" style="width: 100%;">
-                    <el-table-column type="selection" width="55"></el-table-column>
-                    <el-table-column prop="name" label="模块名称" width="150"></el-table-column>
-                    <el-table-column prop="url" label="模块路由" width="150"></el-table-column>
-                </el-table>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click.native="authFormVisible = false">取消</el-button>
-                <el-button type="primary" @click.native="authSubmit" :loading="authLoading">提交</el-button>
-            </div>
-        </el-dialog>
     </section>
 </template>
 
 <script>
-    import util from '@/common/js/util'
-    import api from '@/api'
-    import Uploader from '@/components/Uploader'
+  import util from '@/common/js/util';
+  import api from '@/api';
+  import Uploader from '@/components/Uploader';
 
-    export default {
-        data() {
-            return {
-                filters: {
-                    options: [],
-                    pid: ''
-                },
-                list: [], // 列表
-                total: 0,
-                page: 1,
-                pagesize: 0,
-                listLoading: false,
-                sels: [],//列表选中列
+  export default {
+    data() {
+      return {
+        filters: {
+          options: [],
+          pid: ''
+        },
+        list: [], // 列表
+        total: 0,
+        page: 1,
+        pagesize: 0,
+        listLoading: false,
+        sels: [],//列表选中列
 
-                authFormVisible:false,
-                authLoading: false,
-                authListLoading: false,
-                authList: [],
-                authSels: [],
-                authForm: {
+        authListLoading: false,
+        moduleList: [],
+        moduleSels: [],
+        wechatList: [],
+        wechatSels: [],
 
-                },
+        editFormVisible: false,//编辑界面是否显示
+        editLoading: false,
+        editFormRules: {
+          email: [{required: true, message: '请输入内容', trigger: 'blur'}],
+          realname: [{required: true, message: '请输入内容', trigger: 'blur'}],
+          public_id: [{required: true, message: '请选择内容'}],
+          module_id: [{required: true, message: '请选择内容'}]
+        },
+        //编辑界面数据
+        editForm: {
+          id: 0,
+          email: '',
+          realname: '',
+          tel: '',
+          thumb: '',
+          password: '',
+          public_id: '',
+          module_id: ''
+        },
 
+        addFormVisible: false,//新增界面是否显示
+        addLoading: false,
+        addFormRules: {
+          email: [{required: true, message: '请输入内容', trigger: 'blur'}],
+          realname: [{required: true, message: '请输入内容', trigger: 'blur'}],
+          password: [{required: true, message: '请输入内容', trigger: 'blur'}],
+          public_id: [{required: true, message: '请选择内容'}],
+          module_id: [{required: true, message: '请选择内容'}]
+        },
+        //新增界面数据
+        addForm: {
+          email: '',
+          realname: '',
+          tel: '',
+          thumb: '',
+          password: '',
+          public_id: '',
+          module_id: ''
+        }
 
-                editFormVisible: false,//编辑界面是否显示
-                editLoading: false,
-                editFormRules: {
-                    email: [{required: true, message: '请输入内容', trigger: 'blur'}],
-                    realname: [{required: true, message: '请输入内容', trigger: 'blur'}],
-                    password: [{required: true, message: '请输入内容', trigger: 'blur'}],
-                },
-                //编辑界面数据
-                editForm: {
-                    id: 0,
-                    email: '',
-                    realname: '',
-                    tel: '',
-                    thumb: '',
-                    password: ''
-                },
+      };
+    },
+    methods: {
+      formateDate(row, column) {
+        return ` ${util.formatDate.format(new Date(row[column.property] * 1000), 'yyyy-MM-dd hh:mm:ss')}`;
+      },
+      // 分页
+      handleCurrentChange(val) {
+        this.page = val;
+        this.getListData();
+      },
+      //获取用户列表
+      getListData() {
+        this.listLoading = true;
+        let para = {
+          page: this.page
+        };
+        this.listLoading = true;
+        api.getAdminList(para).then((res) => {
+          this.listLoading = false;
+          if (res.data.status === 200) {
+            this.total = res.data.param.pages.total;
+            this.pagesize = res.data.param.pages.pagesize;
+            this.list = res.data.param.list;
+          }
+        });
+      },
+      //获取用户列表
+      getAuthData() {
+        this.authListLoading = true;
+        api.getAdminArray({}).then((res) => {
+          this.authListLoading = false;
+          if (res.data.status === 200) {
+            this.moduleList = res.data.param.module;
+            this.wechatList = res.data.param.public;
+            // 勾选已知选项（角色和项目权限）
+            this.moduleSels = this.formatCheckedId(this.moduleList, this.editForm.module_id === null ? [] : this.editForm.module_id.indexOf(',') === -1 ? Number(this.editForm.module_id) : this.editForm.module_id.split(','));
+            this.wechatSels = this.formatCheckedId(this.wechatList, this.editForm.public_id === null ? [] : this.editForm.public_id.indexOf(',') === -1 ? Number(this.editForm.public_id) : this.editForm.public_id.split(','));
+            this.toggleSelection(this.moduleSels, 'moduleTable');
+            this.toggleSelection(this.wechatSels, 'wechatTable');
+          }
+        });
+      },
+      //删除
+      handleDel(index, row) {
+        this.$confirm('确认删除该记录吗?', '提示', {
+          type: 'warning'
+        }).then(() => {
+          this.listLoading = true;
+          let para = {ids: row.id, status: -1};
 
-                addFormVisible: false,//新增界面是否显示
-                addLoading: false,
-                addFormRules: {
-                    email: [{required: true, message: '请输入内容', trigger: 'blur'}],
-                    realname: [{required: true, message: '请输入内容', trigger: 'blur'}],
-                    password: [{required: true, message: '请输入内容', trigger: 'blur'}],
-                },
-                //新增界面数据
-                addForm: {
-                    email: '',
-                    realname: '',
-                    tel: '',
-                    thumb: '',
-                    password: ''
-                }
+          api.getAdmintStatus(para).then((res) => {
+            if (res.data.status === 200) {
+              this.listLoading = false;
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              });
+              this.getListData();
+            }
+          });
+
+        }).catch(() => {
+
+        });
+      },
+      //显示编辑界面
+      handleEdit(index, row) {
+        this.editFormVisible = true;
+        let param = {
+          id: row.id
+        };
+        api.getAdmintInfo(param)
+          .then((res) => {
+            if (res.data.status === 200) {
+              this.editForm = Object.assign({}, res.data.param);
+              this.editForm.password = '';
+              this.getAuthData();
+            }
+          });
+
+      },
+      //显示新增界面
+      handleAdd() {
+        this.addFormVisible = true;
+        this.addForm = {
+          email: '',
+          realname: '',
+          tel: '',
+          thumb: '',
+          password: '',
+          public_id: '',
+          module_id: ''
+        };
+        this.getAuthData();
+      },
+      //编辑
+      editSubmit() {
+        this.editForm.public_id = this.wechatSels.map(item => item.id).toString();
+        this.editForm.module_id = this.moduleSels.map(item => item.id).toString();
+
+        this.$refs.editForm.validate((valid) => {
+          if (valid) {
+            this.$confirm('确认提交吗？', '提示', {}).then(() => {
+              this.editLoading = true;
+              let params = Object.assign({}, this.editForm);
+              api.getAdmintUpdate(params)
+                .then((res) => {
+                  if (res.data.status === 200) {
+                    this.editLoading = false;
+                    //NProgress.done();
+                    this.$message({
+                      message: '修改成功',
+                      type: 'success'
+                    });
+                    this.$refs['editForm'].resetFields();
+                    this.editFormVisible = false;
+                    this.getListData();
+                  }
+                });
+            });
+          }
+        });
+      },
+      //新增
+      addSubmit() {
+        this.addForm.public_id = this.wechatSels.map(item => item.id).toString();
+        this.addForm.module_id = this.moduleSels.map(item => item.id).toString();
+        this.$refs.addForm.validate((valid) => {
+          if (valid) {
+            this.$confirm('确认提交吗？', '提示', {}).then(() => {
+              this.addLoading = true;
+              let params = Object.assign({}, this.addForm);
+
+              api.getAdminAdd(params)
+                .then((res) => {
+
+                  this.addLoading = false;
+                  if (res.data.status === 200) {
+                    this.$message({
+                      message: res.data.info,
+                      type: 'success'
+                    });
+
+                    this.$refs['addForm'].resetFields();
+                    this.addFormVisible = false;
+                    this.getListData();
+
+                  }
+                });
+            });
+          }
+        });
+      },
+      selsChange(sels) {
+        this.sels = sels;
+      },
+      selsAuthChange(sels) {
+        this.moduleSels = sels;
+      },
+      selsWechatChange(sels) {
+        this.wechatSels = sels;
+      },
+      /**
+       * 处理为所需的已选中数据,适用于 el-table
+       * @param source 数据来源
+       * @param ids 已选择id数组
+       * @return 返回数组
+       */
+      formatCheckedId(source, ids) {
+        let _CheckedIds = [];
+        console.log(source);
+        if (typeof ids === 'number') {
+          source.forEach((item, index) => {
+
+            if (Number(item.id) === Number(ids)) {
+              _CheckedIds.push(source[index]);
+            }
+          });
+        } else {
+          ids.forEach(id => {
+            source.forEach((item, index) => {
+              if (Number(item.id) === Number(id)) {
+                _CheckedIds.push(source[index]);
+              }
+            });
+          });
+        }
+
+        return _CheckedIds.slice(0);
+      },
+      /**
+       * 勾选已存在的角色权限
+       * @param rows
+       * @param refName 表格DOM名称
+       */
+      toggleSelection(rows, refName) {
+        if (rows) {
+          rows.forEach(row => {
+            // 由于数据是异步获取，所以需要等到DOM都加载完毕后，再勾选
+            this.$nextTick(() => {
+              this.$refs[refName].toggleRowSelection(row);
+            });
+          });
+
+        } else {
+          this.$refs[refName].clearSelection();
+        }
+      },
+      //批量删除
+      batchAction(action) {
+        // 三种操作：remove disable active
+        let ids = this.sels.map(item => item.id).toString();
+        const actions = {
+          'remove': {
+            tip: '删除',
+            api: `getAdmintStatus`
+          },
+          'disable': {
+            tip: '停用',
+            api: `getAdmintStatus`,
+            status: 0
+          },
+          'active': {
+            tip: '启用',
+            api: `getAdmintStatus`,
+            status: 1
+          }
+        };
+        this.$confirm(`确认${actions[action].tip}选中记录吗？`, '提示', {
+          type: 'warning'
+        }).then(() => {
+          this.listLoading = true;
+          // 非批量删除，带上 status
+          let params = (action !== 'remove' ? Object.assign({
+            ids: ids + '',
+            status: actions[action].status
+          }, params) : {id: ids + ''});
+          api[actions[action].api](params).then((res) => {
+            this.listLoading = false;
+
+            if (res.data.status === 200) {
+              this.$message({
+                message: res.data.info,
+                type: 'success'
+              });
+
+              this.getListData();
 
             }
-        },
-        methods: {
-            formateDate(row, column) {
-                return ` ${util.formatDate.format(new Date(row[column.property] * 1000), 'yyyy-MM-dd hh:mm:ss')}`
-            },
-            // 分页
-            handleCurrentChange(val) {
-                this.page = val;
-                this.getListData();
-            },
-            //获取用户列表
-            getListData() {
-                this.listLoading = true;
-                let para = {
-                    page: this.page
-                };
-                this.listLoading = true;
-                api.getAdminList(para).then((res) => {
-                    this.listLoading = false;
-                    if (res.data.status === 200) {
-                        this.total = res.data.param.pages.total;
-                        this.pagesize = res.data.param.pages.pagesize;
-                        this.list = res.data.param.list;
-                    }
-                });
-            },
-            //获取用户列表
-            getAuthData(id) {
-                this.authListLoading = true;
-                api.getAdmintModules({id: id}).then((res) => {
-                    this.authListLoading = false;
-                    if (res.data.status === 200) {
-                        this.authList = res.data.param.list;
-                    }
-                });
-            },
-            //删除
-            handleDel(index, row) {
-                this.$confirm('确认删除该记录吗?', '提示', {
-                    type: 'warning'
-                }).then(() => {
-                    this.listLoading = true;
-                    let para = {id: row.id};
+          });
+        });
+      },
+      // 修改状态
+      async statusSubmit(index, row) {
+        let para = {
+          ids: row.id,
+          status: 1 - row.status
+        };
 
-                    api.getAdmintDelete(para).then((res)=> {
-                        if (res.data.status === 200) {
-                            this.listLoading = false;
-                            this.$message({
-                                message: '删除成功',
-                                type: 'success'
-                            });
-                            this.getListData();
-                        }
-                    })
+        api.getAdmintStatus(para).then((res) => {
+          if (res.data.status === 200) {
+            this.listLoading = false;
+            this.$message({
+              message: '状态修改成功',
+              type: 'success'
+            });
+            row.status = 1 - row.status;
+          }
+        });
 
-                }).catch(() => {
-
-                });
-            },
-            //显示编辑界面
-            handleEdit(index, row) {
-                this.editFormVisible = true;
-                let param = {
-                    id: row.id
-                };
-                api.getAdmintInfo(param)
-                    .then((res) => {
-                        if (res.data.status === 200) {
-                            this.editForm = Object.assign({}, res.data.param);
-                        }
-                    });
-            },
-            //显示新增界面
-            handleAdd() {
-                this.addFormVisible = true;
-                this.addForm = {
-                    email: '',
-                    realname: '',
-                    tel: '',
-                    thumb: '',
-                    password: ''
-                };
-
-            },
-            //显示设置权限界面
-            handleAuth(index, row) {
-                this.authFormVisible = true;
-                this.getAuthData(row.id);
-            },
-            //编辑
-            editSubmit() {
-                this.$refs.editForm.validate((valid) => {
-                    if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            this.editLoading = true;
-                            let params = Object.assign({}, this.editForm);
-                            api.getAdmintUpdate(params)
-                                .then((res) => {
-                                    if (res.data.status === 200) {
-                                        this.editLoading = false;
-                                        //NProgress.done();
-                                        this.$message({
-                                            message: '修改成功',
-                                            type: 'success'
-                                        });
-                                        this.$refs['editForm'].resetFields();
-                                        this.editFormVisible = false;
-                                        this.getListData();
-                                    }
-                                });
-                        });
-                    }
-                });
-            },
-            //新增
-            addSubmit() {
-                this.$refs.addForm.validate((valid) => {
-                    if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            this.addLoading = true;
-                            let params = Object.assign({}, this.addForm);
-
-                            api.getAdminAdd(params)
-                                .then((res) => {
-
-                                    this.addLoading = false;
-                                    if (res.data.status === 200) {
-                                        this.$message({
-                                            message: res.data.info,
-                                            type: 'success'
-                                        });
-
-                                        this.$refs['addForm'].resetFields();
-                                        this.addFormVisible = false;
-                                        this.getListData();
-
-                                    }
-                                });
-                        });
-                    }
-                });
-            },
-            authSubmit() {
-                this.$refs.authForm.validate((valid) => {
-                    if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            this.authLoading = true;
-                            let params = Object.assign({}, this.authForm);
-
-                            api.getAdmintModule(params)
-                                .then((res) => {
-
-                                    this.authLoading = false;
-                                    if (res.data.status === 200) {
-                                        this.$message({
-                                            message: res.data.info,
-                                            type: 'success'
-                                        });
-
-                                        this.$refs['addForm'].resetFields();
-                                        this.authFormVisible = false;
-//                                        this.getListData();
-
-                                    }
-                                });
-                        });
-                    }
-                });
-            },
-            selsChange(sels) {
-                this.sels = sels;
-            },
-            selsAuthChange(sels) {
-                this.authSels = sels;
-            },
-            //批量删除
-            batchAction(action) {
-                // 三种操作：remove disable active
-                let ids = this.sels.map(item => item.id).toString();
-                const actions = {
-                    'remove': {
-                        tip: '删除',
-                        api: `getAdmintDelete`
-                    },
-                    'disable': {
-                        tip: '停用',
-                        api: `getAdmintStatus`,
-                        status: 0
-                    },
-                    'active': {
-                        tip: '启用',
-                        api: `getAdmintStatus`,
-                        status: 1
-                    }
-                };
-                this.$confirm(`确认${actions[action].tip}选中记录吗？`, '提示', {
-                    type: 'warning'
-                }).then(() => {
-                    this.listLoading = true;
-                    // 非批量删除，带上 status
-                    let params = (action !== 'remove' ? Object.assign({
-                        id: ids + '',
-                        status: actions[action].status
-                    }, params) : {id: ids + ''});
-                    api[actions[action].api](params).then((res) => {
-                        this.listLoading = false;
-
-                        if (res.data.status === 200) {
-                            this.$message({
-                                message: res.data.info,
-                                type: 'success'
-                            });
-
-                            this.getListData();
-
-                        }
-                    });
-                });
-            },
-            // 修改状态
-            async statusSubmit(index, row) {
-                let para = {
-                    id: row.id,
-                    status: 1 - row.status
-                };
-
-                api.getAdmintStatus(para).then((res)=> {
-                    if (res.data.status === 200) {
-                        this.listLoading = false;
-                        this.$message({
-                            message: '状态修改成功',
-                            type: 'success'
-                        });
-                        row.status = 1 - row.status;
-                    }
-                })
-
-
-            },
-        },
-        mounted() {
-            this.getListData();
-        },
-        components: {
-            'i-uploader': Uploader
-        }
+      },
+    },
+    mounted() {
+      this.getListData();
+    },
+    components: {
+      'i-uploader': Uploader
     }
+  };
 
 </script>
 
@@ -463,6 +513,7 @@
     .line {
         text-align: center;
     }
+
     .link {
         color: #1f2d3d;
         text-decoration: none;
