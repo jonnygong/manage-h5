@@ -17,6 +17,119 @@
 | ims_scratch_activity | 活动表 |
 
 
+
+### 列表接口
+
++ __接口说明__： __用于显示已添加的活动__
+
++ __接口地址__： __/Lottery/adminActivity/list__
+
++ __请求参数__
+
+|  参数名称  | 参数类型 | 参数说明 |
+| --------- | -------- | ------- |
+| *page | int | 当前页 默认1 |
+
+
++ __响应参数__
+
+|  参数名称  | 参数类型 | 参数说明 |
+| --------- | -------- | ------- |
+| pages | Object | 总数据， 用于分页 |
+| list | Object | 数据相关 |
+
+>  pages 类型：__[Object]__
+
+|  参数名称  | 参数类型 | 参数说明 |
+| --------- | -------- | ------- |
+| total | number | 总数据量  |
+| pagesize | number |  每页数据 |
+
+>  list 类型：__[Object]__
+
+|  参数名称  | 参数类型 | 参数说明 |
+| --------- | -------- | ------- |
+| id | int(11) | 活动id |
+| status | tinyint(1) | 是否启用活动，0不启用，1启用 |
+| active_title | varchar(255) | 活动标题 |
+| active_time | varchar(2550) | 活动时间,多个时段 |
+| max_play | int(11) | 最多可玩次数 |
+| max_eplay | int(11) | 每场最多可玩 |
+| max_share | int(11) | 每场最多可分享 |
+| max_prize | int(11) | 每场最多中几次 |
+| active_type | tinyint(11) | 活动类型1普通，2奖励 |
+| virtual | int(11) | 虚拟人数 |
+| template | int(11) | 类型（10：刮刮卡 11 大转盘 12 红包） |
+| header_img | varchar(255) | 顶部版权图片 |
+| rule_link | varchar(255) | 领奖说明软文 |
+| rule | text | 规则说明 |
+| need_address | tinyint(1) | 地址是否需要填写0否1是 |
+| tips | varchar(2550) | 各类提示配置 |
+| prize | text | 各项奖品配置 |
+| isshare | tinyint(1) | 1允许分享0不允许 |
+| share_title | varchar(255) | 分享标题 |
+| share_desc | varchar(255) | 分享介绍 |
+| share_link | varchar(255) | 分享链接 |
+| share_img | varchar(255) | 分享图片 |
+| config | varchar(255) | 颜色配置 |
+| rid | int(11) | 关联rid |
+| uniacid | int(11) | 公众号 |
+| create_time | int(11) | 创建时间 |
+| update_time | int(11) | 修改时间 |
+
+
+
+### 详情页面
+
++ __接口说明__： __用于获取活动详情__
+
++ __接口地址__： __/Lottery/adminActivity/info__
+
++ __请求参数__
+
+|  参数名称  | 参数类型 | 参数说明 |
+| --------- | -------- | ------- |
+| *id | int | ID |
+
+
++ __响应参数__
+
+> 成功返回200状态码  
+
++ __请求参数__
+
+|  参数名称  | 参数类型 | 参数说明 |
+| --------- | -------- | ------- |
+| id | int(11) | 活动id |
+| status | tinyint(1) | 是否启用活动，0不启用，1启用 |
+| active_title | varchar(255) | 活动标题 |
+| active_time | varchar(2550) | 活动时间,多个时段 |
+| max_play | int(11) | 最多可玩次数 |
+| max_eplay | int(11) | 每场最多可玩 |
+| max_share | int(11) | 每场最多可分享 |
+| max_prize | int(11) | 每场最多中几次 |
+| active_type | tinyint(11) | 活动类型1普通，2奖励 |
+| virtual | int(11) | 虚拟人数 |
+| template | int(11) | 类型（10：刮刮卡 11 大转盘 12 红包） |
+| header_img | varchar(255) | 顶部版权图片 |
+| rule_link | varchar(255) | 领奖说明软文 |
+| rule | text | 规则说明 |
+| need_address | tinyint(1) | 地址是否需要填写0否1是 |
+| tips | varchar(2550) | 各类提示配置 |
+| prize | text | 各项奖品配置 |
+| isshare | tinyint(1) | 1允许分享0不允许 |
+| share_title | varchar(255) | 分享标题 |
+| share_desc | varchar(255) | 分享介绍 |
+| share_link | varchar(255) | 分享链接 |
+| share_img | varchar(255) | 分享图片 |
+| config | varchar(255) | 颜色配置 |
+| rid | int(11) | 关联rid |
+| uniacid | int(11) | 公众号 |
+| create_time | int(11) | 创建时间 |
+| update_time | int(11) | 修改时间 |
+
+
+
 #### 创建活动
 
 + __接口地址__： __/Lottery/adminActivity/add__
