@@ -337,7 +337,7 @@
             break;
         }
         if (!isValidated) return;
-        if (window.localStorage.getItem('VOTE_RECORD') !== null && this.isToday(+window.localStorage.getItem('VOTE_RECORD'))) {
+        if (window.sessionStorage.getItem('VOTE_RECORD') !== null && this.isToday(+window.sessionStorage.getItem('VOTE_RECORD'))) {
           this.$message({
             title: '提示',
             message: '今日已经投过票了！',
@@ -361,7 +361,7 @@
           });
           if (res.status === 200) {
             this.voteList = JSON.parse(res.param).vote;
-            localStorage.setItem('VOTE_RECORD', new Date().getTime());
+            sessionStorage.setItem('VOTE_RECORD', new Date().getTime());
             this.$message({
               title: '提示',
               message: '您已投票成功！',
