@@ -35,7 +35,7 @@
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column prop="active_title" label="活动标题" min-width="120"></el-table-column>
             <el-table-column prop="active_time" label="活动时间" min-width="200">
-                 <template scope="scope">
+                <template scope="scope">
                     <div v-for="(item, index) in scope.row.active_time" :key="index">
                         <p>{{new Date(item.start).toLocaleString()}} 至 {{new Date(item.end).toLocaleString()}}</p>
                     </div>
@@ -48,7 +48,7 @@
             </el-table-column>
             <el-table-column prop="template" label="类型" min-width="120">
                 <template scope="scope">
-                   {{options.template[scope.row.template]}}
+                    {{options.template[scope.row.template]}}
                 </template>
             </el-table-column>
             <el-table-column prop="status" label="是否启用活动" width="120">
@@ -58,26 +58,26 @@
                     </el-tag>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" width="230" fixed="right">
+            <el-table-column label="操作" width="80" fixed="right">
                 <template scope="scope">
-                    <el-button size="small" @click="statusSubmit(scope.$index, scope.row)"
-                               :disabled="scope.row.status === -1">
-                        {{ scope.row.status === 1 ? '停用' : scope.row.status === 0 ? '启用' : '已删除' }}
-                    </el-button>
+                    <!--<el-button size="small" @click="statusSubmit(scope.$index, scope.row)"-->
+                    <!--:disabled="scope.row.status === -1">-->
+                    <!--{{ scope.row.status === 1 ? '停用' : scope.row.status === 0 ? '启用' : '已删除' }}-->
+                    <!--</el-button>-->
                     <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                    <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+                    <!--<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>-->
                 </template>
             </el-table-column>
         </el-table>
 
         <!--工具条-->
         <el-col :span="24" class="toolbar">
-            <el-button type="danger" @click="batchAction('remove')" :disabled="this.sels.length===0">批量删除
-            </el-button>
-            <el-button type="warning" @click="batchAction('disable')" :disabled="this.sels.length===0">批量禁用
-            </el-button>
-            <el-button type="primary" @click="batchAction('active')" :disabled="this.sels.length===0">批量启用
-            </el-button>
+            <!--<el-button type="danger" @click="batchAction('remove')" :disabled="this.sels.length===0">批量删除-->
+            <!--</el-button>-->
+            <!--<el-button type="warning" @click="batchAction('disable')" :disabled="this.sels.length===0">批量禁用-->
+            <!--</el-button>-->
+            <!--<el-button type="primary" @click="batchAction('active')" :disabled="this.sels.length===0">批量启用-->
+            <!--</el-button>-->
             <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="pagesize"
                            :total="total" style="float:right;">
             </el-pagination>
@@ -86,174 +86,166 @@
 </template>
 
 <script>
-import util from "@/utils/js";
-import UE from "@/components/UEditor";
-import Uploader from "@/components/Uploader";
+  import util from '@/utils/js';
+  import UE from '@/components/UEditor';
+  import Uploader from '@/components/Uploader';
 
-export default {
-  data() {
-    return {
-      options: {
-        type: {
-          1: "普通",
-          2: "奖励"
+  export default {
+    data() {
+      return {
+        options: {
+          type: {
+            1: '普通',
+            2: '奖励'
+          },
+          // 10：刮刮卡 11 大转盘 12 红包
+          template: {
+            10: '刮刮卡',
+            11: '大转盘',
+            12: '红包'
+          }
         },
-        // 10：刮刮卡 11 大转盘 12 红包
-        template: {
-          10: "刮刮卡",
-          11: "大转盘",
-          12: "红包"
-        }
-      },
-      filters: {
-        value: "",
-        key: "",
-        options: [{ value: "", label: "全部" }]
-      },
-      list: [],
-      value: "",
-      total: 0,
-      page: 1,
-      pagesize: 10,
-      listLoading: false,
-      sels: [] //列表选中列
-    };
-  },
-  methods: {
-    // 格式化更新时间
-    formateDate(row, column) {
-      return ` ${util.formatDate.format(
-        new Date(row.update_time * 1000),
-        "yyyy-MM-dd hh:mm:ss"
-      )}`;
+        filters: {
+          value: '',
+          key: '',
+          options: [{value: '', label: '全部'}]
+        },
+        list: [],
+        value: '',
+        total: 0,
+        page: 1,
+        pagesize: 10,
+        listLoading: false,
+        sels: [] //列表选中列
+      };
     },
-    handleCurrentChange(val) {
-      this.page = val;
+    methods: {
+      // 格式化更新时间
+      formateDate(row, column) {
+        return ` ${util.formatDate.format(
+          new Date(row.update_time * 1000),
+          'yyyy-MM-dd hh:mm:ss'
+        )}`;
+      },
+      handleCurrentChange(val) {
+        this.page = val;
+        this.getListData();
+      },
+      //获列表
+      async getListData() {
+        this.listLoading = true;
+        let params = {
+          page: this.page,
+          pid: 0,
+          key: this.filters.key, // 可选参数查询
+          value: this.filters.value // 可选参数查询
+        };
+        const res = await this.$http.post(`adminActivityList`, params);
+        this.listLoading = false;
+        if (res === null) return;
+        this.pagesize = res.param.pages.pagesize;
+        this.total = res.param.pages.total;
+        this.list = res.param.list;
+        this.list.forEach(item => {
+          if(item.active_time === '') return;
+          item.active_time = JSON.parse(item.active_time);
+        });
+      },
+      //删除
+      // handleDel(index, row) {
+      //   this.$confirm('确认删除该记录吗?', '提示', {
+      //     type: 'warning'
+      //   })
+      //     .then(async () => {
+      //       let params = {
+      //         id: row.id,
+      //         status: -1
+      //       };
+      //
+      //       const res = await this.$http.post(`adminActivityStatus`, params);
+      //       if (res === null) return;
+      //       this.$message({
+      //         message: '状态修改成功',
+      //         type: 'success'
+      //       });
+      //       row.status = -1;
+      //       this.getListData();
+      //     })
+      //     .catch(() => {});
+      // },
+      //显示编辑界面
+      handleEdit(index, row) {
+        this.$router.push({name: '编辑活动', params: {id: row.id}});
+      },
+      //显示新增界面
+      handleAdd() {
+        this.$router.push({name: '创建活动'});
+      },
+      // 修改状态
+      // async statusSubmit(index, row) {
+      //   let params = {
+      //     ids: row.id,
+      //     status: 1 - row.status
+      //   };
+      //
+      //   const res = await this.$http.post(`adminActivityStatus`, params);
+      //   if (res === null) return;
+      //   this.$message({
+      //     message: "状态修改成功",
+      //     type: "success"
+      //   });
+      //   row.status = 1 - row.status;
+      // },
+      selsChange(sels) {
+        this.sels = sels;
+      },
+      //批量删除
+      batchAction(action) {
+        //                mapadminAreaStatus
+        // 三种操作：remove disable active
+        let ids = this.sels.map(item => item.id).toString();
+        const actions = {
+          remove: {
+            tip: '删除',
+            api: `adminActivityStatus`
+          },
+          disable: {
+            tip: '停用',
+            api: `adminActivityStatus`,
+            status: 0
+          },
+          active: {
+            tip: '启用',
+            api: `adminActivityStatus`,
+            status: 1
+          }
+        };
+        this.$confirm(`确认${actions[action].tip}选中记录吗？`, '提示', {
+          type: 'warning'
+        })
+          .then(async () => {
+            this.listLoading = true;
+            // 非批量删除，带上 status
+            let params = action !== 'remove' ? Object.assign({id: ids + '', status: actions[action].status}, params) : {ids: ids + ''};
+            const res = await this.$http.post(actions[action].api, params);
+            this.listLoading = false;
+            if (res === null) return;
+            this.$message({
+              message: res.info,
+              type: 'success'
+            });
+            this.getListData();
+          })
+          .catch(() => {});
+      }
+    },
+    mounted() {
       this.getListData();
     },
-    //获列表
-    async getListData() {
-      this.listLoading = true;
-      let params = {
-        page: this.page,
-        pid: 0,
-        key: this.filters.key, // 可选参数查询
-        value: this.filters.value // 可选参数查询
-      };
-      const res = await this.$http.post(`adminActivityList`, params);
-      this.listLoading = false;
-      if (res === null) return;
-      this.pagesize = res.param.pages.pagesize;
-      this.total = res.param.pages.total;
-      this.list = res.param.list;
-      this.list.forEach(item => {
-        item.active_time = JSON.parse(item.active_time);
-      });
-    },
-    //删除
-    handleDel(index, row) {
-      this.$confirm("确认删除该记录吗?", "提示", {
-        type: "warning"
-      })
-        .then(async () => {
-          let params = {
-            id: row.id,
-            status: -1
-          };
-
-          const res = await this.$http.post(`adminActivityStatus`, params);
-          if (res === null) return;
-          this.$message({
-            message: "状态修改成功",
-            type: "success"
-          });
-          row.status = -1;
-          this.getListData();
-        })
-        .catch(() => {});
-    },
-    //显示编辑界面
-    handleEdit(index, row) {
-      this.$router.push({ name: "编辑活动", params: { id: row.id } });
-    },
-    //显示新增界面
-    handleAdd() {
-      this.$router.push({ name: "创建活动" });
-    },
-    // 修改状态
-    async statusSubmit(index, row) {
-      let params = {
-        ids: row.id,
-        status: 1 - row.status
-      };
-
-      const res = await this.$http.post(`adminActivityStatus`, params);
-      if (res === null) return;
-      this.$message({
-        message: "状态修改成功",
-        type: "success"
-      });
-      row.status = 1 - row.status;
-    },
-    selsChange(sels) {
-      this.sels = sels;
-    },
-    //批量删除
-    batchAction(action) {
-      //                mapadminAreaStatus
-      // 三种操作：remove disable active
-      let ids = this.sels.map(item => item.id).toString();
-      const actions = {
-        remove: {
-          tip: "删除",
-          api: `adminActivityStatus`
-        },
-        disable: {
-          tip: "停用",
-          api: `adminActivityStatus`,
-          status: 0
-        },
-        active: {
-          tip: "启用",
-          api: `adminActivityStatus`,
-          status: 1
-        }
-      };
-      this.$confirm(`确认${actions[action].tip}选中记录吗？`, "提示", {
-        type: "warning"
-      })
-        .then(async () => {
-          this.listLoading = true;
-          // 非批量删除，带上 status
-          let params =
-            action !== "remove"
-              ? Object.assign(
-                  {
-                    id: ids + "",
-                    status: actions[action].status
-                  },
-                  params
-                )
-              : { ids: ids + "" };
-          const res = await this.$http.post(actions[action].api, params);
-          this.listLoading = false;
-          if (res === null) return;
-          this.$message({
-            message: res.info,
-            type: "success"
-          });
-          this.getListData();
-        })
-        .catch(() => {});
+    components: {
+      'i-uploader': Uploader
     }
-  },
-  mounted() {
-    this.getListData();
-  },
-  components: {
-    "i-uploader": Uploader
-  }
-};
+  };
 </script>
 
 <style lang="scss">
