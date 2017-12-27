@@ -12,14 +12,16 @@
 
             <!-- 步骤条 -->
             <div class="options__step-bar">
-                <el-steps :active="active" :center="true" finish-status="success">
-                    <el-step v-for="(step,index) in stepOptions"
-                             :key="index"
-                             :title="step.title"></el-step>
-                </el-steps>
+                <el-tabs v-model="active" type="card">
+                    <el-tab-pane v-for="(item, index) in stepOptions"
+                                 :key="index"
+                                 :label="item.title"
+                                 :name="index + ''"
+                    ></el-tab-pane>
+                </el-tabs>
             </div>
             <!-- 活动设置 -->
-            <div class="options__content" v-if="active === 0">
+            <div class="options__content" v-if="active === '0'">
                 <el-form :model="formData['activity']"
                          :rules="rules['activity']"
                          ref="activityForm"
@@ -134,7 +136,7 @@
                 </el-form>
             </div>
             <!-- 奖品设置 -->
-            <div class="options__content" v-if="active === 1">
+            <div class="options__content" v-if="active === '1'">
 
                 <el-alert style="margin-bottom: 10px;"
                           title="注意：活动一旦正式开始请勿删除任何奖品、修改奖品，只能添加奖品或修改概率，奖品数量只可增加，否则数据错位后果自负。"
@@ -222,7 +224,7 @@
 
             </div>
             <!-- 自定义设置 -->
-            <div class="options__content" v-if="active === 2">
+            <div class="options__content" v-if="active === '2'">
                 <el-form :model="formData['config']"
                          :rules="rules['config']"
                          ref="configForm"
@@ -283,7 +285,7 @@
                 </el-form>
             </div>
             <!-- 分享设置 -->
-            <div class="options__content" v-if="active === 3">
+            <div class="options__content" v-if="active === '3'">
                 <el-form :model="formData['share']"
                          :rules="rules['share']"
                          ref="shareForm"
@@ -318,7 +320,7 @@
 
             </div>
             <!--发布成功-->
-            <div class="options__content" v-if="active === 4">
+            <div class="options__content" v-if="active === '4'">
                 <div class="options__content--finished">
                     <el-alert
                             title="活动发布成功"
@@ -334,15 +336,15 @@
             </div>
 
             <div class="options__btns">
-                <el-button @click="prev"
+                <!-- <el-button @click="prev"
                            v-if="active !== 0">上一步
-                </el-button>
+                </el-button> -->
                 <el-button type="primary"
-                           v-if="active === 3"
+                           v-if="this.active !== '4'"
                            :loading="submitLoading"
                            @click="submitForm">保存修改
                 </el-button>
-                <el-button @click="next" v-if="active < 3">下一步</el-button>
+                <!-- <el-button @click="next" v-if="active < 3">下一步</el-button> -->
             </div>
 
         </div>
@@ -350,480 +352,480 @@
 </template>
 
 <script>
-import QRCode from "qrcodejs2";
-import Uploader from "@/components/Uploader";
+  import QRCode from 'qrcodejs2';
+  import Uploader from '@/components/Uploader';
 
-export default {
-  data() {
-    return {
-      // 奖品列表标签
-      prizeTabsValue: "0",
-      prizeTabs: [
-        {
-          title: "奖品 1",
-          name: "0"
-        }
-      ],
-      tabIndex: 0,
-      // 当前激活的步骤
-      active: 0,
-      // 所有步骤表单列表，用于表单验证
-      activeForm: ["activityForm", "prizeForm", "configForm", "shareForm"],
-      // 奖品字段中英对照
-      prizeKeys: {
-        name: "奖品名称",
-        type: "奖品类型",
-        sum: "奖品数量",
-        chance: "中奖概率",
-        link: "http://",
-        min: "最小金额",
-        max: "最大金额",
-        money: "红包总额",
-        img: "奖品图片"
-      },
-      formData: {
-        activity: {
-          active_title: "",
-          status: 0,
-          active_time: [
-            {
-              start: new Date(),
-              end: new Date(new Date().getTime() + 3600 * 1000 * 24 * 7)
-            }
-          ],
-          max_share: "",
-          max_eplay: "",
-          max_play: "",
-          max_prize: "",
-          virtual: "",
-          template: "",
-          active_type: ""
+  export default {
+    data() {
+      return {
+        // 奖品列表标签
+        prizeTabsValue: '0',
+        prizeTabs: [],
+        tabIndex: 0,
+        // 当前激活的步骤
+        active: '0',
+        // 所有步骤表单列表，用于表单验证
+        activeForm: {
+          '0': 'activityForm', '1': 'prizeForm', '2': 'configForm', '3': 'shareForm'
         },
-        share: {
-          share_title: "",
-          share_link: "",
-          share_desc: "",
-          share_img: "",
-          uniacid: "",
-          rid: "",
-          isshare: 0
+        // 奖品字段中英对照
+        prizeKeys: {
+          name: '奖品名称',
+          type: '奖品类型',
+          sum: '奖品数量',
+          chance: '中奖概率',
+          link: 'http://',
+          min: '最小金额',
+          max: '最大金额',
+          money: '红包总额',
+          img: '奖品图片'
         },
-        config: {
-          tips: {
-            have_award: "今天已经获奖过咯~不要贪心哦！",
-            no_times: "可次数已用完了！",
-            no_award: "居然没有中奖？不如休息一下赞个手气！",
-            game_over: "本场活动已结束，请等待下一场活动",
-            default: "谢谢！"
+        formData: {
+          id: 0,
+          activity: {
+            active_title: '',
+            status: 0,
+            active_time: [
+              {
+                start: new Date(),
+                end: new Date(new Date().getTime() + 3600 * 1000 * 24 * 7)
+              }
+            ],
+            max_share: '',
+            max_eplay: '',
+            max_play: '',
+            max_prize: '',
+            virtual: '',
+            template: '',
+            active_type: ''
+          },
+          share: {
+            share_title: '',
+            share_link: '',
+            share_desc: '',
+            share_img: '',
+            uniacid: '',
+            rid: '',
+            isshare: 0
           },
           config: {
-            body_color: "",
-            btn_color: ""
+            tips: {
+              have_award: '今天已经获奖过咯~不要贪心哦！',
+              no_times: '可次数已用完了！',
+              no_award: '居然没有中奖？不如休息一下赞个手气！',
+              game_over: '本场活动已结束，请等待下一场活动',
+              default: '谢谢！'
+            },
+            config: {
+              body_color: '',
+              btn_color: ''
+            },
+            header_img: '',
+            rule_link: '',
+            need_address: '',
+            rule: ''
           },
-          header_img: "",
-          rule_link: "",
-          need_address: "",
-          rule: ""
-        },
-        prize: {
-          prize: [
-            {
-              id: "0",
-              name: "奖品 1",
-              type: "physical",
-              sum: 0,
-              chance: 0,
-              link: "http://",
-              min: 0,
-              max: 0,
-              money: 0,
-              img: "",
-              saved: false
-            }
-          ]
-        }
-      },
-      rules: {
-        activity: {
-          active_title: [
-            { required: true, message: "请输入活动名称", trigger: "blur" }
-          ],
-          status: [
-            {
-              type: "number",
-              required: true,
-              message: "请选择活动状态",
-              trigger: "change"
-            }
-          ],
-          active_time: [
-            {
-              type: "array",
-              min: 1,
-              required: true,
-              message: "请至少添加一个活动时间",
-              trigger: "change"
-            }
-          ],
-          max_share: [
-            {
-              type: "number",
-              required: true,
-              message: "请输入每场最多可分享",
-              trigger: "blur"
-            }
-          ],
-          max_eplay: [
-            {
-              type: "number",
-              required: true,
-              message: "请输入每场最多可玩",
-              trigger: "blur"
-            }
-          ],
-          max_play: [
-            {
-              type: "number",
-              required: true,
-              message: "请输入最多可玩次数",
-              trigger: "blur"
-            }
-          ],
-          max_prize: [
-            {
-              type: "number",
-              required: true,
-              message: "请输入每场最多中几次",
-              trigger: "blur"
-            }
-          ],
-          virtual: [
-            {
-              type: "number",
-              required: true,
-              message: "请输入虚拟人数",
-              trigger: "blur"
-            }
-          ],
-          template: [
-            {
-              type: "number",
-              required: true,
-              message: "请输入类型类型",
-              trigger: "change"
-            }
-          ],
-          active_type: [
-            {
-              type: "number",
-              required: true,
-              message: "请输入活动类型",
-              trigger: "change"
-            }
-          ]
-        },
-        share: {
-          isshare: [
-            {
-              type: "number",
-              required: true,
-              message: "请选择是否分享",
-              trigger: "change"
-            }
-          ],
-          rid: [{ required: true, message: "请输入rid", trigger: "blur" }],
-          uniacid: [{ required: true, message: "请输入公众号", trigger: "blur" }]
-        },
-        config: {
-          tips: [
-            {
-              type: "object",
-              required: true,
-              message: "请输入活动名称",
-              trigger: "blur"
-            }
-          ],
-          header_img: [
-            { required: true, message: "请输入顶部版权图片", trigger: "blur" }
-          ],
-          rule_link: [
-            { required: true, message: "请输入领奖说明软文", trigger: "blur" }
-          ],
-          need_address: [
-            {
-              type: "number",
-              required: true,
-              message: "请选择地址是否需要填写",
-              trigger: "change"
-            }
-          ],
-          rule: [{ required: true, message: "请输入规则说明", trigger: "blur" }]
-        },
-        prize: {
-          prize: [
-            {
-              type: "array",
-              required: true,
-              message: "请输入奖品信息",
-              trigger: "blur"
-            }
-          ]
-        }
-      },
-      // 实物physical、红包red、劵码coupon
-      prizeType: [
-        {
-          value: "physical",
-          label: "实物"
-        },
-        {
-          value: "red",
-          label: "红包"
-        },
-        {
-          value: "coupon",
-          label: "劵码"
-        }
-      ],
-      stepOptions: [
-        {
-          title: "活动设置"
-        },
-        {
-          title: "奖品设置"
-        },
-        {
-          title: "自定义设置"
-        },
-        {
-          title: "分享设置"
-        }
-      ],
-      submitLoading: false
-    };
-  },
-  watch: {
-    $route(to, from) {
-      this.getFormData();
-    }
-  },
-  methods: {
-    // 添加奖品按钮
-    addTab(targetName) {
-      let newTabName = ++this.tabIndex + "";
-      targetName.push({
-        title: `奖品 ${+newTabName + 1}`,
-        name: newTabName
-      });
-      this.prizeTabsValue = newTabName;
-      this._addPrize(newTabName);
-    },
-    // 移除奖品按钮
-    removeTab(targetName) {
-      let tabs = this.prizeTabs; // 标签列表
-      let activeName = this.prizeTabsValue; // 当前激活项
-      if (activeName === targetName) {
-        tabs.forEach((tab, index) => {
-          if (tab.name === targetName) {
-            let nextTab = tabs[index + 1] || tabs[index - 1];
-            if (nextTab) {
-              activeName = nextTab.name;
-            }
+          prize: {
+            prize: [
+              {
+                id: '0',
+                name: '奖品 1',
+                type: 'physical',
+                sum: 0,
+                chance: 0,
+                link: 'http://',
+                min: 0,
+                max: 0,
+                money: 0,
+                img: '',
+                saved: false
+              }
+            ]
           }
-        });
+        },
+        rules: {
+          activity: {
+            active_title: [
+              {required: true, message: '请输入活动名称', trigger: 'blur'}
+            ],
+            status: [
+              {
+                type: 'number',
+                required: true,
+                message: '请选择活动状态',
+                trigger: 'change'
+              }
+            ],
+            active_time: [
+              {
+                type: 'array',
+                min: 1,
+                required: true,
+                message: '请至少添加一个活动时间',
+                trigger: 'change'
+              }
+            ],
+            max_share: [
+              {
+                type: 'number',
+                required: true,
+                message: '请输入每场最多可分享',
+                trigger: 'blur'
+              }
+            ],
+            max_eplay: [
+              {
+                type: 'number',
+                required: true,
+                message: '请输入每场最多可玩',
+                trigger: 'blur'
+              }
+            ],
+            max_play: [
+              {
+                type: 'number',
+                required: true,
+                message: '请输入最多可玩次数',
+                trigger: 'blur'
+              }
+            ],
+            max_prize: [
+              {
+                type: 'number',
+                required: true,
+                message: '请输入每场最多中几次',
+                trigger: 'blur'
+              }
+            ],
+            virtual: [
+              {
+                type: 'number',
+                required: true,
+                message: '请输入虚拟人数',
+                trigger: 'blur'
+              }
+            ],
+            template: [
+              {
+                type: 'number',
+                required: true,
+                message: '请输入类型类型',
+                trigger: 'change'
+              }
+            ],
+            active_type: [
+              {
+                type: 'number',
+                required: true,
+                message: '请输入活动类型',
+                trigger: 'change'
+              }
+            ]
+          },
+          share: {
+            isshare: [
+              {
+                type: 'number',
+                required: true,
+                message: '请选择是否分享',
+                trigger: 'change'
+              }
+            ],
+            rid: [{required: true, message: '请输入rid', trigger: 'blur'}],
+            uniacid: [{required: true, message: '请输入公众号', trigger: 'blur'}]
+          },
+          config: {
+            tips: [
+              {
+                type: 'object',
+                required: true,
+                message: '请输入活动名称',
+                trigger: 'blur'
+              }
+            ],
+            header_img: [
+              {required: true, message: '请输入顶部版权图片', trigger: 'blur'}
+            ],
+            rule_link: [
+              {required: true, message: '请输入领奖说明软文', trigger: 'blur'}
+            ],
+            need_address: [
+              {
+                type: 'number',
+                required: true,
+                message: '请选择地址是否需要填写',
+                trigger: 'change'
+              }
+            ],
+            rule: [{required: true, message: '请输入规则说明', trigger: 'blur'}]
+          },
+          prize: {
+            prize: [
+              {
+                type: 'array',
+                required: true,
+                message: '请输入奖品信息',
+                trigger: 'blur'
+              }
+            ]
+          }
+        },
+        // 实物physical、红包red、劵码coupon
+        prizeType: [
+          {
+            value: 'physical',
+            label: '实物'
+          },
+          {
+            value: 'red',
+            label: '红包'
+          },
+          {
+            value: 'coupon',
+            label: '劵码'
+          }
+        ],
+        stepOptions: [
+          {
+            title: '活动设置'
+          },
+          {
+            title: '奖品设置'
+          },
+          {
+            title: '自定义设置'
+          },
+          {
+            title: '分享设置'
+          }
+        ],
+        submitLoading: false
+      };
+    },
+    watch: {
+      $route(to, from) {
+        this.getFormData();
       }
-      if (this.formData["prize"].prize.length === 0) return;
-      this.formData["prize"].prize.forEach((item, index) => {
-        if (item.id === targetName) {
-          if (item.saved) {
-            this.$message({
-              message: "不能删除已保存的奖品",
-              type: "error"
-            });
-          } else {
-            this.formData["prize"].prize.splice(index, 1);
-            this.prizeTabsValue = activeName;
-            this.prizeTabs = tabs.filter(tab => tab.name !== targetName);
-          }
-        }
-      });
     },
-    // 增加奖品
-    _addPrize(id) {
-      this.formData["prize"].prize.push({
-        id: id,
-        name: "奖品" + (+id + 1),
-        type: "physical",
-        sum: 0,
-        chance: 0,
-        link: "http://",
-        min: 0,
-        max: 0,
-        money: 0,
-        img: "",
-        saved: false
-      });
-    },
-    // 添加活动时间
-    addTime() {
-      this.formData.activity.active_time.push({
-        start: new Date(),
-        end: new Date(new Date().getTime() + 3600 * 1000 * 24 * 7)
-      });
-    },
-    // 删除活动时间
-    removeTime(index) {
-      this.formData.activity.active_time.splice(index, 1);
-    },
-    // 上一步
-    prev() {
-      this.active--;
-    },
-    // 下一步
-    next() {
-      // 奖品表单验证单独校验
-      if (this.activeForm[this.active] === "prizeForm") {
-        if (this.formData.prize.prize.length === 0) {
-          this.$message({
-            message: "至少添加一个奖品",
-            type: "warning"
-          });
-        } else {
-          // 对奖品做表单校验，防止空数据提交
-          let result = true;
-          for (let i = 0; i < this.formData.prize.prize.length; i++) {
-            const item = this.formData.prize.prize[i];
-            for (let key in item) {
-              if (item[key] === "") {
-                this.$message({
-                  message: `请填写「${item.name}」表单「${this.prizeKeys[key]}」字段内容`,
-                  type: "warning"
-                });
-                result = false;
-                break;
+    methods: {
+      // 添加奖品按钮
+      addTab(targetName) {
+        let newTabName = ++this.tabIndex + '';
+        targetName.push({
+          title: `奖品 ${+newTabName + 1}`,
+          name: newTabName
+        });
+        this.prizeTabsValue = newTabName;
+        this._addPrize(newTabName);
+      },
+      // 移除奖品按钮
+      removeTab(targetName) {
+        let tabs = this.prizeTabs; // 标签列表
+        let activeName = this.prizeTabsValue; // 当前激活项
+        if (activeName === targetName) {
+          tabs.forEach((tab, index) => {
+            if (tab.name === targetName) {
+              let nextTab = tabs[index + 1] || tabs[index - 1];
+              if (nextTab) {
+                activeName = nextTab.name;
               }
             }
-          }
-          // 验证通过，则下一步
-          if (result) {
-            if (this.active++ > 3) {
-              // generate qr-code
-              this.active = 0;
-            }
-          }
+          });
         }
-      } else {
-        this.$refs[this.activeForm[this.active]].validate(valid => {
-          if (valid) {
-            if (this.active++ > 3) {
-              // generate qr-code
-              this.active = 0;
+        if (this.formData['prize'].prize.length === 0) return;
+        this.formData['prize'].prize.forEach((item, index) => {
+          if (item.id === targetName) {
+            if (item.saved) {
+              this.$message({
+                message: '不能删除已保存的奖品',
+                type: 'error'
+              });
+            } else {
+              this.formData['prize'].prize.splice(index, 1);
+              this.prizeTabsValue = activeName;
+              this.prizeTabs = tabs.filter(tab => tab.name !== targetName);
             }
-          } else {
-            this.$message({
-              message: `请填写表单内容`,
-              type: "warning"
-            });
-            return false;
           }
         });
+      },
+      // 增加奖品
+      _addPrize(id) {
+        this.formData['prize'].prize.push({
+          id: id,
+          name: '奖品' + (+id + 1),
+          type: 'physical',
+          sum: 0,
+          chance: 0,
+          link: 'http://',
+          min: 0,
+          max: 0,
+          money: 0,
+          img: '',
+          saved: false
+        });
+      },
+      // 添加活动时间
+      addTime() {
+        this.formData.activity.active_time.push({
+          start: new Date(),
+          end: new Date(new Date().getTime() + 3600 * 1000 * 24 * 7)
+        });
+      },
+      // 删除活动时间
+      removeTime(index) {
+        this.formData.activity.active_time.splice(index, 1);
+      },
+      // 下一步
+      validate() {
+        let isChecked = true;
+        // 奖品表单验证单独校验
+        if (this.activeForm[this.active] === 'prizeForm') {
+          if (this.formData.prize.prize.length === 0) {
+            this.$message({
+              message: '至少添加一个奖品',
+              type: 'warning'
+            });
+            return isChecked;
+          } else {
+            // 对奖品做表单校验，防止空数据提交
+            let result = true;
+            for (let i = 0; i < this.formData.prize.prize.length; i++) {
+              const item = this.formData.prize.prize[i];
+              for (let key in item) {
+                if (item[key] === '') {
+                  this.$message({
+                    message: `请填写「${item.name}」表单「${this.prizeKeys[key]}」字段内容`,
+                    type: 'warning'
+                  });
+                  result = false;
+                  return;
+                }
+              }
+            }
+            isChecked = result;
+            // 验证通过，则下一步
+            return isChecked;
+          }
+          
+        } else {
+          this.$refs[this.activeForm[this.active]].validate(valid => {
+            if (valid) {
+            } else {
+              this.$message({
+                message: `请填写表单内容`,
+                type: 'warning'
+              });
+              isChecked = false;
+            }
+          });
+          return isChecked;
+        }
+      },
+      // 提交修改活动
+      async submitForm() {
+        console.log(this.validate())
+        if(!this.validate()) return;
+        this.submitLoading = true;
+
+        let params = Object.assign(
+          {id: this.formData.id},
+          this.formData.prize,
+          this.formData.activity,
+          this.formData.config,
+          this.formData.share
+        );
+        // 转换指定字段为 JSON
+        params.tips = JSON.stringify(params.tips);
+        params.config = JSON.stringify(params.config);
+        params.active_time = JSON.stringify(params.active_time);
+        params.prize = JSON.stringify(params.prize);
+
+        console.log(params);
+        const res = await this.$http.post(`adminActivityUpdate`, params);
+        this.submitLoading = false;
+        if (res === null) return;
+        this.$message({
+          message: res.info,
+          type: 'success'
+        });
+        this.$nextTick(() => {
+          new QRCode(this.$refs.qrcode, {
+            // eslint-disable-line no-new
+            text: `${window.location.host}${window.location.pathname}`,
+            width: 250,
+            height: 250,
+            colorDark: '#000000',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+          });
+        });
+        this.active = '4';
+      },
+      // 提交创建活动
+      async getFormData() {
+        let params = {
+          id: this.$route.params.id
+        };
+
+        const res = await this.$http.post(`adminActivityInfo`, params);
+        if (res === null) return;
+        // 转换指定字段为 JSON
+        this.formData.id = res.param.id,
+          this.formData.activity = {
+            active_title: res.param.active_title,
+            status: res.param.status,
+            active_time: JSON.parse(res.param.active_time),
+            max_share: res.param.max_share,
+            max_eplay: res.param.max_eplay,
+            max_play: res.param.max_play,
+            max_prize: res.param.max_prize,
+            virtual: res.param.virtual,
+            template: res.param.template,
+            active_type: res.param.active_type
+          };
+        this.formData.share = {
+          share_title: res.param.share_title,
+          share_link: res.param.share_link,
+          share_desc: res.param.share_desc,
+          share_img: res.param.share_img,
+          uniacid: res.param.uniacid,
+          rid: res.param.rid,
+          isshare: res.param.isshare
+        };
+        this.formData.prize = {
+          prize: JSON.parse(res.param.prize)
+        };
+        console.log(this.formData.prize)
+        
+
+        this.formData.config = {
+          tips: JSON.parse(res.param.tips),
+          config: JSON.parse(res.param.config),
+          header_img: res.param.header_img,
+          rule_link: res.param.rule_link,
+          need_address: res.param.need_address,
+          rule: res.param.rule
+        };
+
+        this.formData.prize.prize.forEach((item, index) => {
+          this.prizeTabs.push({
+            title: `奖品 ${index + 1 + ''}`,
+            name: index + ''
+          })
+          item.saved = true;
+        });
+        this.tabIndex = this.formData.prize.prize.length - 1;
       }
     },
-    // 提交修改活动
-    async submitForm() {
-      this.submitLoading = true;
-
-      let params = Object.assign(
-        {},
-        this.formData.prize,
-        this.formData.activity,
-        this.formData.config,
-        this.formData.share
-      );
-      // 转换指定字段为 JSON
-      params.tips = JSON.stringify(params.tips);
-      params.config = JSON.stringify(params.config);
-      params.active_time = JSON.stringify(params.active_time);
-      params.prize = JSON.stringify(params.prize);
-
-      console.log(params);
-      const res = await this.$http.post(`adminActivityUpdate`, params);
-      this.submitLoading = false;
-      if (res === null) return;
-      this.$message({
-        message: res.info,
-        type: "success"
-      });
-      this.$nextTick(() => {
-        new QRCode(this.$refs.qrcode, {
-          // eslint-disable-line no-new
-          text: `${window.location.host}${window.location.pathname}`,
-          width: 250,
-          height: 250,
-          colorDark: "#000000",
-          colorLight: "#ffffff",
-          correctLevel: QRCode.CorrectLevel.H
-        });
-      });
-      this.active++;
+    mounted() {
+      this.getFormData();
     },
-    // 提交创建活动
-    async getFormData() {
-      let params = {
-        id: this.$route.params.id
-      };
-
-      const res = await this.$http.post(`adminActivityInfo`, params);
-      if (res === null) return;
-      // 转换指定字段为 JSON
-    
-      this.formData.activity = {
-        active_title: res.param.active_title,
-        status: res.param.status,
-        active_time: JSON.parse(res.param.active_time),
-        max_share: res.param.max_share,
-        max_eplay: res.param.max_eplay,
-        max_play: res.param.max_play,
-        max_prize: res.param.max_prize,
-        virtual: res.param.virtual,
-        template: res.param.template,
-        active_type: res.param.active_type
-      };
-      this.formData.share = {
-        share_title: res.param.share_title,
-        share_link: res.param.share_link,
-        share_desc: res.param.share_desc,
-        share_img: res.param.share_img,
-        uniacid: res.param.uniacid,
-        rid: res.param.rid,
-        isshare: res.param.isshare
-      };
-      this.formData.prize = {
-        prize: JSON.parse(res.param.prize)
-      };
-      this.formData.config = {
-        tips: JSON.parse(res.param.tips),
-        config: JSON.parse(res.param.config),
-        header_img: res.param.header_img,
-        rule_link: res.param.rule_link,
-        need_address: res.param.need_address,
-        rule: res.param.rule
-      };
-
-      this.formData.prize.prize.forEach(item => {
-        item.saved = true;
-      });
+    components: {
+      'i-uploader': Uploader
     }
-  },
-  mounted() {
-    this.getFormData();
-  },
-  components: {
-    "i-uploader": Uploader
-  }
-};
+  };
 </script>
 
 <style lang="scss" scoped>
-@import "Edit";
+    @import "Edit";
 </style>
