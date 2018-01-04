@@ -325,19 +325,19 @@
                     <el-alert
                             title="活动发布成功"
                             type="success"
-                            description="您的活动已发布，下方为本活动二维码，扫码可访问。"
+                            description="您的活动已发布。"
                             :closable="false"
                             show-icon>
                     </el-alert>
-                    <div class="qrcode-wrapper">
-                        <div id="qrcode" ref="qrcode"></div>
-                    </div>
+                    <!--<div class="qrcode-wrapper">-->
+                        <!--<div id="qrcode" ref="qrcode"></div>-->
+                    <!--</div>-->
                 </div>
             </div>
 
             <div class="options__btns">
                 <el-button @click="prev"
-                           v-if="active !== 0">上一步
+                           v-if="active > 0 && active < 4">上一步
                 </el-button>
                 <el-button type="primary"
                            v-if="active === 3"
