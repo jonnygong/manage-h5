@@ -113,7 +113,7 @@
                 <i-uploader v-model="prize.img"></i-uploader>
               </el-form-item>
               <el-form-item label="奖品类型" prop="type" required>
-                <el-radio class="radio" v-for="(item, index) in prizeType" :key="index" v-model.number="prize.type" :label="item.value">
+                <el-radio class="radio" v-for="(item, index) in prizeType" :key="index" v-model="prize.type" :label="item.value">
                   {{item.label}}
                 </el-radio>
               </el-form-item>
@@ -130,24 +130,26 @@
                 </el-col>
               </el-row>
               <el-row>
-                <el-col :span="8">
+                <el-col :span="8" v-if="prize.type !== 'physical' && prize.type !== 'coupon'">
                   <el-form-item label="最小金额" prop="min" required>
                     <el-input v-model.number="prize.min"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="8" v-if="prize.type !== 'physical' && prize.type !== 'coupon'">
                   <el-form-item label="最大金额" prop="max" required>
                     <el-input v-model.number="prize.max"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="8" v-if="prize.type !== 'physical' && prize.type !== 'coupon'">
                   <el-form-item label="红包总额" prop="money" required>
                     <el-input v-model.number="prize.money"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
-
-
+              <el-row>
+                <el-col :span="24"> <el-alert style="margin-top: 10px;" title="注意：当最小金额和最大金额相等的时候，为定额红包，否则为区间红包。" type="info" :closable="false" v-if="prize.type === 'red'">
+                </el-alert></el-col>
+              </el-row>
             </el-col>
           </el-row>
         </el-form>
@@ -218,12 +220,12 @@
           <el-form-item label="分享图片" prop="share_img">
             <i-uploader v-model="formData['share'].share_img"></i-uploader>
           </el-form-item>
-          <el-form-item label="公众号" prop="uniacid">
-            <el-input v-model.number="formData['share'].uniacid"></el-input>
-          </el-form-item>
-          <el-form-item label="关联rid" prop="rid">
-            <el-input v-model.number="formData['share'].rid"></el-input>
-          </el-form-item>
+          <!--<el-form-item label="公众号" prop="uniacid">-->
+            <!--<el-input v-model.number="formData['share'].uniacid"></el-input>-->
+          <!--</el-form-item>-->
+          <!--<el-form-item label="关联rid" prop="rid">-->
+            <!--<el-input v-model.number="formData['share'].rid"></el-input>-->
+          <!--</el-form-item>-->
           <el-form-item label="是否允许分享" prop="isshare">
             <el-switch on-text="是" off-text="否" :on-value="1" :off-value="0" v-model.number="formData['share'].isshare"></el-switch>
           </el-form-item>
