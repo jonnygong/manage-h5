@@ -1,4 +1,4 @@
-# 模块管理文档
+# 记者管理文档
 
 + 作者：qqs
 
@@ -10,21 +10,23 @@
 
 |  表名称  |  参数说明 |
 | --------- |  ------- |
-| kfw_module | 模型管理表 |
+| news_reporter | 关键词分类管理表 |
 
 
 
 ### 列表接口
 
-+ __接口说明__： __用于显示已添加的模块__
++ __接口说明__： __用于显示已添加的记者__
 
-+ __接口地址__： __/System/Module/list__
++ __接口地址__： __/Newsadmin/Reporter/list__
 
 + __请求参数__
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
+| *public_id | int | 公众号id |
 | page | int | 当前页 默认1 |
+| search | int | 记者名称搜索条件 |
 
 
 + __响应参数__
@@ -46,19 +48,21 @@
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
 | id | int | ID |
-| name | string | 模型名称 |
+| name | string | 记者名称 |
 | create_time | int | 创建时间 |
 | update_time | int | 更新时间 |
-| adminurl | string | 后台路由 |
 | status | int | 状态-1删除，0禁用，1启用 |
+| thumb | string | 记者图片 |
+| info | int | 记者介绍 |
+| url | int | 记者链接 |
 
 
 
 ### 详情页面
 
-+ __接口说明__： __用于模块详情__
++ __接口说明__： __用于获取记者详情__
 
-+ __接口地址__： __/System/Module/info__
++ __接口地址__： __/Newsadmin/Reporter/info__
 
 + __请求参数__
 
@@ -76,27 +80,31 @@
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
 | id | int | ID |
-| name | string | 模型名称 |
+| name | string | 记者名称 |
 | create_time | int | 创建时间 |
 | update_time | int | 更新时间 |
-| adminurl | string | 后台路由 |
 | status | int | 状态-1删除，0禁用，1启用 |
-
+| thumb | string | 记者图片 |
+| info | int | 记者介绍 |
+| url | int | 记者链接 |
 
 
 
 ### 新增页面
 
-+ __接口说明__： __用于新添加模块__
++ __接口说明__： __用于新添加记者__
 
-+ __接口地址__： __/System/Module/add__
++ __接口地址__： __/Newsadmin/Reporter/add__
 
 + __请求参数__
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| *name | string | 模型名称 |
-| *adminurl | string | 后台路由 |
+| *name | string | 记者名称 |
+| *thumb | string | 记者图片 |
+| *info | int | 记者介绍 |
+| *url | int | 记者链接 |
+| *public_id | int | 公众号id |
 
 
 + __响应参数__
@@ -108,17 +116,19 @@
 
 ### 修改页面
 
-+ __接口说明__： __用于修改模块信息__
++ __接口说明__： __用于修改记者信息__
 
-+ __接口地址__： __/System/Module/update__
++ __接口地址__： __/Newsadmin/Reporter/update__
 
 + __请求参数__
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
 | *id | int | id |
-| *name | string | 模型名称 |
-| *adminurl | string | 后台路由 |
+| *name | string | 记者名称 |
+| *thumb | string | 记者图片 |
+| *info | int | 记者介绍 |
+| *url | int | 记者链接 |
 
 
 + __响应参数__
@@ -130,16 +140,16 @@
 
 ### 修改状态
 
-+ __接口说明__： __用于修改模块状态，可多选__
++ __接口说明__： __用于修改记者状态，可多选__
 
-+ __接口地址__： __/System/Module/status__
++ __接口地址__： __/Newsadmin/Reporter/status__
 
 + __请求参数__
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| *id | string | ID集，集格式为'1,2,3,4' |
-| *status | int | 1 开启  0 关闭  -1 删除  |
+| ids | string | ID集，集格式为'1,2,3,4' |
+| status | int | 1 开启  0 关闭  -1 删除  |
 
 
 + __响应参数__
