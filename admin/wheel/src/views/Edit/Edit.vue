@@ -120,6 +120,9 @@
                             <el-form-item label="奖品名称" prop="name" required>
                                 <el-input v-model="prize.name"></el-input>
                             </el-form-item>
+                            <el-form-item label="奖品描述" prop="desc" required>
+                                <el-input type="textarea" v-model="prize.desc"></el-input>
+                            </el-form-item>
                             <el-form-item label="奖品图片" prop="img" required>
                                 <i-uploader v-model="prize.img"></i-uploader>
                             </el-form-item>
@@ -307,7 +310,8 @@
           min: '最小金额',
           max: '最大金额',
           money: '红包总额',
-          img: '奖品图片'
+          img: '奖品图片',
+          desc: '奖品描述'
         },
         formData: {
           id: 0,
@@ -365,6 +369,7 @@
               max: 0,
               money: 0,
               img: '',
+              desc: '',
               saved: false
             }]
           }
@@ -582,6 +587,7 @@
           max: 0,
           money: 0,
           img: '',
+          desc: '',
           saved: false
         });
       },
