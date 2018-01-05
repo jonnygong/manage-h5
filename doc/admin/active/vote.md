@@ -119,12 +119,14 @@
 | active_name | string | 活动名称,必填 |
 | active_time | string | 活动时间 ,必填,格式如下 |
 | --------- | -------- | ------- |
+
 ```json
 {
 "active_time":
   { "start_time":"2017-01-01","end_time":"2017-05-01"}
 }
 ```
+
 | active_cover | string | 活动图片,必填 |
 | active_rule | string | 活动规则,必填 |
 | is_attend | number | 是否伪关注，必填， 1不需要伪关注，2，二维码伪关注,3,推文链接地址伪关注--分享链接|
@@ -164,21 +166,26 @@
 | pre_num | Number | 投票次数，必填|
 | cat_name | String | 分类名称列表集,必填 |
 | --------- | -------- | ------- |
+
 ```json
 {
 "cat_name":"五彩森林，赏梅胜地"
 }
 ```
+
 | cat_max_vote  | Number | 每个分类最少投票数，必填|
 | least_vote  | String |每次投票总数，必填 ,格式如下,每次投票总数等于3票（注意：投票总数必须大于分类数量*每个分类最少投票数）|
 | --------- | -------- | ------- |
+
 ```json
 {
 "least_vote":["=", "3"]
 }
 ```
+
 | -----友情设置---- | -------- | ------- |
 | follow | String |友情链接,格式如下 ，非必填|
+
 ```json
 {
 "follow":[
@@ -187,6 +194,7 @@
   ]
 }
 ```
+
 | -----防刷设置---- | -------- | ------- |
 | is_verify | Number | 开启验证码（1，关闭，2，开启） |
 | is_black | Number | 开启黑名单(1，关闭，2，开启) |
@@ -194,12 +202,14 @@
 | is_enroll | Number | 用户报名（1，关闭，2，开启） |
 | poll_time | string | 报名时间 ,必填,格式如下 |
 | --------- | -------- | ------- |
+
 ```json
 {
 "poll_time":
   { "start_time":"2017-01-01","end_time":"2017-05-01"}
 }
 ```
+
 | is_check | Number | 选手报名审核(1，关闭，2，开启) |
 | nickname | String | 呢称，必填 |
 | image_num | Number | 照片上传数量，必填 |
