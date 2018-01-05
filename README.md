@@ -48,8 +48,11 @@
 - [快房通用表单接口](/doc/activity/form.md)  
 - [积分接口](/doc/activity/score.md)  
 - [图片上传接口](/doc/activity/img.md)  
-- [抽奖游戏接口](/doc/activity/prize.md)  
-
-
+- [抽奖游戏接口](/doc/activity/prize.md)
+- [投票接口](/doc/activity/vote.md)
 ### 部署说明
 - 后台： http://api.mp.kfw001.com/
+
+## [投票系统后台接口]
+
+- [投票接口](/doc/admin/active/vote.md)
