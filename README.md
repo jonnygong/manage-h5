@@ -51,18 +51,10 @@
 - [抽奖游戏接口](/doc/activity/prize.md)
 - [投票接口](/doc/activity/vote.md)
 - [创建抽奖活动接口](/doc/activity/adminactivity.md)
+
 ### 部署说明
 - 后台： http://api.mp.kfw001.com/
 
 ## [投票系统后台接口]
 
 - [投票接口](/doc/admin/active/vote.md)
-
-# 前端后台管理说明文档
-- [快房问答后台](/admin/ask/README.md)
-- [案例展示后台](/admin/case/README.md)
-- [登录后台](/admin/login/README.md)
-- [楼盘地图后台](/admin/map/README.md)
-- [新闻爆料后台](/admin/news/README.md)
-- [投票后台](/admin/vote/README.md)
-- [大转盘后台](/admin/wheel/README.md)
