@@ -53,3 +53,7 @@
 - [创建抽奖活动接口](/doc/activity/adminactivity.md)
 ### 部署说明
 - 后台： http://api.mp.kfw001.com/
+
+## [投票系统后台接口]
+
+- [投票接口](/doc/admin/active/vote.md)
