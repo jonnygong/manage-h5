@@ -258,7 +258,7 @@
                         <el-input v-model="formData['config'].rule_link"></el-input>
                     </el-form-item>
                     <el-form-item label="规则说明" prop="rule">
-                        <el-input v-model="formData['config'].rule"></el-input>
+                        <UE :defaultMsg="formData['config'].rule" ref="ue"></UE>
                     </el-form-item>
                     <el-form-item label="是否填写地址" prop="need_address">
                         <el-switch on-text="是"
@@ -353,6 +353,7 @@
 
 <script>
   import QRCode from 'qrcodejs2';
+  import UE from '@/components/UEditor';
   import Uploader from '@/components/Uploader';
 
   export default {
@@ -633,7 +634,7 @@
               for (let key in item) {
                 if (item[key] === '') {
                   this.$message({
-                    message: `请填写「${item.name}」表单「${this.prizeKeys[key]}」字段内容`,
+                    message: `请填写「${this.prizeTabs[i].title}」表单「${this.prizeKeys[key]}」字段内容`,
                     type: 'warning'
                   });
                   result = false;
@@ -650,6 +651,9 @@
             }
           }
         } else {
+          if(this.activeForm[this.active] === 'configForm') {
+            this.formData['config'].rule = this.getUEContent('ue');
+          }
           this.$refs[this.activeForm[this.active]].validate((valid) => {
             if (valid) {
               if (this.active++ > 3) {
@@ -678,6 +682,7 @@
           this.formData.share
         );
         // 转换指定字段为 JSON
+        params.rule = this.getUEContent('ue');
         params.tips = JSON.stringify(params.tips);
         params.config = JSON.stringify(params.config);
         params.active_time = JSON.stringify(params.active_time);
@@ -703,8 +708,13 @@
         });
         this.active++;
       },
+      // Ueditor 获取内容
+      getUEContent(ele) {
+        return this.$refs[ele].getUEContent();
+      },
     },
     components: {
+      UE,
       'i-uploader': Uploader
     }
   };
