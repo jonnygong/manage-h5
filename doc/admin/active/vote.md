@@ -118,15 +118,6 @@
 | --------- | -------- | ------- |
 | active_name | string | 活动名称,必填 |
 | active_time | string | 活动时间 ,必填,格式如下 |
-| --------- | -------- | ------- |
-
-```json
-{
-"active_time":
-  { "start_time":"2017-01-01","end_time":"2017-05-01"}
-}
-```
-
 | active_cover | string | 活动图片,必填 |
 | active_rule | string | 活动规则,必填 |
 | is_attend | number | 是否伪关注，必填， 1不需要伪关注，2，二维码伪关注,3,推文链接地址伪关注--分享链接|
@@ -134,6 +125,12 @@
 | active_attention | string | 二维码关注文字，非必填 |
 | tid | number | 模板id编号 |
 
+```json
+{
+"active_time":
+  { "start_time":"2017-01-01","end_time":"2017-05-01"}
+}
+```
 > 活动分享数据
 
 |  参数名称  | 参数类型 | 参数说明 |
@@ -165,51 +162,17 @@
 | pre_type| Number | 投票类型(1,固定次数-- 每个账号投票次数，2，周期次数--每个账号每天投票次数)|
 | pre_num | Number | 投票次数，必填|
 | cat_name | String | 分类名称列表集,必填 |
-| --------- | -------- | ------- |
-
-```json
-{
-"cat_name":"五彩森林，赏梅胜地"
-}
-```
-
 | cat_max_vote  | Number | 每个分类最少投票数，必填|
 | least_vote  | String |每次投票总数，必填 ,格式如下,每次投票总数等于3票（注意：投票总数必须大于分类数量*每个分类最少投票数）|
-| --------- | -------- | ------- |
-
-```json
-{
-"least_vote":["=", "3"]
-}
-```
-
-| -----友情设置---- | -------- | ------- |
+| ---友情设置-- | -------- | ------- |
 | follow | String |友情链接,格式如下 ，非必填|
-
-```json
-{
-"follow":[
-  { "name":"浙江发布","url":"https://weixin.zjol.com.cn"},
-  { "name":"浙江发布","url":"https://weixin.zjol.com.cn"}
-  ]
-}
-```
-
-| -----防刷设置---- | -------- | ------- |
+| --防刷设置-- | -------- | ------- |
 | is_verify | Number | 开启验证码（1，关闭，2，开启） |
 | is_black | Number | 开启黑名单(1，关闭，2，开启) |
-| -----报名设置---- | -------- | ------- |
+| --报名设置-- | -------- | ------- |
 | is_enroll | Number | 用户报名（1，关闭，2，开启） |
 | poll_time | string | 报名时间 ,必填,格式如下 |
 | --------- | -------- | ------- |
-
-```json
-{
-"poll_time":
-  { "start_time":"2017-01-01","end_time":"2017-05-01"}
-}
-```
-
 | is_check | Number | 选手报名审核(1，关闭，2，开启) |
 | nickname | String | 呢称，必填 |
 | image_num | Number | 照片上传数量，必填 |
@@ -218,6 +181,31 @@
 | is_describe| Number | 描述(1,选填，2,必填 3，不显示) |
 | define_field | String |自定义字段， 格式如下 (type类型为1,选填，2,必填 3，不显示) |
 
+```json
+{
+"cat_name":"五彩森林，赏梅胜地"
+}
+```
+
+```json
+{
+"least_vote":["=", "3"]
+}
+```
+```json
+{
+"follow":[
+  { "name":"浙江发布","url":"https://weixin.zjol.com.cn"},
+  { "name":"浙江发布","url":"https://weixin.zjol.com.cn"}
+  ]
+}
+```
+```json
+{
+"poll_time":
+  { "start_time":"2017-01-01","end_time":"2017-05-01"}
+}
+```
 ```json
 {
 "define_field":[
