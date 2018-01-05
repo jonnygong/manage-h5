@@ -1,17 +1,22 @@
-# 模块管理 接口文档
+# 模块管理文档
 
-> 本接口用于案例模块、
++ 作者：qqs
 
-###涉及的表结构
++ 调用： https://api.kfw001.com/模型/控制器/方法(247)
+
++ 参数前有*为必填
+
+### 涉及的表结构
 
 |  表名称  |  参数说明 |
 | --------- |  ------- |
-| kfw_module| 模块管理|
+| kfw_module | 模型管理表 |
 
 
-####列表接口
 
-> 获取案例数据
+### 列表接口
+
++ __接口说明__： __用于显示已添加的模块__
 
 + __接口地址__： __/System/Module/list__
 
@@ -40,15 +45,18 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| name | int(11) | 模型名称 |
-| create_time | int(11) |  |
-| update_time | int(11) |  |
-| adminurl | varchar(50) | 路由地址 |
-| info | varchar(255) | 模型描述 |
-| mb_url | varchar(255) | 展示端url |
+| id | int | ID |
+| name | string | 模型名称 |
+| create_time | int | 创建时间 |
+| update_time | int | 更新时间 |
+| adminurl | string | 后台路由 |
+| status | int | 状态-1删除，0禁用，1启用 |
 
 
-###详情页面
+
+### 详情页面
+
++ __接口说明__： __用于模块详情__
 
 + __接口地址__： __/System/Module/info__
 
@@ -56,30 +64,30 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| *id | int | id |
+| *id | int | ID |
+
 
 + __响应参数__
 
-> 成功返回200状态码
+> 成功返回200状态码  
 
 + __请求参数__
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| name | int(11) | 模型名称 |
-| create_time | int(11) |  |
-| update_time | int(11) |  |
-| adminurl | varchar(50) | 路由地址 |
-| info | varchar(255) | 模型描述 |
-| mb_url | varchar(255) | 展示端url |
+| id | int | ID |
+| name | string | 模型名称 |
+| create_time | int | 创建时间 |
+| update_time | int | 更新时间 |
+| adminurl | string | 后台路由 |
+| status | int | 状态-1删除，0禁用，1启用 |
 
-+ __示例__
 
-``` javascript
 
-```
 
-###新增接口
+### 新增页面
+
++ __接口说明__： __用于新添加模块__
 
 + __接口地址__： __/System/Module/add__
 
@@ -87,25 +95,20 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| *name | int(11) | 模型名称 |
-| *adminurl | varchar(50) | 路由地址 |
-| *info | varchar(255) | 模型描述 |
-| mb_url | varchar(255) | 展示端url |
-| create_time | int(11) |  |
-| update_time | int(11) |  |
+| *name | string | 模型名称 |
+| *adminurl | string | 后台路由 |
+
 
 + __响应参数__
 
 > 成功返回200状态码
 
-+ __示例__
-
-``` javascript
-
-```
 
 
-###修改接口
+
+### 修改页面
+
++ __接口说明__： __用于修改模块信息__
 
 + __接口地址__： __/System/Module/update__
 
@@ -113,12 +116,9 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| *name | int(11) | 模型名称 |
-| *adminurl | varchar(50) | 路由地址 |
-| *info | varchar(255) | 模型描述 |
-| mb_url | varchar(255) | 展示端url |
-| create_time | int(11) |  |
-| update_time | int(11) |  |
+| *id | int | id |
+| *name | string | 模型名称 |
+| *adminurl | string | 后台路由 |
 
 
 + __响应参数__
@@ -126,12 +126,11 @@
 > 成功返回200状态码
 
 
-+ __示例__
 
-``` javascript
-```
 
-###  修改状态
+### 修改状态
+
++ __接口说明__： __用于修改模块状态，可多选__
 
 + __接口地址__： __/System/Module/status__
 
@@ -139,34 +138,11 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| *id | number |  案例ID |
-| *status | number | 1 开启  0 关闭  -1 删除  |
+| *id | string | ID集，集格式为'1,2,3,4' |
+| *status | int | 1 开启  0 关闭  -1 删除  |
+
 
 + __响应参数__
 
 > 成功返回200状态码
 
-
-+ __示例__
-
-``` javascript
-```
-
-###  删除接口
-
-+ __接口地址__： __/System/Module/delete__
-
-+ __请求参数__
-
-|  参数名称  | 参数类型 | 参数说明 |
-| --------- | -------- | ------- |
-| *id | number |  案例ID |
-
-+ __响应参数__
-
-> 成功返回200状态码
-
-+ __示例__
-
-``` javascript
-```

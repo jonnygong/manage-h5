@@ -1,4 +1,4 @@
-
+﻿
 # 本系统为快房内部功能接口
 
 
@@ -7,7 +7,7 @@
 - [后台系统接口](/doc/system/README.md)
 
 ## 新闻报料接口
-- [移动端接口](/doc/news/admin/README.md)   `开发中`
+- [移动端接口](/doc/news/wx/README.md)   `开发中`
 - [后台管理接口](/doc/news/admin/README.md)     `开发中`
 
 ## 快房问答接口
@@ -50,6 +50,7 @@
 - [图片上传接口](/doc/activity/img.md)  
 - [抽奖游戏接口](/doc/activity/prize.md)
 - [投票接口](/doc/activity/vote.md)
+- [创建抽奖活动接口](/doc/activity/adminactivity.md)
 ### 部署说明
 - 后台： http://api.mp.kfw001.com/
 

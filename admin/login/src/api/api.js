@@ -4,7 +4,7 @@ import qs from 'qs'
 import {vm as Vue} from '@/main.js'
 
 // 确认默认链接
-axios.defaults.baseURL = 'https://api.kfw001.com';
+axios.defaults.baseURL = 'http://api.kfw001.com';
 // 初始化post header
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.withCredentials = true;  //是关键 支持跨域携带cookie
@@ -57,11 +57,11 @@ export const imgUpload = params => {
     return axios.post('/System/img/upload', qs.stringify(params))
 };
 
-// 获取验证码
+// 用于显示该账号所拥有权限的公众号
 export const getWechatList = params => {
     return axios.post('/System/User/wechat', qs.stringify(params))
 };
-// 登录
+// 用于显示该账号所拥有权限的模块
 export const getProjectList = params => {
     return axios.post('/System/User/modules', qs.stringify(params))
 };
@@ -69,6 +69,9 @@ export const getProjectList = params => {
 // 用户管理
 export const getAdminList = params => {
     return axios.post('/System/Admin/list', qs.stringify(params))
+};
+export const getUserAuth = params => {
+    return axios.post('/System/Admin/getvalidate', qs.stringify(params))
 };
 export const getAdmintInfo = params => {
     return axios.post('/System/Admin/info', qs.stringify(params))
@@ -82,14 +85,8 @@ export const getAdmintUpdate = params => {
 export const getAdmintStatus = params => {
     return axios.post('/System/Admin/status', qs.stringify(params))
 };
-export const getAdmintDelete = params => {
-    return axios.post('/System/Admin/delete', qs.stringify(params))
-};
-export const getAdmintModule = params => {
-    return axios.post('/System/Admin/module', qs.stringify(params))
-};
-export const getAdmintModules = params => {
-    return axios.post('/System/Admin/modules', qs.stringify(params))
+export const getAdminArray = params => {
+    return axios.post('/System/Admin/array', qs.stringify(params))
 };
 
 
@@ -109,9 +106,6 @@ export const getModuleUpdate = params => {
 export const getModuleStatus = params => {
     return axios.post('/System/Module/status', qs.stringify(params))
 };
-export const getModuleDelete = params => {
-    return axios.post('/System/Module/delete', qs.stringify(params))
-};
 
 // 公众号
 export const gePublicList = params => {
@@ -128,7 +122,4 @@ export const getPublicUpdate = params => {
 };
 export const getPublicStatus = params => {
   return axios.post('/System/Public/status', qs.stringify(params))
-};
-export const getPublicDelete = params => {
-  return axios.post('/System/Public/delete', qs.stringify(params))
 };

@@ -1,17 +1,24 @@
-# 用户管理 接口文档
+# 用户管理文档
 
-> 本接口用于案例模块、
++ 作者：qqs
 
-###涉及的表结构
++ 调用： https://api.kfw001.com/模型/控制器/方法(247)
+
++ 参数前有*为必填
+
+### 涉及的表结构
 
 |  表名称  |  参数说明 |
 | --------- |  ------- |
-| case_rbac_admin| 用户管理|
+| kfw_public | 公众号管理表 |
+| kfw_module | 模块管理表 |
+| case_rbac_admin | 用户管理表 |
 
 
-####列表接口
 
-- 获取用户列表，但是不会获取超级用户
+### 列表接口
+
++ __接口说明__： __用于显示已添加的用户账号__
 
 + __接口地址__： __/System/Admin/list__
 
@@ -40,23 +47,43 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| pid | int(11) | 父级ID |
-| level | int(11) | 人员等级 |
-| email | varchar(255) | 用户名 |
-| status | tinyint(1) | 状态 |
-| realname | varchar(255) | 真名 |
-| tel | varchar(255) | 联系电话 |
-| thumb | varchar(255) | 用户头像 |
-| password | varchar(255) | 密码 |
-| path | varchar(255) | 层级路径 |
-| role_id | int(1) | 角色ID |
-| client_id | int(11) | 客户编号 |
-| update_time | int(11) | 更新时间 |
-| create_time | int(11) | 创建时间 |
+| id | int | ID |
+| email | string | 登录邮箱 |
+| realname | string | 真名 |
+| tel | string | 手机号码 |
+| thumb | string | 头像 |
+| status | int | 状态-1删除，0禁用，1启用 |
 
 
 
-###详情页面
+### 数组
+
++ __接口说明__： __用于获取添加修改的所有公众号和模块集__
+
++ __接口地址__： __/System/Admin/array__
+
++ __请求参数__
+
+|  参数名称  | 参数类型 | 参数说明 |
+| --------- | -------- | ------- |
+
+
++ __响应参数__
+
+> 成功返回200状态码  
+
++ __请求参数__
+
+|  参数名称  | 参数类型 | 参数说明 |
+| --------- | -------- | ------- |
+| public | object | 所有公众号 |
+| module | object | 所有模块 |
+
+
+
+### 详情页面
+
++ __接口说明__： __用于获取用户详情__
 
 + __接口地址__： __/System/Admin/info__
 
@@ -64,39 +91,31 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| *id | int | id |
+| *id | int | ID |
 
 
 + __响应参数__
 
-> 成功返回200状态码
+> 成功返回200状态码  
 
 + __请求参数__
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| pid | int(11) | 父级ID |
-| level | int(11) | 人员等级 |
-| email | varchar(255) | 用户名 |
-| status | tinyint(1) | 状态 |
-| realname | varchar(255) | 真名 |
-| tel | varchar(255) | 联系电话 |
-| thumb | varchar(255) | 用户头像 |
-| password | varchar(255) | 密码 |
-| path | varchar(255) | 层级路径 |
-| role_id | int(1) | 角色ID |
-| client_id | int(11) | 客户编号 |
-| update_time | int(11) | 更新时间 |
-| create_time | int(11) | 创建时间 |
+| id | int | ID |
+| email | string | 登录邮箱 |
+| realname | string | 真名 |
+| tel | string | 手机号码 |
+| thumb | string | 头像 |
+| status | int | 状态-1删除，0禁用，1启用 |
+| module_id | string | 模块集 |
+| public_id | string | 公众号集 |
 
 
-+ __示例__
 
-``` javascript
+### 新增页面
 
-```
-
-###新增接口
++ __接口说明__： __用于新添加用户信息__
 
 + __接口地址__： __/System/Admin/add__
 
@@ -104,19 +123,13 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| *email | varchar(255) | 用户名 |
-| *password | varchar(255) | 密码 |
-| *realname | varchar(255) | 真名 |
-| status | tinyint(1) | 状态 |
-| tel | varchar(255) | 联系电话 |
-| thumb | varchar(255) | 用户头像 |
-| pid | int(11) | 父级ID |
-| level | int(11) | 人员等级 |
-| path | varchar(255) | 层级路径 |
-| role_id | int(1) | 角色ID |
-| client_id | int(11) | 客户编号 |
-| update_time | int(11) | 更新时间 |
-| create_time | int(11) | 创建时间 |
+| *email | string | 登录邮箱 |
+| *realname | string | 真名 |
+| *module_id | string | 模块集 |
+| *public_id | string | 公众号集 |
+| *password | string | 密码 |
+| tel | string | 手机号码 |
+| thumb | string | 头像 |
 
 
 + __响应参数__
@@ -124,12 +137,11 @@
 > 成功返回200状态码
 
 
-+ __示例__
 
-``` javascript
-```
 
-###修改接口
+### 修改页面
+
++ __接口说明__： __用于修改用户信息__
 
 + __接口地址__： __/System/Admin/update__
 
@@ -137,31 +149,25 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| *email | varchar(255) | 用户名 |
-| *password | varchar(255) | 密码 |
-| *realname | varchar(255) | 真名 |
-| status | tinyint(1) | 状态 |
-| tel | varchar(255) | 联系电话 |
-| thumb | varchar(255) | 用户头像 |
-| pid | int(11) | 父级ID |
-| level | int(11) | 人员等级 |
-| path | varchar(255) | 层级路径 |
-| role_id | int(1) | 角色ID |
-| client_id | int(11) | 客户编号 |
-| update_time | int(11) | 更新时间 |
-| create_time | int(11) | 创建时间 |
+| *email | string | 登录邮箱 |
+| *realname | string | 真名 |、
+| *module_id | string | 模块集 |
+| *public_id | string | 公众号集 |
+| tel | string | 手机号码 |
+| thumb | string | 头像 |
+| password | string | 密码,不修改密码为空上传 |
+
 
 + __响应参数__
 
 > 成功返回200状态码
 
 
-+ __示例__
 
-``` javascript
-```
 
-###  修改状态
+### 修改状态
+
++ __接口说明__： __用于修改用户账号状态，可多选__
 
 + __接口地址__： __/System/Admin/status__
 
@@ -169,79 +175,11 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| *id | number |  案例ID |
-| *status | number | 1 开启  0 关闭  -1 删除  |
+| ids | string | ID集，集格式为'1,2,3,4' |
+| status | int | 1 开启  0 关闭  -1 删除  |
+
 
 + __响应参数__
 
 > 成功返回200状态码
 
-
-+ __示例__
-
-``` javascript
-```
-
-###  删除接口
-
-- 不可以删除root 用户
-
-+ __接口地址__： __/System/Admin/delete__
-
-+ __请求参数__
-
-|  参数名称  | 参数类型 | 参数说明 |
-| --------- | -------- | ------- |
-| *id | number |  案例ID |
-
-+ __响应参数__
-
-> 成功返回200状态码
-
-+ __示例__
-
-``` javascript
-```
-
-###  用户模块授权接口
-
-- 允许一次授权多个模块
-
-+ __接口地址__： __/System/Admin/module__
-
-+ __请求参数__
-
-|  参数名称  | 参数类型 | 参数说明 |
-| --------- | -------- | ------- |
-| *id | number |  案例ID |
-| ids | number |  模块ID |
-
-+ __响应参数__
-
-> 成功返回200状态码
-
-+ __示例__
-
-``` javascript
-```
-
-### 获取用户可用模块
-
-- 通过用户的ID，获取用户可用的模块数据
-
-+ __接口地址__： __/System/Admin/modules__
-
-+ __请求参数__
-
-|  参数名称  | 参数类型 | 参数说明 |
-| --------- | -------- | ------- |
-| id | string | 用户ID |
-
-+ __响应参数__
-
->   param 类型：__[Object]__
-
-|  参数名称  | 参数类型 | 参数说明 |
-| --------- | -------- | ------- |
-| name | string | 模块名称 |
-| url | string | 模块路由 |
