@@ -6,7 +6,7 @@ export default {
   baseUrl: baseUrl,
   api: {
     // 公共接口
-    imageUpload: 'http://api.kfw001.com/System/img/upload', // 文件上传
+    imageUpload: 'http://api.kfw001.com/Caseadmin/img/upload', // 文件上传
 
     adminActivityAdd: 'Lottery/adminActivity/add', // 创建活动
     adminActivityList: 'Lottery/adminActivity/list', // 活动列表
