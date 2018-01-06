@@ -3,7 +3,7 @@
         <div class="web-view">
             <div class="web-view__phone">
                 <iframe class="web-view__iframe"
-                        src="//elemefe.github.io/mint-ui/#/"
+                        :src="previewSrc"
                         frameborder="0"
                         width="320"></iframe>
             </div>
@@ -362,6 +362,8 @@
   export default {
     data() {
       return {
+        // todo 放 demo 地址修改
+        previewSrc: '//elemefe.github.io/mint-ui/#/',
         // 奖品列表标签
         prizeTabsValue: '0',
         prizeTabs: [{
@@ -702,6 +704,7 @@
           type: 'success'
         });
         this.$nextTick(() => {
+          // todo demo 地址修改
           new QRCode(this.$refs.qrcode, { // eslint-disable-line no-new
             text: `${window.location.host}${window.location.pathname}`,
             width: 250,

@@ -2,7 +2,7 @@
     <div class="edit-activity">
         <div class="web-view">
             <div class="web-view__phone">
-                <iframe class="web-view__iframe" src="//elemefe.github.io/mint-ui/#/" frameborder="0"
+                <iframe class="web-view__iframe" :src="previewSrc" frameborder="0"
                         width="320"></iframe>
             </div>
         </div>
@@ -287,6 +287,8 @@
   export default {
     data() {
       return {
+        // todo 预览地址修改
+        previewSrc: '//elemefe.github.io/mint-ui/#/',
         // 奖品列表标签
         prizeTabsValue: '0',
         prizeTabs: [],
@@ -734,13 +736,14 @@
         this.formData.prize.prize.forEach((item, index) => {
           this.prizeTabs.push({
             title: `奖品 ${index + 1 + ''}`,
-            name: index + ''
+            name: item.id + ''
           });
           item.saved = true;
         });
-        console.log(this.formData);
+        this.prizeTabsValue = this.formData.prize.prize[0].id;
         this.tabIndex = this.formData.prize.prize.length - 1;
         this.$nextTick(() => {
+          // todo 预览地址修改
           new QRCode(this.$refs.qrcode, {
             // eslint-disable-line no-new
             text: `${window.location.host}?code=${this.formData.code}`,
