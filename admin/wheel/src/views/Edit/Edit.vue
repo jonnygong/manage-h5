@@ -732,7 +732,14 @@
           need_address: res.param.need_address,
           rule: res.param.rule
         };
-
+        console.log(this.formData.prize.prize)
+        if(!Array.isArray(this.formData.prize.prize)) {
+          let temp = [];
+          for(let key in this.formData.prize.prize) {
+            temp.push(this.formData.prize.prize[key])
+          }
+          this.formData.prize.prize = temp.slice(0);
+        }
         this.formData.prize.prize.forEach((item, index) => {
           this.prizeTabs.push({
             title: `奖品 ${index + 1 + ''}`,
