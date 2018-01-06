@@ -12,6 +12,8 @@ export default {
     adminActivityList: 'Lottery/adminActivity/list', // 活动列表
     adminActivityInfo: 'Lottery/adminActivity/info', // 活动详情
     adminActivityUpdate: 'Lottery/adminActivity/update', // 修改活动
-    adminActivityStatus: 'Lottery/adminActivity/status' // 状态修改
+    adminActivityStatus: 'Lottery/adminActivity/status', // 状态修改
+    getRedisKey: 'Lottery/adminActivity/getRedisKey', // 状态修改
+    getRedisData: 'Lottery/adminActivity/getData' // 状态修改
   }
 };

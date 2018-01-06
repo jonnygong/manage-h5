@@ -4,27 +4,27 @@
         <!--工具条-->
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">
-                <el-form-item>
-                    <el-input v-model="filters.value" placeholder="关键词"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-select v-model="filters.key" placeholder="请选择搜索字段">
-                        <el-option
-                                v-for="(item,index) in filters.options"
-                                :key="index"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" icon="search" @click="getListData">搜索</el-button>
-                </el-form-item>
+                <!--<el-form-item>-->
+                    <!--<el-input v-model="filters.value" placeholder="关键词"></el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item>-->
+                    <!--<el-select v-model="filters.key" placeholder="请选择搜索字段">-->
+                        <!--<el-option-->
+                                <!--v-for="(item,index) in filters.options"-->
+                                <!--:key="index"-->
+                                <!--:label="item.label"-->
+                                <!--:value="item.value">-->
+                        <!--</el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item>-->
+                    <!--<el-button type="primary" icon="search" @click="getListData">搜索</el-button>-->
+                <!--</el-form-item>-->
                 <el-form-item>
                     <el-button type="primary" @click="getListData">刷新</el-button>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="handleAdd">新增</el-button>
+                    <el-button type="primary" @click="$router.back()">返回</el-button>
                 </el-form-item>
             </el-form>
         </el-col>
@@ -33,30 +33,7 @@
         <el-table :data="list" highlight-current-row v-loading="listLoading" @selection-change="selsChange"
                   style="width: 100%;">
             <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column prop="active_title" label="活动标题" min-width="120"></el-table-column>
-            <el-table-column prop="active_time" label="活动时间" min-width="200">
-                <template scope="scope">
-                    <div v-for="(item, index) in scope.row.active_time" :key="index">
-                        <p>{{new Date(item.start).toLocaleString()}} 至 {{new Date(item.end).toLocaleString()}}</p>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column prop="active_type" label="活动类型" min-width="120">
-                <template scope="scope">
-                    {{options.type[scope.row.active_type]}}
-                </template>
-            </el-table-column>
-            <el-table-column prop="template" label="类型" min-width="120">
-                <template scope="scope">
-                    {{options.template[scope.row.template]}}
-                </template>
-            </el-table-column>
-            <el-table-column prop="status" label="是否启用活动" width="120">
-                <template scope="scope">
-                    <el-tag :type="scope.row.status === 1 ? 'success' : scope.row.status === -1 ? 'gray' : 'danger'">
-                        {{ scope.row.status === 1 ? '可用' : scope.row.status === -1 ? '已删除' : '不可用' }}
-                    </el-tag>
-                </template>
+            <el-table-column prop="key" label="Key" min-width="120">
             </el-table-column>
             <el-table-column label="操作" width="200" fixed="right">
                 <template scope="scope">
@@ -65,7 +42,7 @@
                     <!--{{ scope.row.status === 1 ? '停用' : scope.row.status === 0 ? '启用' : '已删除' }}-->
                     <!--</el-button>-->
                     <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                    <el-button type="info" size="small" @click="handleRedis(scope.row)">查看Redis键</el-button>
+                    <el-button type="info" size="small" @click="handleData(scope.$index, scope.row)">查看数据</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -120,11 +97,11 @@
       };
     },
     methods: {
-      handleRedis(row) {
+      handleData(index, row) {
         this.$router.push({
-          name: 'Redis键',
+          name: 'Redis键数据',
           params: {
-            aid: row.id
+            key: row.key
           }
         });
       },
@@ -143,21 +120,18 @@
       async getListData() {
         this.listLoading = true;
         let params = {
-          page: this.page,
-          pid: 0,
-          key: this.filters.key, // 可选参数查询
-          value: this.filters.value // 可选参数查询
+          aid: this.$route.params.aid
         };
-        const res = await this.$http.post(`adminActivityList`, params);
+        const res = await this.$http.post(`getRedisKey`, params);
         this.listLoading = false;
         if (res === null) return;
-        this.pagesize = res.param.pages.pagesize;
-        this.total = res.param.pages.total;
-        this.list = res.param.list;
-        this.list.forEach(item => {
-          if (item.active_time === '') return;
-          item.active_time = JSON.parse(item.active_time);
-        });
+        // this.pagesize = res.param.pages.pagesize;
+        // this.total = res.param.pages.total;
+        this.list = res.param;
+        // this.list.forEach(item => {
+        //   if(item.active_time === '') return;
+        //   item.active_time = JSON.parse(item.active_time);
+        // });
       },
       //删除
       // handleDel(index, row) {
@@ -234,10 +208,7 @@
           .then(async () => {
             this.listLoading = true;
             // 非批量删除，带上 status
-            let params = action !== 'remove' ? Object.assign({
-              id: ids + '',
-              status: actions[action].status
-            }, params) : {ids: ids + ''};
+            let params = action !== 'remove' ? Object.assign({id: ids + '', status: actions[action].status}, params) : {ids: ids + ''};
             const res = await this.$http.post(actions[action].api, params);
             this.listLoading = false;
             if (res === null) return;

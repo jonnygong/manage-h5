@@ -19,7 +19,7 @@
                 </el-steps>
             </div>
             <!-- 活动设置 -->
-            <div class="options__content" v-if="active === 0">
+            <div class="options__content" v-show="active === 0">
                 <el-form :model="formData['activity']"
                          :rules="rules['activity']"
                          ref="activityForm"
@@ -134,7 +134,7 @@
                 </el-form>
             </div>
             <!-- 奖品设置 -->
-            <div class="options__content" v-if="active === 1">
+            <div class="options__content" v-show="active === 1">
 
                 <el-alert style="margin-bottom: 10px;"
                           title="注意：活动一旦正式开始请勿删除任何奖品、修改奖品，只能添加奖品或修改概率，奖品数量只可增加，否则数据错位后果自负。"
@@ -227,7 +227,7 @@
 
             </div>
             <!-- 自定义设置 -->
-            <div class="options__content" v-if="active === 2">
+            <div class="options__content" v-show="active === 2">
                 <el-form :model="formData['config']"
                          :rules="rules['config']"
                          ref="configForm"
@@ -288,7 +288,7 @@
                 </el-form>
             </div>
             <!-- 分享设置 -->
-            <div class="options__content" v-if="active === 3">
+            <div class="options__content" v-show="active === 3">
                 <el-form :model="formData['share']"
                          :rules="rules['share']"
                          ref="shareForm"
@@ -688,7 +688,6 @@
           this.formData.share
         );
         // 转换指定字段为 JSON
-        params.rule = this.getUEContent('ue');
         params.tips = JSON.stringify(params.tips);
         params.config = JSON.stringify(params.config);
         params.active_time = JSON.stringify(params.active_time);
