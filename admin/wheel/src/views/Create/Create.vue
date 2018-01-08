@@ -363,7 +363,7 @@
     data() {
       return {
         // todo 放 demo 地址修改
-        previewSrc: '//elemefe.github.io/mint-ui/#/',
+        previewSrc: `http://api.mp.kfw001.com/Lottery/Activity/index?code=5TXyCDjE00w`,
         // 奖品列表标签
         prizeTabsValue: '0',
         prizeTabs: [{
@@ -706,7 +706,7 @@
         this.$nextTick(() => {
           // todo demo 地址修改
           new QRCode(this.$refs.qrcode, { // eslint-disable-line no-new
-            text: `${window.location.host}${window.location.pathname}`,
+            text: `http://api.mp.kfw001.com/Lottery/Activity/index?code=5TXyCDjE00w`,
             width: 250,
             height: 250,
             colorDark: '#000000',

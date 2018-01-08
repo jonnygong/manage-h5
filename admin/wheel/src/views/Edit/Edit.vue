@@ -259,7 +259,7 @@
                     <el-alert title="活动发布成功" type="success" description="您的活动已发布，下方为本活动地址和二维码，扫码可访问。" :closable="false"
                               show-icon>
                     </el-alert>
-                    <el-input style="margin: 10px 0;" v-model="formData.code" readonly></el-input>
+                    <el-input style="margin: 10px 0;" v-model="previewSrc" readonly></el-input>
                     <div class="qrcode-wrapper">
                         <div id="qrcode" ref="qrcode"></div>
                     </div>
@@ -288,7 +288,6 @@
     data() {
       return {
         // todo 预览地址修改
-        previewSrc: '//elemefe.github.io/mint-ui/#/',
         // 奖品列表标签
         prizeTabsValue: '0',
         prizeTabs: [],
@@ -535,6 +534,11 @@
         this.getFormData();
       }
     },
+    computed: {
+      previewSrc() {
+        return `http://api.mp.kfw001.com/Lottery/Activity/index?code=${this.formData.code}`
+      }
+    },
     methods: {
       // 添加奖品按钮
       addTab(targetName) {
@@ -732,7 +736,6 @@
           need_address: res.param.need_address,
           rule: res.param.rule
         };
-        console.log(this.formData.prize.prize)
         if(!Array.isArray(this.formData.prize.prize)) {
           let temp = [];
           for(let key in this.formData.prize.prize) {
@@ -753,7 +756,7 @@
           // todo 预览地址修改
           new QRCode(this.$refs.qrcode, {
             // eslint-disable-line no-new
-            text: `${window.location.host}?code=${this.formData.code}`,
+            text: `http://api.mp.kfw001.com/Lottery/Activity/index?code=${this.formData.code}`,
             width: 250,
             height: 250,
             colorDark: '#000000',
