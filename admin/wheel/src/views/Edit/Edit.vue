@@ -259,9 +259,17 @@
                     <el-alert title="活动发布成功" type="success" description="您的活动已发布，下方为本活动地址和二维码，扫码可访问。" :closable="false"
                               show-icon>
                     </el-alert>
+
+                    <h4>活动发布地址：</h4>
                     <el-input style="margin: 10px 0;" v-model="previewSrc" readonly></el-input>
                     <div class="qrcode-wrapper">
-                        <div id="qrcode" ref="qrcode"></div>
+                        <div id="qrcode1" ref="qrcode1"></div>
+                    </div>
+
+                    <h4>抽奖人资格认证：</h4>
+                    <el-input style="margin: 10px 0;" v-model="previewSrc" readonly></el-input>
+                    <div class="qrcode-wrapper">
+                        <div id="qrcode2" ref="qrcode2"></div>
                     </div>
                 </div>
             </div>
@@ -754,7 +762,16 @@
         this.tabIndex = this.formData.prize.prize.length - 1;
         this.$nextTick(() => {
           // todo 预览地址修改
-          new QRCode(this.$refs.qrcode, {
+          new QRCode(this.$refs.qrcode1, {
+            // eslint-disable-line no-new
+            text: `http://api.mp.kfw001.com/Lottery/Activity/index?code=${this.formData.code}`,
+            width: 250,
+            height: 250,
+            colorDark: '#000000',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+          });
+          new QRCode(this.$refs.qrcode2, {
             // eslint-disable-line no-new
             text: `http://api.mp.kfw001.com/Lottery/Activity/index?code=${this.formData.code}`,
             width: 250,

@@ -58,6 +58,13 @@ let routes = [
         hidden: true,
         meta: {requiresAuth: true}
       },
+      {
+        path: '/redis/list/:aid/detail_activity/:key',
+        component: () => import('@/views/Redis/DataActivity.vue'),
+        name: 'Redis键活动数据',
+        hidden: true,
+        meta: {requiresAuth: true}
+      }
     ]
   },
   // 404 页面跳转

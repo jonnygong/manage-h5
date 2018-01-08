@@ -5,20 +5,20 @@
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">
                 <!--<el-form-item>-->
-                    <!--<el-input v-model="filters.value" placeholder="关键词"></el-input>-->
+                <!--<el-input v-model="filters.value" placeholder="关键词"></el-input>-->
                 <!--</el-form-item>-->
                 <!--<el-form-item>-->
-                    <!--<el-select v-model="filters.key" placeholder="请选择搜索字段">-->
-                        <!--<el-option-->
-                                <!--v-for="(item,index) in filters.options"-->
-                                <!--:key="index"-->
-                                <!--:label="item.label"-->
-                                <!--:value="item.value">-->
-                        <!--</el-option>-->
-                    <!--</el-select>-->
+                <!--<el-select v-model="filters.key" placeholder="请选择搜索字段">-->
+                <!--<el-option-->
+                <!--v-for="(item,index) in filters.options"-->
+                <!--:key="index"-->
+                <!--:label="item.label"-->
+                <!--:value="item.value">-->
+                <!--</el-option>-->
+                <!--</el-select>-->
                 <!--</el-form-item>-->
                 <!--<el-form-item>-->
-                    <!--<el-button type="primary" icon="search" @click="getListData">搜索</el-button>-->
+                <!--<el-button type="primary" icon="search" @click="getListData">搜索</el-button>-->
                 <!--</el-form-item>-->
                 <el-form-item>
                     <el-button type="primary" @click="getListData">刷新</el-button>
@@ -33,18 +33,20 @@
         <el-table :data="list" highlight-current-row v-loading="listLoading" @selection-change="selsChange"
                   style="width: 100%;">
             <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column prop="key" label="Key" min-width="120">
+            <el-table-column prop="key" label="键" min-width="120">
             </el-table-column>
-            <el-table-column label="操作" width="200" fixed="right">
-                <template scope="scope">
-                    <!--<el-button size="small" @click="statusSubmit(scope.$index, scope.row)"-->
-                    <!--:disabled="scope.row.status === -1">-->
-                    <!--{{ scope.row.status === 1 ? '停用' : scope.row.status === 0 ? '启用' : '已删除' }}-->
-                    <!--</el-button>-->
-                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                    <el-button type="info" size="small" @click="handleData(scope.$index, scope.row)">查看数据</el-button>
-                </template>
+            <el-table-column prop="value" label="值" min-width="120">
             </el-table-column>
+            <!--<el-table-column label="操作" width="80" fixed="right">-->
+                <!--<template scope="scope">-->
+                    <!--&lt;!&ndash;<el-button size="small" @click="statusSubmit(scope.$index, scope.row)"&ndash;&gt;-->
+                    <!--&lt;!&ndash;:disabled="scope.row.status === -1">&ndash;&gt;-->
+                    <!--&lt;!&ndash;{{ scope.row.status === 1 ? '停用' : scope.row.status === 0 ? '启用' : '已删除' }}&ndash;&gt;-->
+                    <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
+                    <!--<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>-->
+                    <!--&lt;!&ndash;<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>&ndash;&gt;-->
+                <!--</template>-->
+            <!--</el-table-column>-->
         </el-table>
 
         <!--工具条-->
@@ -70,6 +72,11 @@
   export default {
     data() {
       return {
+        prizeType: {
+          'physical': '实物',
+          'red': '红包',
+          'coupon': '劵码'
+        },
         options: {
           type: {
             1: '普通',
@@ -97,17 +104,6 @@
       };
     },
     methods: {
-      handleData(index, row) {
-
-          this.$router.push({
-            name: /&\d+$/.test(row.key) ? 'Redis键数据' : 'Redis键活动数据',
-            params: {
-              key: row.key
-            }
-          });
-
-
-      },
       // 格式化更新时间
       formateDate(row, column) {
         return ` ${util.formatDate.format(
@@ -123,9 +119,9 @@
       async getListData() {
         this.listLoading = true;
         let params = {
-          aid: this.$route.params.aid
+          key: this.$route.params.key
         };
-        const res = await this.$http.post(`getRedisKey`, params);
+        const res = await this.$http.post(`getRedisData`, params);
         this.listLoading = false;
         if (res === null) return;
         // this.pagesize = res.param.pages.pagesize;
@@ -211,7 +207,10 @@
           .then(async () => {
             this.listLoading = true;
             // 非批量删除，带上 status
-            let params = action !== 'remove' ? Object.assign({id: ids + '', status: actions[action].status}, params) : {ids: ids + ''};
+            let params = action !== 'remove' ? Object.assign({
+              id: ids + '',
+              status: actions[action].status
+            }, params) : {ids: ids + ''};
             const res = await this.$http.post(actions[action].api, params);
             this.listLoading = false;
             if (res === null) return;
