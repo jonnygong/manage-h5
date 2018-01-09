@@ -267,7 +267,7 @@
                     </div>
 
                     <h4>抽奖人资格认证：</h4>
-                    <el-input style="margin: 10px 0;" v-model="previewSrc" readonly></el-input>
+                    <el-input style="margin: 10px 0;" v-model="whiteSrc" readonly></el-input>
                     <div class="qrcode-wrapper">
                         <div id="qrcode2" ref="qrcode2"></div>
                     </div>
@@ -545,6 +545,9 @@
     computed: {
       previewSrc() {
         return `http://api.mp.kfw001.com/Lottery/Activity/index?code=${this.formData.code}`
+      },
+      whiteSrc() {
+        return `http://api.mp.kfw001.com/Lottery/Activity/white?code=${this.formData.code}`
       }
     },
     methods: {
@@ -773,7 +776,7 @@
           });
           new QRCode(this.$refs.qrcode2, {
             // eslint-disable-line no-new
-            text: `http://api.mp.kfw001.com/Lottery/Activity/index?code=${this.formData.code}`,
+            text: `http://api.mp.kfw001.com/Lottery/Activity/white?code=${this.formData.code}`,
             width: 250,
             height: 250,
             colorDark: '#000000',
