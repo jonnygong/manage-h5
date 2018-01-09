@@ -500,9 +500,9 @@
             tips: [
               {type: 'object', required: true, message: '请输入活动名称', trigger: 'blur'}
             ],
-            header_img: [
-              {required: true, message: '请输入顶部版权图片', trigger: 'blur'}
-            ],
+            // header_img: [
+            //   {required: true, message: '请输入顶部版权图片', trigger: 'blur'}
+            // ],
             rule_link: [
               {required: true, message: '请输入领奖说明软文', trigger: 'blur'}
             ],
