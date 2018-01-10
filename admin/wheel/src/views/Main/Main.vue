@@ -85,78 +85,80 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                sysName: '幸运大转盘后台',
-                collapsed: false,
-                sysUserName: '',
-                sysUserAvatar: '',
-                form: {
-                    name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
-                }
-            }
-        },
-        computed: {
-            curProject() {
-                return window.sessionStorage.getItem('PROJECT_NAME') === null ? '未选择项目' : window.sessionStorage.getItem('PROJECT_NAME')
-            },
-            curWechat() {
-                return window.sessionStorage.getItem('WECHAT_NAME') === null ? '未选择公众号' : window.sessionStorage.getItem('WECHAT_NAME')
-            }
-        },
-        methods: {
-            handleChange(type) {
-                if (type === 'project') {
-                    window.sessionStorage.removeItem('PROJECT_ID');
-                    window.sessionStorage.removeItem('PROJECT_NAME');
-                    window.location.replace('/admin/#/project')
-                } else {
-                    window.sessionStorage.removeItem('WECHAT_ID');
-                    window.sessionStorage.removeItem('WECHAT_NAME');
-                    window.location.replace('/admin/#/')
-                }
-            },
-            handleopen() {
-                //console.log('handleopen');
-            },
-            handleclose() {
-                //console.log('handleclose');
-            },
-            handleselect(a, b) {
-            },
-            //退出登录
-            logout() {
-                let _this = this;
-                this.$confirm('确认退出吗?', '提示', {
-                    //type: 'warning'
-                }).then(() => {
-                    this.$store.dispatch('login_out');
-                    window.location.href = '/admin/';
-                }).catch(() => {
-
-                });
-            },
-            //折叠导航栏
-            collapse() {
-                this.collapsed = !this.collapsed;
-            }
-        },
-        mounted() {
-            this.sysUserName = sessionStorage.getItem("USER_NAME") || '';
-            this.sysUserAvatar = require("@/assets/images/loggeduser.png");
-        }
+export default {
+  data() {
+    return {
+      sysName: "互动通用后台",
+      collapsed: false,
+      sysUserName: "",
+      sysUserAvatar: "",
+      form: {
+        name: "",
+        region: "",
+        date1: "",
+        date2: "",
+        delivery: false,
+        type: [],
+        resource: "",
+        desc: ""
+      }
+    };
+  },
+  computed: {
+    curProject() {
+      return window.sessionStorage.getItem("PROJECT_NAME") === null
+        ? "未选择项目"
+        : window.sessionStorage.getItem("PROJECT_NAME");
+    },
+    curWechat() {
+      return window.sessionStorage.getItem("WECHAT_NAME") === null
+        ? "未选择公众号"
+        : window.sessionStorage.getItem("WECHAT_NAME");
     }
-
+  },
+  methods: {
+    handleChange(type) {
+      if (type === "project") {
+        window.sessionStorage.removeItem("PROJECT_ID");
+        window.sessionStorage.removeItem("PROJECT_NAME");
+        window.location.replace("/admin/#/project");
+      } else {
+        window.sessionStorage.removeItem("WECHAT_ID");
+        window.sessionStorage.removeItem("WECHAT_NAME");
+        window.location.replace("/admin/#/");
+      }
+    },
+    handleopen() {
+      //console.log('handleopen');
+    },
+    handleclose() {
+      //console.log('handleclose');
+    },
+    handleselect(a, b) {},
+    //退出登录
+    logout() {
+      let _this = this;
+      this.$confirm("确认退出吗?", "提示", {
+        //type: 'warning'
+      })
+        .then(() => {
+          this.$store.dispatch("login_out");
+          window.location.href = "/admin/";
+        })
+        .catch(() => {});
+    },
+    //折叠导航栏
+    collapse() {
+      this.collapsed = !this.collapsed;
+    }
+  },
+  mounted() {
+    this.sysUserName = sessionStorage.getItem("USER_NAME") || "";
+    this.sysUserAvatar = require("@/assets/images/loggeduser.png");
+  }
+};
 </script>
 
 <style lang="scss">
-    @import "Main";
+@import "Main";
 </style>
