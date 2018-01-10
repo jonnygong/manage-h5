@@ -3,7 +3,7 @@
         <div class="web-view">
             <div class="web-view__phone">
                 <iframe class="web-view__iframe"
-                        src="//elemefe.github.io/mint-ui/#/"
+                        :src="previewSrc"
                         frameborder="0"
                         width="320"></iframe>
             </div>
@@ -19,7 +19,7 @@
                 </el-steps>
             </div>
             <!-- 活动设置 -->
-            <div class="options__content" v-if="active === 0">
+            <div class="options__content" v-show="active === 0">
                 <el-form :model="formData['activity']"
                          :rules="rules['activity']"
                          ref="activityForm"
@@ -134,7 +134,7 @@
                 </el-form>
             </div>
             <!-- 奖品设置 -->
-            <div class="options__content" v-if="active === 1">
+            <div class="options__content" v-show="active === 1">
 
                 <el-alert style="margin-bottom: 10px;"
                           title="注意：活动一旦正式开始请勿删除任何奖品、修改奖品，只能添加奖品或修改概率，奖品数量只可增加，否则数据错位后果自负。"
@@ -173,6 +173,9 @@
                             <el-form-item label="奖品名称" prop="name" required>
                                 <el-input v-model="prize.name"></el-input>
                             </el-form-item>
+                            <el-form-item label="奖品描述" prop="desc" required>
+                                <el-input type="textarea" v-model="prize.desc"></el-input>
+                            </el-form-item>
                             <el-form-item label="奖品图片" prop="img" required>
                                 <i-uploader v-model="prize.img"></i-uploader>
                             </el-form-item>
@@ -198,31 +201,33 @@
                                 </el-col>
                             </el-row>
                             <el-row>
-                                <el-col :span="8">
+                                <el-col :span="8" v-if="prize.type !== 'physical' && prize.type !== 'coupon'">
                                     <el-form-item label="最小金额" prop="min" required>
                                         <el-input v-model.number="prize.min"></el-input>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="8">
+                                <el-col :span="8" v-if="prize.type !== 'physical' && prize.type !== 'coupon'">
                                     <el-form-item label="最大金额" prop="max" required>
                                         <el-input v-model.number="prize.max"></el-input>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="8">
+                                <el-col :span="8" v-if="prize.type !== 'physical' && prize.type !== 'coupon'">
                                     <el-form-item label="红包总额" prop="money" required>
                                         <el-input v-model.number="prize.money"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
-
-
+                            <el-row>
+                                <el-col :span="24"> <el-alert style="margin-top: 10px;" title="注意：当最小金额和最大金额相等的时候，为定额红包，否则为区间红包。" type="info" :closable="false" v-if="prize.type === 'red'">
+                                </el-alert></el-col>
+                            </el-row>
                         </el-col>
                     </el-row>
                 </el-form>
 
             </div>
             <!-- 自定义设置 -->
-            <div class="options__content" v-if="active === 2">
+            <div class="options__content" v-show="active === 2">
                 <el-form :model="formData['config']"
                          :rules="rules['config']"
                          ref="configForm"
@@ -256,7 +261,7 @@
                         <el-input v-model="formData['config'].rule_link"></el-input>
                     </el-form-item>
                     <el-form-item label="规则说明" prop="rule">
-                        <el-input v-model="formData['config'].rule"></el-input>
+                        <UE :defaultMsg="formData['config'].rule" ref="ue"></UE>
                     </el-form-item>
                     <el-form-item label="是否填写地址" prop="need_address">
                         <el-switch on-text="是"
@@ -283,7 +288,7 @@
                 </el-form>
             </div>
             <!-- 分享设置 -->
-            <div class="options__content" v-if="active === 3">
+            <div class="options__content" v-show="active === 3">
                 <el-form :model="formData['share']"
                          :rules="rules['share']"
                          ref="shareForm"
@@ -323,19 +328,19 @@
                     <el-alert
                             title="活动发布成功"
                             type="success"
-                            description="您的活动已发布，下方为本活动二维码，扫码可访问。"
+                            description="您的活动已发布。"
                             :closable="false"
                             show-icon>
                     </el-alert>
-                    <div class="qrcode-wrapper">
-                        <div id="qrcode" ref="qrcode"></div>
-                    </div>
+                    <!--<div class="qrcode-wrapper">-->
+                        <!--<div id="qrcode" ref="qrcode"></div>-->
+                    <!--</div>-->
                 </div>
             </div>
 
             <div class="options__btns">
                 <el-button @click="prev"
-                           v-if="active !== 0">上一步
+                           v-if="active > 0 && active < 4">上一步
                 </el-button>
                 <el-button type="primary"
                            v-if="active === 3"
@@ -351,11 +356,14 @@
 
 <script>
   import QRCode from 'qrcodejs2';
+  import UE from '@/components/UEditor';
   import Uploader from '@/components/Uploader';
 
   export default {
     data() {
       return {
+        // todo 放 demo 地址修改
+        previewSrc: `http://api.mp.kfw001.com/Lottery/Activity/index?code=5TXyCDjE00w`,
         // 奖品列表标签
         prizeTabsValue: '0',
         prizeTabs: [{
@@ -382,7 +390,8 @@
           min: '最小金额',
           max: '最大金额',
           money: '红包总额',
-          img: '奖品图片'
+          img: '奖品图片',
+          desc: '奖品描述'
         },
         formData: {
           activity: {
@@ -438,6 +447,7 @@
               max: 0,
               money: 0,
               img: '',
+              desc: '',
               saved: false
             }]
           }
@@ -490,9 +500,9 @@
             tips: [
               {type: 'object', required: true, message: '请输入活动名称', trigger: 'blur'}
             ],
-            header_img: [
-              {required: true, message: '请输入顶部版权图片', trigger: 'blur'}
-            ],
+            // header_img: [
+            //   {required: true, message: '请输入顶部版权图片', trigger: 'blur'}
+            // ],
             rule_link: [
               {required: true, message: '请输入领奖说明软文', trigger: 'blur'}
             ],
@@ -569,7 +579,7 @@
         if (this.formData['prize'].prize.length === 0) return;
         this.formData['prize'].prize.forEach((item, index) => {
           if (item.id === targetName) {
-            if(item.saved) {
+            if (item.saved) {
               this.$message({
                 message: '不能删除已保存的奖品',
                 type: 'error'
@@ -596,6 +606,7 @@
           max: 0,
           money: 0,
           img: '',
+          desc: '',
           saved: false
         });
       },
@@ -631,7 +642,7 @@
               for (let key in item) {
                 if (item[key] === '') {
                   this.$message({
-                    message: `请填写「${item.name}」表单「${this.prizeKeys[key]}」字段内容`,
+                    message: `请填写「${this.prizeTabs[i].title}」表单「${this.prizeKeys[key]}」字段内容`,
                     type: 'warning'
                   });
                   result = false;
@@ -648,6 +659,9 @@
             }
           }
         } else {
+          if(this.activeForm[this.active] === 'configForm') {
+            this.formData['config'].rule = this.getUEContent('ue');
+          }
           this.$refs[this.activeForm[this.active]].validate((valid) => {
             if (valid) {
               if (this.active++ > 3) {
@@ -690,8 +704,9 @@
           type: 'success'
         });
         this.$nextTick(() => {
+          // todo demo 地址修改
           new QRCode(this.$refs.qrcode, { // eslint-disable-line no-new
-            text: `${window.location.host}${window.location.pathname}`,
+            text: `http://api.mp.kfw001.com/Lottery/Activity/index?code=5TXyCDjE00w`,
             width: 250,
             height: 250,
             colorDark: '#000000',
@@ -701,8 +716,13 @@
         });
         this.active++;
       },
+      // Ueditor 获取内容
+      getUEContent(ele) {
+        return this.$refs[ele].getUEContent();
+      },
     },
     components: {
+      UE,
       'i-uploader': Uploader
     }
   };

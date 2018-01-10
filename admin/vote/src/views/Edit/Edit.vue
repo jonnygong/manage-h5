@@ -182,7 +182,7 @@
                                 <el-radio class="radio"
                                           v-for="(item, index) in prizeType"
                                           :key="index"
-                                          v-model.number="prize.type"
+                                          v-model="prize.type"
                                           :label="item.value">
                                     {{item.label}}
                                 </el-radio>
@@ -302,12 +302,12 @@
                     <el-form-item label="分享图片" prop="share_img">
                         <i-uploader v-model="formData['share'].share_img"></i-uploader>
                     </el-form-item>
-                    <el-form-item label="公众号" prop="uniacid">
-                        <el-input v-model="formData['share'].uniacid"></el-input>
-                    </el-form-item>
-                    <el-form-item label="关联rid" prop="rid">
-                        <el-input v-model="formData['share'].rid"></el-input>
-                    </el-form-item>
+                    <!--<el-form-item label="公众号" prop="uniacid">-->
+                        <!--<el-input v-model="formData['share'].uniacid"></el-input>-->
+                    <!--</el-form-item>-->
+                    <!--<el-form-item label="关联rid" prop="rid">-->
+                        <!--<el-input v-model="formData['share'].rid"></el-input>-->
+                    <!--</el-form-item>-->
                     <el-form-item label="是否允许分享" prop="isshare">
                         <el-switch on-text="是"
                                    off-text="否"
