@@ -7,8 +7,8 @@
 - [后台系统接口](/doc/system/README.md)
 
 ## 新闻报料接口
-- [移动端接口](/doc/news/wx/README.md)   `开发中`
-- [后台管理接口](/doc/news/admin/README.md)     `开发中`
+- [移动端接口](/doc/news/wx/README.md)   `开发完成`
+- [后台管理接口](/doc/news/admin/README.md)     `开发完成`
 
 ## 快房问答接口
 - [移动端接口](/doc/ask/README.md)   `开发中`
@@ -16,8 +16,12 @@
 
 
 ## [楼盘地图接口]
-- [移动端接口](/doc/map/README.md)   `开发中`
-- [后台管理接口](/doc/map/admin/README.md)  `开发中`
+- [移动端接口](/doc/map/README.md)   `开发完成`
+- [后台管理接口](/doc/map/admin/README.md)  `开发完成`
+
+## 微信商城
+- [移动端接口](/doc/shop/README.md)   `开发中`
+- [后台管理接口](/doc/shop/admin/README.md)   `开发中`  
 
 ### 部署说明
 - 后台： http://h.kfw001.com/admin/hous_map/
