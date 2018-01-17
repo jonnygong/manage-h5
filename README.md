@@ -20,7 +20,7 @@
 - [后台管理接口](/doc/map/admin/README.md)  `开发完成`
 
 ## 微信商城
-- [移动端接口](/doc/shop/README.md)   `开发中`
+- [移动端接口](/doc/shop/wx/README.md)   `开发中`
 - [后台管理接口](/doc/shop/admin/README.md)   `开发中`  
 
 ### 部署说明
