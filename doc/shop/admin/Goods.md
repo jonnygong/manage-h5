@@ -43,11 +43,11 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| shop_id | int(11) unsigned | 所属店铺 0为平台产品 |
-| category_id | int(11) unsigned | 分类id |
-| type | tinyint(1) unsigned | 1实体商品，2为虚拟商品，3门店项目 |
+| shop_id | int(11) | 所属店铺 0为平台产品 |
+| category_id | int(11) | 分类id |
+| type | tinyint(1) | 1实体商品，2为虚拟商品，3门店项目 |
 | status | int(11) | 1为上架，0为下架，-1为删除 |
-| sort | int(11) unsigned | 排序 |
+| sort | int(11) | 排序 |
 | title | varchar(255) | 商品/项目标题 |
 | thumb | varchar(255) | 商品封面图 |
 | description | varchar(1000) | 商品/项目描述 |
@@ -59,11 +59,11 @@
 | offer_point | int(11) | 需要支付积分 |
 | offer_money | decimal(10,2) | 需要支付金额 |
 | back_point | decimal(10,2) | 可返还积分 |
-| stock | int(11) unsigned | 库存 |
+| stock | int(11) | 库存 |
 | stock_config | tinyint(1) | 0拍下减库存 1生成订单减库存 2永久不减 |
-| sales | int(11) unsigned | 已售数量 |
+| sales | int(11) | 已售数量 |
 | weight | int(11) | 重量(g) |
-| max_buy | int(11) unsigned | 用户最多购买数量 |
+| max_buy | int(11) | 用户最多购买数量 |
 | logistic_type | int(11) | 运输方式，1自提，2物流 |
 | thumb_url | text | 其他图片 |
 | is_new | tinyint(11) | 是否新品 |
@@ -76,9 +76,10 @@
 | view_count | int(11) | 浏览量 |
 | is_check | tinyint(1) | 是否审核通过 |
 | update_time | int(11) | 更新时间 |
-| create_time | int(11) unsigned | 创建时间 |
+| create_time | int(11) | 创建时间 |
 | content | text | 图文详情 |
 | index_id | varchar(50) | 搜索关键词id集 |
+| category_path | varchar(255) | 分类路径 |
 
 
 
@@ -101,11 +102,11 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| shop_id | int(11) unsigned | 所属店铺 0为平台产品 |
-| category_id | int(11) unsigned | 分类id |
-| type | tinyint(1) unsigned | 1实体商品，2为虚拟商品，3门店项目 |
+| shop_id | int(11) | 所属店铺 0为平台产品 |
+| category_id | int(11) | 分类id |
+| type | tinyint(1) | 1实体商品，2为虚拟商品，3门店项目 |
 | status | int(11) | 1为上架，0为下架，-1为删除 |
-| sort | int(11) unsigned | 排序 |
+| sort | int(11) | 排序 |
 | title | varchar(255) | 商品/项目标题 |
 | thumb | varchar(255) | 商品封面图 |
 | description | varchar(1000) | 商品/项目描述 |
@@ -117,11 +118,11 @@
 | offer_point | int(11) | 需要支付积分 |
 | offer_money | decimal(10,2) | 需要支付金额 |
 | back_point | decimal(10,2) | 可返还积分 |
-| stock | int(11) unsigned | 库存 |
+| stock | int(11) | 库存 |
 | stock_config | tinyint(1) | 0拍下减库存 1生成订单减库存 2永久不减 |
-| sales | int(11) unsigned | 已售数量 |
+| sales | int(11) | 已售数量 |
 | weight | int(11) | 重量(g) |
-| max_buy | int(11) unsigned | 用户最多购买数量 |
+| max_buy | int(11) | 用户最多购买数量 |
 | logistic_type | int(11) | 运输方式，1自提，2物流 |
 | thumb_url | text | 其他图片 |
 | is_new | tinyint(11) | 是否新品 |
@@ -134,9 +135,10 @@
 | view_count | int(11) | 浏览量 |
 | is_check | tinyint(1) | 是否审核通过 |
 | update_time | int(11) | 更新时间 |
-| create_time | int(11) unsigned | 创建时间 |
+| create_time | int(11) | 创建时间 |
 | content | text | 图文详情 |
 | index_id | varchar(50) | 搜索关键词id集 |
+| category_path | varchar(255) | 分类路径 |
 
 
 
@@ -162,6 +164,7 @@
 | name | varchar(50) | 分类名称 |
 | pid | int(11) | 父级分类 |
 | img | varchar(255) | 分类图片 |
+| path | varchar(255) | 分类路径 |
 | shop_id | int(11) | 商铺id |
 | is_show | tinyint(1) | 是否展示 |
 
@@ -202,42 +205,25 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| shop_id | int(11) unsigned | 所属店铺 0为平台产品 |
-| category_id | int(11) unsigned | 分类id |
-| type | tinyint(1) unsigned | 1实体商品，2为虚拟商品，3门店项目 |
-| status | int(11) | 1为上架，0为下架，-1为删除 |
-| sort | int(11) unsigned | 排序 |
-| title | varchar(255) | 商品/项目标题 |
-| thumb | varchar(255) | 商品封面图 |
-| description | varchar(1000) | 商品/项目描述 |
-| goods_sn | varchar(50) | 商品编号 |
-| product_sn | varchar(50) | 商品条码 |
-| original_price | decimal(10,1) | 原价 |
-| cost_price | decimal(10,1) | 成本价 |
-| is_point | tinyint(1) | 是否为积分商品 |
-| offer_point | int(11) | 需要支付积分 |
-| offer_money | decimal(10,2) | 需要支付金额 |
-| back_point | decimal(10,2) | 可返还积分 |
-| stock | int(11) unsigned | 库存 |
-| stock_config | tinyint(1) | 0拍下减库存 1生成订单减库存 2永久不减 |
-| sales | int(11) unsigned | 已售数量 |
-| weight | int(11) | 重量(g) |
-| max_buy | int(11) unsigned | 用户最多购买数量 |
-| logistic_type | int(11) | 运输方式，1自提，2物流 |
-| thumb_url | text | 其他图片 |
-| is_new | tinyint(11) | 是否新品 |
-| is_hot | tinyint(11) | 是否热门 |
-| is_discount | tinyint(11) | 是否折扣 |
-| is_recommand | tinyint(11) | 是否展示到首页 |
-| is_time | tinyint(11) | 是否限时卖 |
-| start_time | int(11) | 限时卖开始时间 |
-| end_time | int(11) | 限时卖结束时间 |
-| view_count | int(11) | 浏览量 |
-| is_check | tinyint(1) | 是否审核通过 |
-| update_time | int(11) | 更新时间 |
-| create_time | int(11) unsigned | 创建时间 |
-| content | text | 图文详情 |
-| index_id | varchar(50) | 搜索关键词id集 |
+| *shop_id | int(11) | 所属店铺 0为平台产品 |
+| *category_id | int(11) | 分类id |
+| *type | tinyint(1) | 1实体商品，2为虚拟商品，3门店项目 |
+| *status | int(11) | 1为上架，0为下架，-1为删除 |
+| *sort | int(11) | 排序 |
+| *title | varchar(255) | 商品/项目标题 |
+| *thumb | varchar(255) | 商品封面图 |
+| *description | varchar(1000) | 商品/项目描述 |
+| *original_price | decimal(10,1) | 原价 |
+| *stock | int(11) | 库存 |
+| *stock_config | tinyint(1) | 0拍下减库存 1生成订单减库存 2永久不减 |
+| *sales | int(11) | 已售数量 |
+| *max_buy | int(11) | 用户最多购买数量 |
+| *logistic_type | int(11) | 运输方式，1自提，2物流 |
+| *thumb_url | text | 其他图片 |
+| *is_hot | tinyint(11) | 是否热门 |
+| *content | text | 图文详情 |
+| *index_id | varchar(50) | 搜索关键词id集 |
+| *category_path | varchar(255) | 分类路径，分类id的路径 |
 
 
 + __响应参数__
@@ -254,42 +240,25 @@
 
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
-| shop_id | int(11) unsigned | 所属店铺 0为平台产品 |
-| category_id | int(11) unsigned | 分类id |
-| type | tinyint(1) unsigned | 1实体商品，2为虚拟商品，3门店项目 |
-| status | int(11) | 1为上架，0为下架，-1为删除 |
-| sort | int(11) unsigned | 排序 |
-| title | varchar(255) | 商品/项目标题 |
-| thumb | varchar(255) | 商品封面图 |
-| description | varchar(1000) | 商品/项目描述 |
-| goods_sn | varchar(50) | 商品编号 |
-| product_sn | varchar(50) | 商品条码 |
-| original_price | decimal(10,1) | 原价 |
-| cost_price | decimal(10,1) | 成本价 |
-| is_point | tinyint(1) | 是否为积分商品 |
-| offer_point | int(11) | 需要支付积分 |
-| offer_money | decimal(10,2) | 需要支付金额 |
-| back_point | decimal(10,2) | 可返还积分 |
-| stock | int(11) unsigned | 库存 |
-| stock_config | tinyint(1) | 0拍下减库存 1生成订单减库存 2永久不减 |
-| sales | int(11) unsigned | 已售数量 |
-| weight | int(11) | 重量(g) |
-| max_buy | int(11) unsigned | 用户最多购买数量 |
-| logistic_type | int(11) | 运输方式，1自提，2物流 |
-| thumb_url | text | 其他图片 |
-| is_new | tinyint(11) | 是否新品 |
-| is_hot | tinyint(11) | 是否热门 |
-| is_discount | tinyint(11) | 是否折扣 |
-| is_recommand | tinyint(11) | 是否展示到首页 |
-| is_time | tinyint(11) | 是否限时卖 |
-| start_time | int(11) | 限时卖开始时间 |
-| end_time | int(11) | 限时卖结束时间 |
-| view_count | int(11) | 浏览量 |
-| is_check | tinyint(1) | 是否审核通过 |
-| update_time | int(11) | 更新时间 |
-| create_time | int(11) unsigned | 创建时间 |
-| content | text | 图文详情 |
-| index_id | varchar(50) | 搜索关键词id集 |
+| *shop_id | int(11) | 所属店铺 0为平台产品 |
+| *category_id | int(11) | 分类id |
+| *type | tinyint(1) | 1实体商品，2为虚拟商品，3门店项目 |
+| *status | int(11) | 1为上架，0为下架，-1为删除 |
+| *sort | int(11) | 排序 |
+| *title | varchar(255) | 商品/项目标题 |
+| *thumb | varchar(255) | 商品封面图 |
+| *description | varchar(1000) | 商品/项目描述 |
+| *original_price | decimal(10,1) | 原价 |
+| *stock | int(11) | 库存 |
+| *stock_config | tinyint(1) | 0拍下减库存 1生成订单减库存 2永久不减 |
+| *sales | int(11) | 已售数量 |
+| *max_buy | int(11) | 用户最多购买数量 |
+| *logistic_type | int(11) | 运输方式，1自提，2物流 |
+| *thumb_url | text | 其他图片 |
+| *is_hot | tinyint(11) | 是否热门 |
+| *content | text | 图文详情 |
+| *index_id | varchar(50) | 搜索关键词id集 |
+| *category_path | varchar(255) | 分类路径，分类id的路径 |
 
 
 + __响应参数__
