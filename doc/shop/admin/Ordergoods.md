@@ -98,68 +98,6 @@
 
 
 
-### 新增页面
-
-+ __接口地址__： __/Shopadmin/Ordergoods/add__
-
-+ __请求参数__
-
-|  参数名称  | 参数类型 | 参数说明 |
-| --------- | -------- | ------- |
-| order_id | int(11) | 订单编号 |
-| status | tinyint(1) | 订单商品状态，1正常，2退货 |
-| goods_type | tinyint(1) | 商品类型，1实物，2积分,3项目 |
-| goods_id | int(11) | 商品编号 |
-| goods_title | varchar(255) | 商品标题 |
-| goods_logo | varchar(255) | 商品图片 |
-| goods_price | decimal(10,2) | 商品价格 |
-| goods_point | int(11) | 商品积分 |
-| goods_sum | int(11) | 商品数量 |
-| cut_money | decimal(10,2) | 优惠金额 |
-| cut_point | decimal(10,2) | 优惠积分 |
-| offer_money | decimal(10,2) | 需支付金额 |
-| offer_point | decimal(10,0) | 需支付积分 |
-| create_time | int(11) | 创建时间 |
-| update_time | int(11) |  |
-
-
-+ __响应参数__
-
-> 成功返回200状态码
-
-
-
-### 修改页面
-
-+ __接口地址__： __/Shopadmin/Ordergoods/update__
-
-+ __请求参数__
-
-|  参数名称  | 参数类型 | 参数说明 |
-| --------- | -------- | ------- |
-| order_id | int(11) | 订单编号 |
-| status | tinyint(1) | 订单商品状态，1正常，2退货 |
-| goods_type | tinyint(1) | 商品类型，1实物，2积分,3项目 |
-| goods_id | int(11) | 商品编号 |
-| goods_title | varchar(255) | 商品标题 |
-| goods_logo | varchar(255) | 商品图片 |
-| goods_price | decimal(10,2) | 商品价格 |
-| goods_point | int(11) | 商品积分 |
-| goods_sum | int(11) | 商品数量 |
-| cut_money | decimal(10,2) | 优惠金额 |
-| cut_point | decimal(10,2) | 优惠积分 |
-| offer_money | decimal(10,2) | 需支付金额 |
-| offer_point | decimal(10,0) | 需支付积分 |
-| create_time | int(11) | 创建时间 |
-| update_time | int(11) |  |
-
-
-+ __响应参数__
-
-> 成功返回200状态码
-
-
-
 ###  修改状态
 
 + __接口地址__： __/Shopadmin/Ordergoods/status__
@@ -169,7 +107,7 @@
 |  参数名称  | 参数类型 | 参数说明 |
 | --------- | -------- | ------- |
 | *ids | str |  id集 |
-| *status | number | 1 开启  0 关闭  -1 删除  |
+| *status | number | 订单商品状态，1正常，2退货 |
 
 
 + __响应参数__
